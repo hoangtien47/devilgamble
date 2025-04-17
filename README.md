@@ -1,39 +1,45 @@
 
-<p align="center">
-    <img width="400px" src="http://mixandjam.com/wp-content/uploads/2019/11/git.png">    
-</p>
+# Idea Chính
 
-# Balatro's Game Feel | Mix and Jam
+Game card có cơ chế của HSR (Honkai Starail) kết hợp với cả cơ chế có sẵn giống với balatro.
 
-<p align="center">
-<img width="900px" src="http://mixandjam.com/wp-content/uploads/2024/04/Screenshot-2024-04-29-at-03.22.41.png">
-</p>
 
-This is the official respository for the episode <b>#32</b> of the [Mix and Jam Youtube Channel](https://www.youtube.com/c/MixAndJam)!
 
-## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+## Cấu tạo quái
 
-### Prerequisites
+Quái có các thuộc tính như:
+- Thanh sức bền
+- Thanh máu
+- Damage
+- Thuộc tính quái (kháng một số chất của lá bài)
+- Lượt hành động
 
--  Unity ver. 2022.3 or higher
 
-### Running the project
 
-After cloning or downloading the repository, open the root project folder in unity and press the Play button.
+## Cấu tạo lá bài
 
-You can see a running demo of the project in [this video](https://youtu.be/I1dAZuWurw4).
+Mỗi lá bài sẽ có các thuộc tính sau:
+- Chất của lá bài đại diện cho hiệu ứng lá bài
+- Màu lá bài đại diện cho chất của lá bài
+- Chỉ số lá bài đại diện cho sức mạnh của lá bài
 
-## Built With
 
-* [DOTween](http://dotween.demigiant.com/) - DOTween is a fast, efficient, fully type-safe object-oriented animation engine for Unity, optimized for C# users, free and open-source, with tons of advanced features
 
-## Authors
 
-Game Development
-* **André Cardoso** - [Github](https://github.com/cardosoandre)
-<br>[![Twitter Follow](https://img.shields.io/twitter/follow/andre_mc.svg?style=social)](https://twitter.com/andre_mc)
+## Phân loại bài
+
+Có 2 dạng phân loại bài chính:
+- Phân loại theo hệ: Hỏa, Thổ, Thủy và Phong
+- Phân loại theo hiệu ứng của lá bài: DOT (Damage Over Time: Độc, chảy máu,...), Khống chế cứng (Đóng băng, sốc điện), Hiệu ứng tích sát thương (Cần đạt số lượng cộng dồn để gây sát thương), Hiệu ứng phá vỡ điểm yếu (Break Effect).
+
+
+
+
+## Người chơi
+Người chơi sẽ có các thuộc tính sau:
+- Máu người chơi
+- Số tiền người chơi sở hữu
 
 ## License
 

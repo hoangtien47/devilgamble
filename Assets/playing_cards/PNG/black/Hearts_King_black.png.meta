@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Hearts_King_black_0: -5785791534491196641
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

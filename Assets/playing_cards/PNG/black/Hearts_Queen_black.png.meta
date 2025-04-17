@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Hearts_Queen_black_0: 4292712323535756662
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

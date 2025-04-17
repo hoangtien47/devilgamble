@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Pikes_8_white_0: 7919155039317069991
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Tiles_Queen_white_0: -9062799800482736669
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

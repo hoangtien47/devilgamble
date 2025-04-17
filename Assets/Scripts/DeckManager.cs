@@ -68,6 +68,7 @@ public class DeckManager : MonoBehaviour
 
         InitializeDeck();
         ShuffleDeck();
+        DealHand();
     }
 
     public void InitializeDeck()
@@ -351,6 +352,7 @@ public class DeckManager : MonoBehaviour
         handCards.Clear();
 
         OnDiscardCountChanged?.Invoke(discardPile.Count);
+        DealHand();
     }
 
     public void ClearHand()

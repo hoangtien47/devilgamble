@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Clovers_10_black_0: 6560628295431040436
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

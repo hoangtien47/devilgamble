@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Pikes_Queen_black_0: -5131335426968775593
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

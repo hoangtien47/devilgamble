@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Pikes_A_black_0: -4863524014830454848
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

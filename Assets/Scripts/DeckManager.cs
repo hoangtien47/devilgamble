@@ -132,19 +132,12 @@ public class DeckManager : MonoBehaviour
         if (isDealing)
             return;
 
-
-        print(handCards.Count);
-        print(handSize - handCards.Count);
-
         if (handCards.Count == 0)
         {
-            print("deal full");
             StartCoroutine(DealHandCoroutine(handSize));
         }
         else if (handCards.Count < handSize)
         {
-            print("deal second");
-
             StartCoroutine(DealHandCoroutine(handSize - handCards.Count));
         }
         else

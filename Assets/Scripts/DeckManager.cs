@@ -30,7 +30,6 @@ public class CardData
 public class DeckManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject cardPrefab;
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private Transform deckTransform;
     [SerializeField] private Transform discardTransform;
@@ -522,5 +521,94 @@ public class DeckManager : MonoBehaviour
         return false;
     }
 
+    public void SortByRank()
+    {
+        if (handHolder.cards == null || handHolder.cards.Count == 0)
+            return;
+
+        // Create a list of card-index pairs
+        List<(Card card, int index, CardData data)> cardPairs = new List<(Card, int, CardData)>();
+        for (int i = 0; i < handHolder.cards.Count; i++)
+        {
+            if (i < handCards.Count)
+            {
+                cardPairs.Add((handHolder.cards[i], i, handCards[i]));
+            }
+        }
+
+        // Sort by rank
+        cardPairs = cardPairs.OrderBy(pair => (int)pair.data.rank).ToList();
+
+        // Rearrange cards in the UI
+        RearrangeCards(cardPairs);
+    }
+
+    public void SortBySuit()
+    {
+        if (handHolder.cards == null || handHolder.cards.Count == 0)
+            return;
+
+        // Create a list of card-index pairs
+        List<(Card card, int index, CardData data)> cardPairs = new List<(Card, int, CardData)>();
+        for (int i = 0; i < handHolder.cards.Count; i++)
+        {
+            if (i < handCards.Count)
+            {
+                cardPairs.Add((handHolder.cards[i], i, handCards[i]));
+            }
+        }
+
+        // Sort by suit, then by rank
+        cardPairs = cardPairs.OrderBy(pair => (int)pair.data.suit)
+                             .ThenBy(pair => (int)pair.data.rank)
+                             .ToList();
+
+        // Rearrange cards in the UI
+        RearrangeCards(cardPairs);
+    }
+
+    private void RearrangeCards(List<(Card card, int index, CardData data)> sortedPairs)
+    {
+        // Temporarily store the cards and their data
+        List<CardData> newHandCards = new List<CardData>();
+        List<Transform> cardSlots = new List<Transform>();
+
+        // Get all the card slots (parents of cards)
+        foreach (var pair in sortedPairs)
+        {
+            cardSlots.Add(pair.card.transform.parent);
+            newHandCards.Add(pair.data);
+        }
+
+        // Rearrange the cards in the UI
+        for (int i = 0; i < sortedPairs.Count; i++)
+        {
+            // Set the sibling index to reorder in hierarchy
+            cardSlots[i].SetSiblingIndex(i);
+        }
+
+        // Update the handCards list to match the new order
+        handCards = newHandCards;
+
+        // Update the cards list in the handHolder
+        handHolder.cards = handHolder.GetComponentsInChildren<Card>().ToList();
+
+        // Update card visuals
+        StartCoroutine(UpdateCardVisuals());
+    }
+
+    private IEnumerator UpdateCardVisuals()
+    {
+        yield return new WaitForEndOfFrame();
+
+        // Update visual indices
+        for (int i = 0; i < handHolder.cards.Count; i++)
+        {
+            if (handHolder.cards[i].cardVisual != null)
+            {
+                handHolder.cards[i].cardVisual.UpdateIndex(handHolder.transform.childCount);
+            }
+        }
+    }
 
 }

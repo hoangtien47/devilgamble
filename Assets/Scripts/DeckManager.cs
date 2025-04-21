@@ -27,6 +27,13 @@ public class CardData
 
 }
 
+[System.Serializable]
+public enum SortBy
+{
+    Rank,
+    Suit,
+}
+
 public class DeckManager : MonoBehaviour
 {
     [Header("References")]
@@ -63,12 +70,36 @@ public class DeckManager : MonoBehaviour
     public UnityEvent OnDeckShuffled;
     public UnityEvent<int, int> OnScoreCalculated; // score, multiplier
 
+    [Header("SortBy")]
+    [SerializeField] private SortBy sortBy = SortBy.Suit;
+
     private void Start()
     {
+        OnHandDealt.AddListener(OnHandDealtHandler);
+
 
         InitializeDeck();
         ShuffleDeck();
         DealHand();
+
+    }
+
+    private void OnHandDealtHandler(List<CardData> hand)
+    {
+        // Sort the hand based on the selected sort method
+        if (sortBy == SortBy.Rank)
+        {
+            print("Sorting by rank");
+            SortByRank();
+        }
+        else if (sortBy == SortBy.Suit)
+        {
+            print("Sorting by suit");
+            SortBySuit();
+        }
+
+        // Optionally, unsubscribe if you only want this to happen once
+        // OnHandDealt.RemoveListener(OnHandDealtHandler);
     }
 
     public void InitializeDeck()
@@ -156,6 +187,8 @@ public class DeckManager : MonoBehaviour
                     handHolder.cards[i].cardVisual.UpdateIndex(transform.childCount);
             }
         }
+
+
     }
 
 
@@ -528,6 +561,8 @@ public class DeckManager : MonoBehaviour
         if (handHolder.cards == null || handHolder.cards.Count == 0)
             return;
 
+        sortBy = SortBy.Rank;
+
         // Create a list of card-index pairs
         List<(Card card, int index, CardData data)> cardPairs = new List<(Card, int, CardData)>();
         for (int i = 0; i < handHolder.cards.Count; i++)
@@ -549,6 +584,8 @@ public class DeckManager : MonoBehaviour
     {
         if (handHolder.cards == null || handHolder.cards.Count == 0)
             return;
+
+        sortBy = SortBy.Suit;
 
         // Create a list of card-index pairs
         List<(Card card, int index, CardData data)> cardPairs = new List<(Card, int, CardData)>();

@@ -2258,8 +2258,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -131.91, y: 216}
-  m_SizeDelta: {x: 695.66, y: 200}
+  m_AnchoredPosition: {x: 0, y: 225}
+  m_SizeDelta: {x: 800, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &667881466
 MonoBehaviour:
@@ -2806,10 +2806,10 @@ RectTransform:
   - {fileID: 351632089}
   m_Father: {fileID: 2074635280}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -900, y: -324}
-  m_SizeDelta: {x: 189.3, y: 200}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 200, y: -300}
+  m_SizeDelta: {x: 189.29999, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &981949313
 GameObject:
@@ -3373,10 +3373,10 @@ RectTransform:
   - {fileID: 1981634155}
   m_Father: {fileID: 2074635280}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 761, y: -324}
-  m_SizeDelta: {x: 189.3, y: 200}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -200, y: 0}
+  m_SizeDelta: {x: 189.30005, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1248292963
 GameObject:
@@ -3468,7 +3468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1296720586
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3683,10 +3683,10 @@ RectTransform:
   - {fileID: 549722123}
   m_Father: {fileID: 2074635280}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -620, y: -324}
-  m_SizeDelta: {x: 189.3, y: 200}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 200, y: 0}
+  m_SizeDelta: {x: 189.29999, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1461599510
 GameObject:
@@ -4461,7 +4461,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1960801686}
   m_Layer: 5
-  m_Name: DiscardDeck (1)
+  m_Name: PlaycardDeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4488,10 +4488,10 @@ RectTransform:
   - {fileID: 1835099429}
   m_Father: {fileID: 2074635280}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 761, y: -69}
-  m_SizeDelta: {x: 189.3, y: 200}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -200, y: -300}
+  m_SizeDelta: {x: 189.30005, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1981634154
 GameObject:

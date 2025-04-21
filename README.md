@@ -1,4 +1,3 @@
-
 # Idea Chính
 
 Game card có cơ chế của HSR (Honkai Starail) kết hợp với cả cơ chế có sẵn giống với balatro.
@@ -12,33 +11,38 @@ Quái có các thuộc tính như:
 - Thanh sức bền
 - Thanh máu
 - Damage
-- Thuộc tính quái (kháng một số chất của lá bài)
+- Thuộc tính quái (Hiển thị điểm yếu quái)
 - Lượt hành động
 
 
 
 ## Cấu tạo lá bài
 
-Mỗi lá bài sẽ có các thuộc tính sau:
-- Chất của lá bài đại diện cho hiệu ứng lá bài
-- Màu lá bài đại diện cho chất của lá bài
-- Chỉ số lá bài đại diện cho sức mạnh của lá bài
+Lấy cảm hứng từ bộ bài tây
 
 
+## Heroes
+
+Có 4 loại heroes:
+- Tank
+- Healer
+- DPS
+- Support  
+
+Người chơi có thể chọn 3 heroes tham gia mỗi lần chơi.
 
 
-## Phân loại bài
+## Phân loại Heroes
 
 Có 2 dạng phân loại bài chính:
 - Phân loại theo hệ: Hỏa, Thổ, Thủy và Phong
-- Phân loại theo hiệu ứng của lá bài: DOT (Damage Over Time: Độc, chảy máu,...), Khống chế cứng (Đóng băng, sốc điện), Hiệu ứng tích sát thương (Cần đạt số lượng cộng dồn để gây sát thương), Hiệu ứng phá vỡ điểm yếu (Break Effect).
+- Phân loại theo hiệu ứng của Heroes: DOT (Damage Over Time: Độc, chảy máu,...), Khống chế cứng (Đóng băng, sốc điện), Hiệu ứng tích sát thương (Cần đạt số lượng cộng dồn để gây sát thương), Hiệu ứng phá vỡ điểm yếu (Break Effect), Hiệu ứng hồi máu, Hiệu ứng khiêu khích và vân vân mây mây.
 
 
-
+ 
 
 ## Người chơi
 Người chơi sẽ có các thuộc tính sau:
-- Máu người chơi
 - Số tiền người chơi sở hữu
 
 ## License

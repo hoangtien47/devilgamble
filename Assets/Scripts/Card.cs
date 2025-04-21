@@ -5,6 +5,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
+public enum CardSuit { Hearts, Diamonds, Clubs, Spades }
+public enum CardRank { Two = 2, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace }
+
 public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
     private Canvas canvas;
@@ -43,6 +47,9 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public CardSuit Suit { get; set; }
     public CardRank Rank { get; set; }
 
+    public bool isCharacterCard { get; set; }
+    public int index { get; set; }
+
     void Start()
     {
         canvas = GetComponentInParent<Canvas>();
@@ -53,7 +60,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
         visualHandler = FindObjectOfType<VisualCardsHandler>();
         cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
-        cardVisual.Initialize(this, Suit, Rank);
+        cardVisual.Initialize(this);
     }
 
     void Update()

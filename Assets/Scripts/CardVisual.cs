@@ -2,8 +2,6 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum CardSuit { Hearts, Diamonds, Clubs, Spades }
-public enum CardRank { Two = 2, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace }
 
 public class CardVisual : MonoBehaviour
 {
@@ -65,6 +63,8 @@ public class CardVisual : MonoBehaviour
 
     private CardSuit Suit;
     private CardRank Rank;
+
+    [Header("Card Sprites")]
     public CardSpriteDatabase spriteDatabase;
 
 
@@ -73,21 +73,21 @@ public class CardVisual : MonoBehaviour
         shadowDistance = visualShadow.localPosition;
     }
 
-    public void Initialize(Card target, CardSuit cardSuit, CardRank cardRank, int index = 0)
+    public void Initialize(Card target, int index = 0)
     {
-        Suit = cardSuit;
-        Rank = cardRank;
+        Suit = target.Suit;
+        Rank = target.Rank;
 
 
 
-        int suitIndex = (int)cardSuit;
-        int rankIndex = (int)cardRank - 2; // Two starts at 2
+        int suitIndex = (int)Suit;
+        int rankIndex = (int)Rank - 2; // Two starts at 2
         int spriteIndex = suitIndex * 13 + rankIndex;
 
 
         if (spriteIndex >= 0 && spriteIndex < spriteDatabase.cardSprites.Length)
         {
-            cardImage.sprite = spriteDatabase.cardSprites[spriteIndex];
+            cardImage.sprite = spriteDatabase.GetCardSprite(Suit, Rank);//spriteDatabase.cardSprites[spriteIndex];
         }
         else
         {

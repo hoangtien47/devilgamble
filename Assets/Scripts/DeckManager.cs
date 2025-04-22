@@ -24,7 +24,12 @@ public class CardData
         isSealed = false;
         edition = 0;
     }
+}
 
+[System.Serializable]
+public class HeroData
+{
+    public int index;
 }
 
 [System.Serializable]
@@ -41,6 +46,10 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private Transform deckTransform;
     [SerializeField] private Transform discardTransform;
     [SerializeField] private HorizontalCardHolder handHolder;
+
+    [SerializeField] private GameObject heroPrefab;
+    [SerializeField] private HorizontalCardHolder heroHolder;
+
 
     [Header("Deck Settings")]
     [SerializeField] private int handSize = 8;
@@ -60,6 +69,7 @@ public class DeckManager : MonoBehaviour
     public List<CardData> handCards = new List<CardData>();
     public List<CardData> removedCards = new List<CardData>(); // Cards removed from play
     public List<CardData> selectedCards = new List<CardData>(); // Selected cards
+
     private bool isDealing = false;
 
     [Header("Events")]
@@ -82,6 +92,7 @@ public class DeckManager : MonoBehaviour
         ShuffleDeck();
         DealHand();
 
+        StartCoroutine(DealHeroCoroutine(3));
     }
 
     private void OnHandDealtHandler(List<CardData> hand)
@@ -191,6 +202,39 @@ public class DeckManager : MonoBehaviour
 
     }
 
+    private IEnumerator DealHeroCoroutine(int numCardDeal)
+    {
+
+        // Create slots for the hand
+        for (int i = 0; i < numCardDeal; i++)
+        {
+
+            // Create a slot and card
+            GameObject slot = Instantiate(heroPrefab, heroHolder.transform);
+            Card card = slot.GetComponentInChildren<Card>();
+            card.index = i;
+            yield return new WaitForSeconds(dealDelay);
+        }
+
+        // Update the card holder
+        heroHolder.cards = heroHolder.GetComponentsInChildren<Card>().ToList();
+
+        // Set up event listeners for the new cards
+        int cardCount = 0;
+        foreach (Card card in heroHolder.cards)
+        {
+            // Draw a card from the deck
+
+            card.PointerEnterEvent.AddListener(heroHolder.CardPointerEnter);
+            card.PointerExitEvent.AddListener(heroHolder.CardPointerExit);
+            card.BeginDragEvent.AddListener(heroHolder.BeginDrag);
+            card.EndDragEvent.AddListener(heroHolder.EndDrag);
+            card.SelectEvent.AddListener(HandleCardSelection); // Add selection listener
+            card.name = cardCount.ToString();
+            cardCount++;
+        }
+
+    }
 
     private IEnumerator DealHandCoroutine(int numCardDeal)
     {

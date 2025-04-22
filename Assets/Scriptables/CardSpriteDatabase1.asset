@@ -65,3 +65,8 @@ MonoBehaviour:
   - {fileID: -5781337745158164669, guid: 31cbc3ab9e9342b49bda6a0bb1dfcef8, type: 3}
   - {fileID: -419935416126996855, guid: a66d8d54f76e82545b69c1016e37397b, type: 3}
   - {fileID: -8985279245500102161, guid: fd97254c6af5ecc4faee0dc8f2297101, type: 3}
+  indexCardSprites:
+  - {fileID: 3418397821490864761, guid: a37bbeec2f0678c45a295fce3ecad084, type: 3}
+  - {fileID: 4786299406925355100, guid: 54fb59b2d4069a444887a79a034f4472, type: 3}
+  - {fileID: 2953834158818252387, guid: 640c2a8dbd554884fb9bc630dcc27e72, type: 3}
+  - {fileID: -6112370201196446708, guid: 337cc2f6de038834584955f639c8c859, type: 3}

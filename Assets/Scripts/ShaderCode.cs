@@ -15,14 +15,14 @@ public class ShaderCode : MonoBehaviour
         image.material = m;
         visual = GetComponentInParent<CardVisual>();
 
-        string[] editions = new string[4];
-        editions[0] = "REGULAR";
-        editions[1] = "POLYCHROME";
-        editions[2] = "REGULAR";
-        editions[3] = "NEGATIVE";
-
-        //string[] editions = new string[1];
+        //string[] editions = new string[4];
         //editions[0] = "REGULAR";
+        //editions[1] = "POLYCHROME";
+        //editions[2] = "REGULAR";
+        //editions[3] = "NEGATIVE";
+
+        string[] editions = new string[1];
+        editions[0] = "REGULAR";
 
         for (int i = 0; i < image.material.enabledKeywords.Length; i++)
         {

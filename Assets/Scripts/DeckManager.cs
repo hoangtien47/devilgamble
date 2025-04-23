@@ -161,6 +161,11 @@ public class DeckManager : MonoBehaviour
             if (isSelected && !selectedCards.Contains(cardData))
             {
                 selectedCards.Add(cardData);
+                if (selectedCards.Count > 5)
+                {
+                    selectedCards.Remove(cardData);
+                    card.Deselect();
+                }
             }
             else if (!isSelected && selectedCards.Contains(cardData))
             {
@@ -573,6 +578,10 @@ public class DeckManager : MonoBehaviour
         Debug.Log($"Final Score: {finalScore} (Base: {baseScore} x Multiplier: {comboMultiplier} x HandMultiplier: {handMultiplier})");
         StartCoroutine(DiscardSelectedCardsCoroutine());
 
+        if (heroHolder == null || heroHolder.cards == null || heroHolder.cards.Count == 0 || bossTransform == null)
+            return;
+        StartCoroutine(AttackSequence());
+
     }
 
     private bool IsStraight(List<CardData> cards)
@@ -653,7 +662,6 @@ public class DeckManager : MonoBehaviour
 
     private void RearrangeCards(List<(Card card, int index, CardData data)> sortedPairs)
     {
-        // Temporarily store the cards and their data
         List<CardData> newHandCards = new List<CardData>();
         List<Transform> cardSlots = new List<Transform>();
 
@@ -695,4 +703,45 @@ public class DeckManager : MonoBehaviour
         }
     }
 
+
+    [Header("Attack Settings")]
+    [SerializeField] private Transform bossTransform;
+    [SerializeField] private float delayBetweenAttacks = 0.2f;
+    [SerializeField] private bool useSpecialAttacks = false;
+
+
+    private IEnumerator AttackSequence()
+    {
+        // Get all hero cards
+        List<Card> heroCards = heroHolder.cards;
+
+        foreach (Card heroCard in heroCards)
+        {
+            if (heroCard != null && heroCard.isCharacterCard && heroCard.cardVisual != null)
+            {
+                // Determine if this card should use a special attack
+                bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
+
+                // Create a callback for when the attack hits
+                System.Action hitCallback = () =>
+                {
+                    // Shake the boss to show impact
+                    bossTransform.DOShakePosition(0.2f, 0.5f, 10);
+
+                    // You could add more effects here, like damage numbers or particles
+                };
+
+                // Execute the attack animation
+                Tween attackTween = useSpecial ?
+                    heroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
+                    heroCard.cardVisual.Attack(bossTransform, hitCallback);
+
+                // Wait for the attack to complete
+                yield return attackTween.WaitForCompletion();
+
+                // Add a small delay between attacks
+                yield return new WaitForSeconds(delayBetweenAttacks);
+            }
+        }
+    }
 }

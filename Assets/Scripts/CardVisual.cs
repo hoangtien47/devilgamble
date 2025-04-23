@@ -57,6 +57,13 @@ public class CardVisual : MonoBehaviour
     [Header("Curve")]
     [SerializeField] private CurveParameters curve;
 
+    [Header("Attack Animation")]
+    [SerializeField] private float attackDuration = 0.3f;
+    [SerializeField] private float returnDuration = 0.2f;
+    [SerializeField] private Ease attackEase = Ease.OutQuint;
+    [SerializeField] private Ease returnEase = Ease.OutBack;
+    [SerializeField] private float attackDistance = 0.7f; // How close to get to the boss (0-1)
+
     private float curveYOffset;
     private float curveRotationOffset;
     private Coroutine pressCoroutine;
@@ -241,4 +248,124 @@ public class CardVisual : MonoBehaviour
         shadowCanvas.overrideSorting = false;
     }
 
+    /// Performs an attack animation toward the target transform
+    /// </summary>
+    /// <param name="targetTransform">The target to attack (usually the boss)</param>
+    /// <param name="onHitCallback">Optional callback that fires when the attack hits</param>
+    /// <returns>Coroutine for sequencing multiple attacks</returns>
+    public Tween Attack(Transform targetTransform, System.Action onHitCallback = null)
+    {
+        if (targetTransform == null)
+            return null;
+
+        DOTween.Kill(transform);
+
+        // Store original position
+        Vector3 originalPosition = transform.position;
+
+        // Calculate attack position (between card and boss)
+        Vector3 attackPosition = Vector3.Lerp(
+            originalPosition,
+            targetTransform.position,
+            attackDistance
+        );
+
+        // Create a sequence for the attack animation
+        Sequence attackSequence = DOTween.Sequence();
+
+        // Add punch scale for "wind up"
+        attackSequence.Append(transform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 5, 0.5f));
+
+        // Add rotation for dynamic feel
+        attackSequence.Join(shakeParent.DORotate(new Vector3(15f, 0f, 0f), 0.2f, RotateMode.LocalAxisAdd));
+
+        // Move toward target
+        attackSequence.Append(transform.DOMove(attackPosition, attackDuration)
+            .SetEase(attackEase));
+
+        // Add callback when hit occurs
+        attackSequence.AppendCallback(() =>
+        {
+            // Visual feedback at impact
+            shakeParent.DOPunchRotation(new Vector3(-25f, 0f, 0f), 0.2f, 10, 0.5f);
+
+            // Invoke the callback if provided
+            onHitCallback?.Invoke();
+        });
+
+        // Return to original position
+        attackSequence.Append(transform.DOMove(originalPosition, returnDuration)
+            .SetEase(returnEase));
+
+        // Reset rotation
+        attackSequence.Join(shakeParent.DORotate(Vector3.zero, returnDuration, RotateMode.Fast));
+
+        return attackSequence;
+    }
+
+    /// Performs a special attack animation with more visual flair
+    /// </summary>
+    /// <param name="targetTransform">The target to attack</param>
+    /// <param name="onHitCallback">Optional callback that fires when the attack hits</param>
+    /// <returns>Coroutine for sequencing multiple attacks</returns>
+    public Tween SpecialAttack(Transform targetTransform, System.Action onHitCallback = null)
+    {
+        if (targetTransform == null)
+            return null;
+
+        // Kill any ongoing tweens
+        DOTween.Kill(transform);
+
+        // Store original position and rotation
+        Vector3 originalPosition = transform.position;
+        Quaternion originalRotation = transform.rotation;
+
+        // Calculate attack position
+        Vector3 attackPosition = Vector3.Lerp(
+            originalPosition,
+            targetTransform.position,
+            attackDistance
+        );
+
+        // Create a sequence for the attack animation
+        Sequence attackSequence = DOTween.Sequence();
+
+        // Add dramatic scale up
+        attackSequence.Append(transform.DOScale(scaleOnSelect * 1.2f, 0.3f).SetEase(Ease.OutBack));
+
+        // Add dramatic rotation
+        attackSequence.Join(transform.DORotate(new Vector3(0, 0, 360), 0.5f, RotateMode.FastBeyond360)
+            .SetEase(Ease.OutCirc));
+
+        // Move toward target with a slight arc
+        attackSequence.Append(transform.DOPath(
+            new Vector3[] {
+            originalPosition + Vector3.up * 0.5f,
+            attackPosition + Vector3.up * 0.3f,
+            attackPosition
+            },
+            attackDuration * 1.5f,
+            PathType.CatmullRom
+        ).SetEase(attackEase));
+
+        // Add callback when hit occurs
+        attackSequence.AppendCallback(() =>
+        {
+            // Visual feedback at impact
+            shakeParent.DOPunchScale(Vector3.one * 0.4f, 0.3f, 10, 0.5f);
+
+            // Invoke the callback if provided
+            onHitCallback?.Invoke();
+        });
+
+        // Return to original position
+        attackSequence.Append(transform.DOMove(originalPosition, returnDuration)
+            .SetEase(returnEase));
+
+        // Reset rotation and scale
+        attackSequence.Join(transform.DORotateQuaternion(originalRotation, returnDuration));
+        attackSequence.Join(transform.DOScale(1f, returnDuration).SetEase(Ease.OutBack));
+
+        return attackSequence;
+    }
 }

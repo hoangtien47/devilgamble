@@ -75,17 +75,20 @@ public class CardVisual : MonoBehaviour
 
     public void Initialize(Card target, int index = 0)
     {
+
+
         Suit = target.Suit;
         Rank = target.Rank;
-
-
 
         int suitIndex = (int)Suit;
         int rankIndex = (int)Rank - 2; // Two starts at 2
         int spriteIndex = suitIndex * 13 + rankIndex;
 
-
-        if (spriteIndex >= 0 && spriteIndex < spriteDatabase.cardSprites.Length)
+        if (target.isCharacterCard)
+        {
+            cardImage.sprite = spriteDatabase.GetIndexCardSprite(target.charIndex);
+        }
+        else if (!target.isCharacterCard && spriteIndex >= 0 && spriteIndex < spriteDatabase.cardSprites.Length)
         {
             cardImage.sprite = spriteDatabase.GetCardSprite(Suit, Rank);//spriteDatabase.cardSprites[spriteIndex];
         }

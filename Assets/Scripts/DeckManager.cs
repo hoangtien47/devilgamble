@@ -212,7 +212,8 @@ public class DeckManager : MonoBehaviour
             // Create a slot and card
             GameObject slot = Instantiate(heroPrefab, heroHolder.transform);
             Card card = slot.GetComponentInChildren<Card>();
-            card.index = i;
+            card.isCharacterCard = true;
+            card.charIndex = i;
             yield return new WaitForSeconds(dealDelay);
         }
 
@@ -486,7 +487,7 @@ public class DeckManager : MonoBehaviour
 
     public void CalculateScoreWithCombos()
     {
-        if (selectedCards.Count == 0)
+        if (selectedCards.Count < 5)
         {
             Debug.LogWarning("No cards selected for scoring.");
             return;

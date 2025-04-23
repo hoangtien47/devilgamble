@@ -50,3 +50,7 @@ Người chơi sẽ có các thuộc tính sau:
 This project is licensed under the MIT License
 
 ![alt text](image.png)
+Background trippy
+#003C2F
+Background
+#319679

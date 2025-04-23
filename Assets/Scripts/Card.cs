@@ -48,7 +48,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public CardRank Rank { get; set; }
 
     public bool isCharacterCard { get; set; }
-    public int index { get; set; }
+    public int charIndex { get; set; }
 
     void Start()
     {

@@ -730,7 +730,7 @@ public class DeckManager : MonoBehaviour
                 if (bossTransform == null) return;
 
                 // Shake the boss to show impact
-                bossTransform.DOShakePosition(0.2f, 0.5f, 10)
+                bossTransform.DOShakePosition(0.2f, .5f, 10)
                     .SetLink(bossTransform.gameObject); // Link to boss to auto-kill if destroyed
             };
 

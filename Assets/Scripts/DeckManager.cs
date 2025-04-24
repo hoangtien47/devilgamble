@@ -717,31 +717,36 @@ public class DeckManager : MonoBehaviour
 
         foreach (Card heroCard in heroCards)
         {
-            if (heroCard != null && heroCard.isCharacterCard && heroCard.cardVisual != null)
+            if (heroCard == null || !heroCard.isCharacterCard || heroCard.cardVisual == null || bossTransform == null)
+                continue;
+
+            // Determine if this card should use a special attack
+            bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
+
+            // Create a callback for when the attack hits
+            System.Action hitCallback = () =>
             {
-                // Determine if this card should use a special attack
-                bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
+                // Check if boss still exists
+                if (bossTransform == null) return;
 
-                // Create a callback for when the attack hits
-                System.Action hitCallback = () =>
-                {
-                    // Shake the boss to show impact
-                    bossTransform.DOShakePosition(0.2f, 0.5f, 10);
+                // Shake the boss to show impact
+                bossTransform.DOShakePosition(0.2f, 0.5f, 10)
+                    .SetLink(bossTransform.gameObject); // Link to boss to auto-kill if destroyed
+            };
 
-                    // You could add more effects here, like damage numbers or particles
-                };
+            // Execute the attack animation
+            Tween attackTween = useSpecial ?
+                heroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
+                heroCard.cardVisual.Attack(bossTransform, hitCallback);
 
-                // Execute the attack animation
-                Tween attackTween = useSpecial ?
-                    heroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
-                    heroCard.cardVisual.Attack(bossTransform, hitCallback);
-
-                // Wait for the attack to complete
+            // Wait for the attack to complete if the tween was created successfully
+            if (attackTween != null)
+            {
                 yield return attackTween.WaitForCompletion();
-
-                // Add a small delay between attacks
-                yield return new WaitForSeconds(delayBetweenAttacks);
             }
+
+            // Add a small delay between attacks
+            yield return new WaitForSeconds(delayBetweenAttacks);
         }
     }
 }

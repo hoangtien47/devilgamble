@@ -57,6 +57,17 @@ public class CardVisual : MonoBehaviour
     [Header("Curve")]
     [SerializeField] private CurveParameters curve;
 
+    [Header("Attack Animation")]
+    [SerializeField] private float attackDuration = 0.3f;
+    [SerializeField] private float returnDuration = 0.2f;
+    [SerializeField] private Ease attackEase = Ease.OutQuint;
+    [SerializeField] private Ease returnEase = Ease.OutBack;
+    [SerializeField] private float attackDistance = 0.7f; // How close to get to the boss (0-1)
+
+    [Header("Check For Destroy Card")]
+    private bool isBeingDestroyed = false;
+
+
     private float curveYOffset;
     private float curveRotationOffset;
     private Coroutine pressCoroutine;
@@ -73,19 +84,47 @@ public class CardVisual : MonoBehaviour
         shadowDistance = visualShadow.localPosition;
     }
 
+    private void OnDestroy()
+    {
+        // Set flag when object is being destroyed
+        isBeingDestroyed = true;
+
+        // Kill all tweens associated with this object and its children
+        DOTween.Kill(transform);
+        if (shakeParent != null)
+            DOTween.Kill(shakeParent);
+        if (tiltParent != null)
+            DOTween.Kill(tiltParent);
+
+        // Remove event listeners to prevent callbacks after destruction
+        if (parentCard != null)
+        {
+            parentCard.PointerEnterEvent.RemoveListener(PointerEnter);
+            parentCard.PointerExitEvent.RemoveListener(PointerExit);
+            parentCard.BeginDragEvent.RemoveListener(BeginDrag);
+            parentCard.EndDragEvent.RemoveListener(EndDrag);
+            parentCard.PointerDownEvent.RemoveListener(PointerDown);
+            parentCard.PointerUpEvent.RemoveListener(PointerUp);
+            parentCard.SelectEvent.RemoveListener(Select);
+        }
+    }
+
     public void Initialize(Card target, int index = 0)
     {
+
+
         Suit = target.Suit;
         Rank = target.Rank;
-
-
 
         int suitIndex = (int)Suit;
         int rankIndex = (int)Rank - 2; // Two starts at 2
         int spriteIndex = suitIndex * 13 + rankIndex;
 
-
-        if (spriteIndex >= 0 && spriteIndex < spriteDatabase.cardSprites.Length)
+        if (target.isCharacterCard)
+        {
+            cardImage.sprite = spriteDatabase.GetIndexCardSprite(target.charIndex);
+        }
+        else if (!target.isCharacterCard && spriteIndex >= 0 && spriteIndex < spriteDatabase.cardSprites.Length)
         {
             cardImage.sprite = spriteDatabase.GetCardSprite(Suit, Rank);//spriteDatabase.cardSprites[spriteIndex];
         }
@@ -171,20 +210,21 @@ public class CardVisual : MonoBehaviour
 
     private void Select(Card card, bool state)
     {
+        if (isBeingDestroyed || shakeParent == null) return;
+
         DOTween.Kill(2, true);
         float dir = state ? 1 : 0;
         shakeParent.DOPunchPosition(shakeParent.up * selectPunchAmount * dir, scaleTransition, 10, 1);
         shakeParent.DOPunchRotation(Vector3.forward * (hoverPunchAngle / 2), hoverTransition, 20, 1).SetId(2);
 
-        if (scaleAnimations)
+        if (scaleAnimations && transform != null)
             transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
 
     }
 
     public void Swap(float dir = 1)
     {
-        if (!swapAnimations)
-            return;
+        if (isBeingDestroyed || !swapAnimations || shakeParent == null) return;
 
         DOTween.Kill(2, true);
         shakeParent.DOPunchRotation((Vector3.forward * swapRotationAngle) * dir, swapTransition, swapVibrato, 1).SetId(3);
@@ -192,21 +232,31 @@ public class CardVisual : MonoBehaviour
 
     private void BeginDrag(Card card)
     {
-        if (scaleAnimations)
+        if (isBeingDestroyed) return;
+
+        if (scaleAnimations && transform != null)
             transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
 
-        canvas.overrideSorting = true;
+        if (canvas != null)
+            canvas.overrideSorting = true;
     }
 
     private void EndDrag(Card card)
     {
-        canvas.overrideSorting = false;
-        transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+        if (isBeingDestroyed) return;
+
+        if (canvas != null)
+            canvas.overrideSorting = false;
+
+        if (transform != null)
+            transform.DOScale(1, scaleTransition).SetEase(scaleEase);
     }
 
     private void PointerEnter(Card card)
     {
-        if (scaleAnimations)
+        if (isBeingDestroyed || shakeParent == null) return;
+
+        if (scaleAnimations && transform != null)
             transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
 
         DOTween.Kill(2, true);
@@ -215,27 +265,137 @@ public class CardVisual : MonoBehaviour
 
     private void PointerExit(Card card)
     {
-        if (!parentCard.wasDragged)
+        if (isBeingDestroyed) return;
+
+        if (!parentCard.wasDragged && transform != null)
             transform.DOScale(1, scaleTransition).SetEase(scaleEase);
     }
 
     private void PointerUp(Card card, bool longPress)
     {
-        if (scaleAnimations)
-            transform.DOScale(longPress ? scaleOnHover : scaleOnSelect, scaleTransition).SetEase(scaleEase);
-        canvas.overrideSorting = false;
+        if (isBeingDestroyed) return;
 
-        visualShadow.localPosition = shadowDistance;
-        shadowCanvas.overrideSorting = true;
+        if (scaleAnimations && transform != null)
+            transform.DOScale(longPress ? scaleOnHover : scaleOnSelect, scaleTransition).SetEase(scaleEase);
+
+        if (canvas != null)
+            canvas.overrideSorting = false;
+
+        if (visualShadow != null)
+        {
+            visualShadow.localPosition = shadowDistance;
+            if (shadowCanvas != null)
+                shadowCanvas.overrideSorting = true;
+        }
     }
 
     private void PointerDown(Card card)
     {
-        if (scaleAnimations)
+        if (isBeingDestroyed) return;
+
+        if (scaleAnimations && transform != null)
             transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
 
-        visualShadow.localPosition += (-Vector3.up * shadowOffset);
-        shadowCanvas.overrideSorting = false;
+        if (visualShadow != null)
+        {
+            visualShadow.localPosition += (-Vector3.up * shadowOffset);
+            if (shadowCanvas != null)
+                shadowCanvas.overrideSorting = false;
+        }
     }
 
+    public Tween Attack(Transform targetTransform, System.Action onHitCallback = null)
+    {
+        if (isBeingDestroyed || targetTransform == null || transform == null || shakeParent == null)
+            return null;
+
+        DOTween.Kill(transform);
+
+        Vector3 originalPosition = transform.position;
+
+        Vector3 attackPosition = Vector3.Lerp(
+            originalPosition,
+            targetTransform.position,
+            attackDistance
+        );
+
+        Sequence attackSequence = DOTween.Sequence();
+
+        attackSequence.SetLink(gameObject);
+        attackSequence.Append(transform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 5, 0.5f));
+
+        attackSequence.Join(shakeParent.DORotate(new Vector3(15f, 0f, 0f), 0.2f, RotateMode.LocalAxisAdd));
+
+        attackSequence.Append(transform.DOMove(attackPosition, attackDuration)
+            .SetEase(attackEase));
+
+        attackSequence.AppendCallback(() =>
+        {
+            if (isBeingDestroyed || shakeParent == null) return;
+
+            shakeParent.DOPunchRotation(new Vector3(-25f, 0f, 0f), 0.2f, 10, 0.5f);
+
+            onHitCallback?.Invoke();
+        });
+
+        attackSequence.Append(transform.DOMove(originalPosition, returnDuration)
+            .SetEase(returnEase));
+
+        attackSequence.Join(shakeParent.DORotate(Vector3.zero, returnDuration, RotateMode.Fast));
+
+        return attackSequence;
+    }
+
+
+    public Tween SpecialAttack(Transform targetTransform, System.Action onHitCallback = null)
+    {
+        if (isBeingDestroyed || targetTransform == null || transform == null || shakeParent == null)
+            return null;
+
+        DOTween.Kill(transform);
+
+        Vector3 originalPosition = transform.position;
+        Quaternion originalRotation = transform.rotation;
+
+        Vector3 attackPosition = Vector3.Lerp(
+            originalPosition,
+            targetTransform.position,
+            attackDistance
+        );
+
+        Sequence attackSequence = DOTween.Sequence();
+
+        attackSequence.SetLink(gameObject);
+
+        attackSequence.Append(transform.DOScale(scaleOnSelect * 1.2f, 0.3f).SetEase(Ease.OutBack));
+
+        attackSequence.Join(transform.DORotate(new Vector3(0, 0, 360), 0.5f, RotateMode.FastBeyond360)
+            .SetEase(Ease.OutCirc));
+
+        attackSequence.Append(transform.DOPath(
+            new Vector3[] {
+                originalPosition + Vector3.up * 0.5f,
+                attackPosition + Vector3.up * 0.3f,
+                attackPosition
+            },
+            attackDuration * 1.5f,
+            PathType.CatmullRom
+        ).SetEase(attackEase));
+
+        attackSequence.AppendCallback(() =>
+        {
+            if (isBeingDestroyed || shakeParent == null) return;
+
+            shakeParent.DOPunchScale(Vector3.one * 0.4f, 0.3f, 10, 0.5f);
+            onHitCallback?.Invoke();
+        });
+
+        attackSequence.Append(transform.DOMove(originalPosition, returnDuration)
+            .SetEase(returnEase));
+
+        attackSequence.Join(transform.DORotateQuaternion(originalRotation, returnDuration));
+        attackSequence.Join(transform.DOScale(1f, returnDuration).SetEase(Ease.OutBack));
+
+        return attackSequence;
+    }
 }

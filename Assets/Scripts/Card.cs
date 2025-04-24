@@ -1,4 +1,5 @@
 
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,7 +49,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public CardRank Rank { get; set; }
 
     public bool isCharacterCard { get; set; }
-    public int index { get; set; }
+    public int charIndex { get; set; }
 
     void Start()
     {
@@ -196,7 +197,23 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     private void OnDestroy()
     {
+        // Kill any tweens associated with this card
+        DOTween.Kill(transform);
+
+        // Clear all event listeners
+        PointerEnterEvent.RemoveAllListeners();
+        PointerExitEvent.RemoveAllListeners();
+        PointerUpEvent.RemoveAllListeners();
+        PointerDownEvent.RemoveAllListeners();
+        BeginDragEvent.RemoveAllListeners();
+        EndDragEvent.RemoveAllListeners();
+        SelectEvent.RemoveAllListeners();
+
+        // Destroy the card visual if it exists
         if (cardVisual != null)
+        {
+            // The cardVisual will handle its own tween cleanup in its OnDestroy
             Destroy(cardVisual.gameObject);
+        }
     }
 }

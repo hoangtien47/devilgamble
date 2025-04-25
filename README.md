@@ -20,14 +20,21 @@ Quái có các thuộc tính như:
 
 Lấy cảm hứng từ bộ bài tây
 
+## Cấu tạo heroes
+- HP
+- ATK
+- SHD
+- LIST<EFFECTED>
+
+- Role
+- 
 
 ## Heroes
 
-Có 4 loại heroes:
-- Tank
-- Healer
+Có 3 loại heroes:
 - DPS
-- Support  
+- Buffer
+- Debuffer
 
 Người chơi có thể chọn 3 heroes tham gia mỗi lần chơi.
 

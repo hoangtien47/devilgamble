@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -47,8 +48,12 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private Transform discardTransform;
     [SerializeField] private HorizontalCardHolder handHolder;
 
+    [Header("Hero Card")]
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private HorizontalCardHolder heroHolder;
+    [Header("Enemy Card")]
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private HorizontalCardHolder enemyHolder;
 
 
     [Header("Deck Settings")]
@@ -83,6 +88,15 @@ public class DeckManager : MonoBehaviour
     [Header("SortBy")]
     [SerializeField] private SortBy sortBy = SortBy.Suit;
 
+    [Header("Attack Settings")]
+    [SerializeField] private Transform bossTransform;
+    [SerializeField] private Transform heroTransform;
+    [SerializeField] private float delayBetweenAttacks = 0.2f;
+    [SerializeField] private bool useSpecialAttacks = false;
+    [SerializeField] private int turnCount = 2;
+
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI turnCountText;
     private void Start()
     {
         OnHandDealt.AddListener(OnHandDealtHandler);
@@ -92,6 +106,7 @@ public class DeckManager : MonoBehaviour
         ShuffleDeck();
         DealHand();
 
+        StartCoroutine(DealEnemyCoroutine(1));
         StartCoroutine(DealHeroCoroutine(3));
     }
 
@@ -206,6 +221,40 @@ public class DeckManager : MonoBehaviour
 
 
     }
+    private IEnumerator DealEnemyCoroutine(int numCardDeal)
+    {
+
+        // Create slots for the hand
+        for (int i = 0; i < numCardDeal; i++)
+        {
+
+            // Create a slot and card
+            GameObject slot = Instantiate(enemyPrefab, enemyHolder.transform);
+            Card card = slot.GetComponentInChildren<Card>();
+            card.isCharacterCard = true;
+            card.charIndex = i;
+            yield return new WaitForSeconds(dealDelay);
+        }
+
+        // Update the card holder
+        enemyHolder.cards = enemyHolder.GetComponentsInChildren<Card>().ToList();
+
+        // Set up event listeners for the new cards
+        int cardCount = 0;
+        foreach (Card card in heroHolder.cards)
+        {
+            // Draw a card from the deck
+
+            card.PointerEnterEvent.AddListener(enemyHolder.CardPointerEnter);
+            card.PointerExitEvent.AddListener(enemyHolder.CardPointerExit);
+            card.BeginDragEvent.AddListener(enemyHolder.BeginDrag);
+            card.EndDragEvent.AddListener(enemyHolder.EndDrag);
+            card.SelectEvent.AddListener(HandleCardSelection); // Add selection listener
+            card.name = cardCount.ToString();
+            cardCount++;
+        }
+        bossTransform = enemyHolder.cards[0].gameObject.transform;
+    }
 
     private IEnumerator DealHeroCoroutine(int numCardDeal)
     {
@@ -239,7 +288,7 @@ public class DeckManager : MonoBehaviour
             card.name = cardCount.ToString();
             cardCount++;
         }
-
+        heroTransform = heroHolder.gameObject.transform;
     }
 
     private IEnumerator DealHandCoroutine(int numCardDeal)
@@ -580,8 +629,7 @@ public class DeckManager : MonoBehaviour
 
         if (heroHolder == null || heroHolder.cards == null || heroHolder.cards.Count == 0 || bossTransform == null)
             return;
-        StartCoroutine(AttackSequence());
-
+        StartCoroutine(AttackHeroSequence());
     }
 
     private bool IsStraight(List<CardData> cards)
@@ -703,14 +751,7 @@ public class DeckManager : MonoBehaviour
         }
     }
 
-
-    [Header("Attack Settings")]
-    [SerializeField] private Transform bossTransform;
-    [SerializeField] private float delayBetweenAttacks = 0.2f;
-    [SerializeField] private bool useSpecialAttacks = false;
-
-
-    private IEnumerator AttackSequence()
+    private IEnumerator AttackHeroSequence()
     {
         // Get all hero cards
         List<Card> heroCards = heroHolder.cards;
@@ -738,15 +779,61 @@ public class DeckManager : MonoBehaviour
             Tween attackTween = useSpecial ?
                 heroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
                 heroCard.cardVisual.Attack(bossTransform, hitCallback);
-
+            
             // Wait for the attack to complete if the tween was created successfully
             if (attackTween != null)
             {
                 yield return attackTween.WaitForCompletion();
+                //deal damage to the boss
+                if (enemyHolder.cards[0].GetComponent<ICharacter>() != null)
+                    heroCard.OnAttack(enemyHolder.cards[0].GetComponent<ICharacter>());
             }
 
             // Add a small delay between attacks
             yield return new WaitForSeconds(delayBetweenAttacks);
         }
+        turnCount--;
+        if (turnCount <= 0)
+        {
+            StartCoroutine(AttackEnemySequence());
+            turnCount = 2;
+        }
+    }
+    private IEnumerator AttackEnemySequence()
+    {
+        Card enemyCard = enemyHolder.cards[0];
+        if(enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null)
+            yield break;
+        // Determine if this card should use a special attack
+        bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
+
+        // Create a callback for when the attack hits
+        System.Action hitCallback = () =>
+        {
+            // Check if hero still exists
+            if (heroTransform == null) return;
+
+            // Shake the hero to show impact
+            heroTransform.DOShakePosition(0.2f, .5f, 10)
+                .SetLink(heroTransform.gameObject); // Link to hero to auto-kill if destroyed
+        };
+
+        // Execute the attack animation
+        Tween attackTween = useSpecial ?
+            enemyCard.cardVisual.SpecialAttack(heroTransform, hitCallback) :
+            enemyCard.cardVisual.Attack(heroTransform, hitCallback);
+
+        // Wait for the attack to complete if the tween was created successfully
+        if (attackTween != null)
+        {
+            yield return attackTween.WaitForCompletion();
+            //deal damage to the hero
+            foreach(Card hero in heroHolder.cards)
+            {
+                if (hero.GetComponent<ICharacter>() != null)
+                    enemyCard.OnAttack(hero.GetComponent<ICharacter>());
+            }
+        }
+        yield return new WaitForSeconds(delayBetweenAttacks);
     }
 }

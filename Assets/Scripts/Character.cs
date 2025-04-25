@@ -70,7 +70,7 @@ public class StatusEffect
     [System.Serializable]
     public class StatModifier
     {
-        public string statToModify; // "HP", "Attack", "Defense", etc.
+        public int statToModify; // "HP", "Attack", "Defense", etc.
         public float value;
         public bool isPercentage;
     }
@@ -238,13 +238,13 @@ public class Character : MonoBehaviour
     {
         switch (modifier.statToModify)
         {
-            case "HP":
+            case 0:
                 if (modifier.isPercentage)
                     stats.currentHP += Mathf.RoundToInt(stats.baseHP * modifier.value);
                 else
                     stats.currentHP += Mathf.RoundToInt(modifier.value);
                 break;
-            case "Attack":
+            case 1:
                 if (modifier.isPercentage)
                     stats.currentAttack += Mathf.RoundToInt(stats.baseAttack * modifier.value);
                 else

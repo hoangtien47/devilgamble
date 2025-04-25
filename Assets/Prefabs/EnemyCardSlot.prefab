@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3655645598659960977, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
       propertyPath: m_Name
-      value: HeroCardSlot
+      value: EnemyCardSlot
       objectReference: {fileID: 0}
     - target: {fileID: 6346821589383760018, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
       propertyPath: cardVisualPrefab
@@ -102,14 +102,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2674873723983150242, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4980357657988797596}
+      addedObject: {fileID: 8630959031633682289}
   m_SourcePrefab: {fileID: 100100000, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
 --- !u!1 &6966232943998436684 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2674873723983150242, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
   m_PrefabInstance: {fileID: 5022085944353503726}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4980357657988797596
+--- !u!114 &8630959031633682289
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,11 +118,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6966232943998436684}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4772e4d3a4dec794f806cc18c0eebdcc, type: 3}
+  m_Script: {fileID: 11500000, guid: ae20611606c9c7c4d876e1d86b48a89d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   idCharacter: 
-  maxHealth: 100
-  attackPower: 10
-  _HPText: {fileID: 0}
-  _ATKText: {fileID: 0}
+  maxHealth: 300
+  attackPower: 50
+  difficultyLevel: 1
+  goldReward: 10
+  maxStamina: 100

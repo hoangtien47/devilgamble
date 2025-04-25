@@ -35,6 +35,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public bool isHovering;
     public bool isDragging;
     [HideInInspector] public bool wasDragged;
+    [HideInInspector] public BaseCharacter BaseCharacter;
 
     [Header("Events")]
     [HideInInspector] public UnityEvent<Card> PointerEnterEvent;
@@ -44,7 +45,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [HideInInspector] public UnityEvent<Card> BeginDragEvent;
     [HideInInspector] public UnityEvent<Card> EndDragEvent;
     [HideInInspector] public UnityEvent<Card, bool> SelectEvent;
-
     public CardSuit Suit { get; set; }
     public CardRank Rank { get; set; }
 
@@ -55,13 +55,16 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     {
         canvas = GetComponentInParent<Canvas>();
         imageComponent = GetComponent<Image>();
-
         if (!instantiateVisual)
             return;
 
         visualHandler = FindObjectOfType<VisualCardsHandler>();
         cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
         cardVisual.Initialize(this);
+        if (isCharacterCard)
+        {   
+            cardVisual.OnChangeData(GetComponent<ICharacter>().HP, GetComponent<ICharacter>().ATK);
+        }
     }
 
     void Update()
@@ -163,7 +166,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         else
             transform.localPosition = Vector3.zero;
     }
-
     public void Deselect()
     {
         if (selected)
@@ -195,6 +197,16 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         return transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
+    public virtual void OnCharacterDataChange()
+    {
+        if (cardVisual != null)
+            cardVisual.OnChangeData(GetComponent<ICharacter>().HP, GetComponent<ICharacter>().ATK);
+    }
+    public virtual void OnAttack(ICharacter target)
+    {
+        if (cardVisual != null)
+            this.GetComponent<BaseCharacter>().Attack(target);
+    }
     private void OnDestroy()
     {
         // Kill any tweens associated with this card

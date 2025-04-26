@@ -355,6 +355,8 @@ MonoBehaviour:
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
+  _HPText: {fileID: 0}
+  _ATKText: {fileID: 0}
   followSpeed: 25
   rotationAmount: 70
   rotationSpeed: 50
@@ -374,6 +376,11 @@ MonoBehaviour:
   swapTransition: 0.2
   swapVibrato: 5
   curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
+  attackDuration: 0.3
+  returnDuration: 0.2
+  attackEase: 15
+  returnEase: 27
+  attackDistance: 0.7
   spriteDatabase: {fileID: 11400000, guid: ce82c1338c52cc94fb2b9b5f3dd27b16, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
@@ -393,7 +400,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 1

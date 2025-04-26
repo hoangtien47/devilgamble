@@ -62,7 +62,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
         cardVisual.Initialize(this);
         if (isCharacterCard)
-        {   
+        {
             cardVisual.OnChangeData(GetComponent<ICharacter>().HP, GetComponent<ICharacter>().ATK);
         }
     }

@@ -764,22 +764,34 @@ public class DeckManager : MonoBehaviour
             // Determine if this card should use a special attack
             bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
 
-            // Create a callback for when the attack hits
+            //// Create a callback for when the attack hits
+            //System.Action hitCallback = () =>
+            //{
+            //    // Check if boss still exists
+            //    if (bossTransform == null) return;
+
+            //    // Shake the boss to show impact
+            //    bossTransform.DOShakePosition(0.2f, .5f, 10)
+            //        .SetLink(bossTransform.gameObject); // Link to boss to auto-kill if destroyed
+            //};
+
             System.Action hitCallback = () =>
             {
                 // Check if boss still exists
-                if (bossTransform == null) return;
+                if (bossTransform == null || enemyHolder.cards[0].cardVisual == null) return;
 
-                // Shake the boss to show impact
-                bossTransform.DOShakePosition(0.2f, .5f, 10)
-                    .SetLink(bossTransform.gameObject); // Link to boss to auto-kill if destroyed
+                // Use AttackedEffect instead of just shaking position
+                enemyHolder.cards[0].cardVisual.AttackedEffect(1.0f, () =>
+                {
+                    // Any additional effects after the attacked animation
+                });
             };
 
             // Execute the attack animation
             Tween attackTween = useSpecial ?
                 heroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
                 heroCard.cardVisual.Attack(bossTransform, hitCallback);
-            
+
             // Wait for the attack to complete if the tween was created successfully
             if (attackTween != null)
             {
@@ -802,33 +814,52 @@ public class DeckManager : MonoBehaviour
     private IEnumerator AttackEnemySequence()
     {
         Card enemyCard = enemyHolder.cards[0];
-        if(enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null)
+        if (enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null)
             yield break;
         // Determine if this card should use a special attack
         bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
 
-        // Create a callback for when the attack hits
+        //// Create a callback for when the attack hits
+        //System.Action hitCallback = () =>
+        //{
+        //    // Check if hero still exists
+        //    if (heroTransform == null) return;
+
+        //    // Shake the hero to show impact
+        //    heroTransform.DOShakePosition(0.2f, .5f, 10)
+        //        .SetLink(heroTransform.gameObject); // Link to hero to auto-kill if destroyed
+        //};
+
         System.Action hitCallback = () =>
         {
             // Check if hero still exists
             if (heroTransform == null) return;
 
-            // Shake the hero to show impact
-            heroTransform.DOShakePosition(0.2f, .5f, 10)
-                .SetLink(heroTransform.gameObject); // Link to hero to auto-kill if destroyed
+            // Find the targeted hero card and apply the effect
+            foreach (Card hero in heroHolder.cards)
+            {
+                if (hero.cardVisual != null)
+                {
+                    hero.cardVisual.AttackedEffect(1.0f, () =>
+                    {
+                        // Any additional effects after the attacked animation
+                    });
+                    //break; // Just affect one card, or remove this to affect all
+                }
+            }
         };
 
         // Execute the attack animation
         Tween attackTween = useSpecial ?
             enemyCard.cardVisual.SpecialAttack(heroTransform, hitCallback) :
-            enemyCard.cardVisual.Attack(heroTransform, hitCallback);
+        enemyCard.cardVisual.Attack(heroTransform, hitCallback);
 
         // Wait for the attack to complete if the tween was created successfully
         if (attackTween != null)
         {
             yield return attackTween.WaitForCompletion();
             //deal damage to the hero
-            foreach(Card hero in heroHolder.cards)
+            foreach (Card hero in heroHolder.cards)
             {
                 if (hero.GetComponent<ICharacter>() != null)
                     enemyCard.OnAttack(hero.GetComponent<ICharacter>());

@@ -406,4 +406,72 @@ public class CardVisual : MonoBehaviour
 
         return attackSequence;
     }
+
+    public Tween AttackedEffect(float intensity = 1.0f, System.Action onCompleteCallback = null)
+    {
+        if (isBeingDestroyed || shakeParent == null)
+            return null;
+
+        DOTween.Kill(transform);
+
+        // Store original values
+        Vector3 originalPosition = transform.position;
+        Vector3 originalScale = transform.localScale;
+        Quaternion originalRotation = transform.rotation;
+
+        Sequence attackedSequence = DOTween.Sequence();
+        attackedSequence.SetLink(gameObject);
+
+        // Flash red effect (requires cardImage to be accessible)
+        if (cardImage != null)
+        {
+            Color originalColor = cardImage.color;
+            attackedSequence.Append(cardImage.DOColor(Color.red, 0.1f));
+            attackedSequence.Append(cardImage.DOColor(originalColor, 0.2f));
+        }
+
+        // Shake effect
+        attackedSequence.Join(shakeParent.DOPunchRotation(
+            new Vector3(intensity * 10f, intensity * 5f, intensity * 15f),
+            0.3f,
+            10,
+            0.5f
+        ));
+
+        // Vibration effect
+        attackedSequence.Join(transform.DOShakePosition(
+            0.4f,
+            strength: new Vector3(0.2f, 0.2f, 0) * intensity,
+            vibrato: 20,
+            randomness: 90,
+            snapping: false,
+            fadeOut: true
+        ));
+
+        // Scale punch for impact feeling
+        attackedSequence.Join(transform.DOPunchScale(
+            new Vector3(-0.3f, -0.3f, 0) * intensity,
+            0.3f,
+            10,
+            0.5f
+        ));
+
+        // Ensure we return to original state
+        attackedSequence.OnComplete(() =>
+        {
+            if (isBeingDestroyed) return;
+
+            // Make sure we're back to original state
+            if (transform != null)
+            {
+                transform.position = originalPosition;
+                transform.localScale = originalScale;
+                transform.rotation = originalRotation;
+            }
+
+            onCompleteCallback?.Invoke();
+        });
+
+        return attackedSequence;
+    }
 }

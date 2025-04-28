@@ -2617,7 +2617,7 @@ MonoBehaviour:
   OnScoreCalculated:
     m_PersistentCalls:
       m_Calls: []
-  sortBy: 1
+  sortBy: 0
   bossTransform: {fileID: 0}
   heroTransform: {fileID: 0}
   delayBetweenAttacks: 0.2

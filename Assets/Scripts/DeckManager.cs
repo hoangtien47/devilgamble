@@ -398,14 +398,11 @@ public class DeckManager : MonoBehaviour
             }
         }
 
-        // If no cards are selected, exit
         if (cardsToDiscard.Count == 0)
             yield break;
 
-        // Animate cards to discard pile
         foreach (Card card in cardsToDiscard)
         {
-            // Animate card to discard pile
             card.transform.DOMove(discardTransform.position, dealDuration)
                 .SetEase(Ease.InBack);
 
@@ -541,76 +538,185 @@ public class DeckManager : MonoBehaviour
 
     public void CalculateScoreWithCombos()
     {
-        if (selectedCards.Count < 5)
+        var hand = selectedCards;
+
+        // Check if there are any cards selected
+        if (hand.Count == 0)
         {
             Debug.LogWarning("No cards selected for scoring.");
             return;
         }
 
-        var hand = selectedCards;
-
         int baseScore = 0;
         float comboMultiplier = 1f;
 
-        bool isFlush = hand.All(c => c.suit == hand[0].suit);
-        bool isStraight = IsStraight(hand);
+        // Define minimum cards needed for each combo
+        const int MIN_FLUSH_CARDS = 5;
+        const int MIN_STRAIGHT_CARDS = 5;
+
+        // Only check for flush/straight if we have enough cards
+        bool isFlush = hand.Count >= MIN_FLUSH_CARDS && hand.All(c => c.suit == hand[0].suit);
+        bool isStraight = hand.Count >= MIN_STRAIGHT_CARDS && IsStraight(hand);
+
         var rankGroups = hand.GroupBy(c => c.rank).ToList();
         var groupSizes = rankGroups.Select(g => g.Count()).OrderByDescending(x => x).ToList();
 
-        // Determine combo
-        if (isStraight && isFlush)
+        // Determine combo based on number of cards
+        if (hand.Count >= 5)
         {
-            baseScore = 500;
-            comboMultiplier = 5f;
-            Debug.Log("Straight Flush");
+            // Standard poker hands (require 5+ cards)
+            if (isStraight && isFlush)
+            {
+                baseScore = 500;
+                comboMultiplier = 5f;
+                Debug.Log("Straight Flush");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 4)
+            {
+                baseScore = 400;
+                comboMultiplier = 4f;
+                Debug.Log("Four of a Kind");
+            }
+            else if (groupSizes.Count >= 2 && groupSizes[0] == 3 && groupSizes[1] >= 2)
+            {
+                baseScore = 300;
+                comboMultiplier = 3.5f;
+                Debug.Log("Full House");
+            }
+            else if (isFlush)
+            {
+                baseScore = 250;
+                comboMultiplier = 3f;
+                Debug.Log("Flush");
+            }
+            else if (isStraight)
+            {
+                baseScore = 200;
+                comboMultiplier = 2.5f;
+                Debug.Log("Straight");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 3)
+            {
+                baseScore = 150;
+                comboMultiplier = 2f;
+                Debug.Log("Three of a Kind");
+            }
+            else if (groupSizes.Count(g => g == 2) == 2)
+            {
+                baseScore = 100;
+                comboMultiplier = 2f;
+                Debug.Log("Two Pair");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 50;
+                comboMultiplier = 1.5f;
+                Debug.Log("Pair");
+            }
+            else
+            {
+                baseScore = 5 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (5+ cards)");
+            }
         }
-        else if (groupSizes[0] == 4)
+        else if (hand.Count == 4)
         {
-            baseScore = 400;
-            comboMultiplier = 4f;
-            Debug.Log("Four of a Kind");
+            // 4-card combinations
+            if (groupSizes.Count > 0 && groupSizes[0] == 4)
+            {
+                baseScore = 300;
+                comboMultiplier = 3f;
+                Debug.Log("Four of a Kind (4 cards)");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 3)
+            {
+                baseScore = 120;
+                comboMultiplier = 1.8f;
+                Debug.Log("Three of a Kind (4 cards)");
+            }
+            else if (groupSizes.Count(g => g == 2) == 2)
+            {
+                baseScore = 80;
+                comboMultiplier = 1.7f;
+                Debug.Log("Two Pair (4 cards)");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 40;
+                comboMultiplier = 1.4f;
+                Debug.Log("Pair (4 cards)");
+            }
+            else
+            {
+                baseScore = 4 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (4 cards)");
+            }
         }
-        else if (groupSizes[0] == 3 && groupSizes.Count >= 2 && groupSizes[1] >= 2)
+        else if (hand.Count == 3)
         {
-            baseScore = 300;
-            comboMultiplier = 3.5f;
-            Debug.Log("Full House");
+            // 3-card combinations
+            if (groupSizes.Count > 0 && groupSizes[0] == 3)
+            {
+                baseScore = 90;
+                comboMultiplier = 1.6f;
+                Debug.Log("Three of a Kind (3 cards)");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 30;
+                comboMultiplier = 1.3f;
+                Debug.Log("Pair (3 cards)");
+            }
+            else
+            {
+                baseScore = 3 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (3 cards)");
+            }
         }
-        else if (isFlush)
+        else if (hand.Count == 2)
         {
-            baseScore = 250;
-            comboMultiplier = 3f;
-            Debug.Log("Flush");
+            // 2-card combinations
+            if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 20;
+                comboMultiplier = 1.2f;
+                Debug.Log("Pair (2 cards)");
+            }
+            else
+            {
+                baseScore = 2 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (2 cards)");
+            }
         }
-        else if (isStraight)
+        else if (hand.Count == 1)
         {
-            baseScore = 200;
-            comboMultiplier = 2.5f;
-            Debug.Log("Straight");
-        }
-        else if (groupSizes[0] == 3)
-        {
-            baseScore = 150;
-            comboMultiplier = 2f;
-            Debug.Log("Three of a Kind");
-        }
-        else if (groupSizes.Count(g => g == 2) == 2)
-        {
-            baseScore = 100;
-            comboMultiplier = 2f;
-            Debug.Log("Two Pair");
-        }
-        else if (groupSizes[0] == 2)
-        {
-            baseScore = 50;
-            comboMultiplier = 1.5f;
-            Debug.Log("Pair");
-        }
-        else
-        {
-            baseScore = 5 * hand.Count;
-            comboMultiplier = 1f;
-            Debug.Log("High Card");
+            // Single card - score based on rank
+            CardRank rank = hand[0].rank;
+
+            // Higher ranks get better scores
+            if (rank == CardRank.Ace)
+            {
+                baseScore = 15;
+                comboMultiplier = 1.1f;
+                Debug.Log("Single Ace");
+            }
+            else if (rank == CardRank.King || rank == CardRank.Queen || rank == CardRank.Jack)
+            {
+                baseScore = 12;
+                comboMultiplier = 1.05f;
+                Debug.Log("Single Face Card");
+            }
+            else
+            {
+                // For number cards, score based on the rank
+                baseScore = 5 + (int)rank;
+                comboMultiplier = 1f;
+                Debug.Log($"Single Card: {rank}");
+            }
         }
 
         // Enhance bonuses
@@ -764,17 +870,6 @@ public class DeckManager : MonoBehaviour
             // Determine if this card should use a special attack
             bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
 
-            //// Create a callback for when the attack hits
-            //System.Action hitCallback = () =>
-            //{
-            //    // Check if boss still exists
-            //    if (bossTransform == null) return;
-
-            //    // Shake the boss to show impact
-            //    bossTransform.DOShakePosition(0.2f, .5f, 10)
-            //        .SetLink(bossTransform.gameObject); // Link to boss to auto-kill if destroyed
-            //};
-
             System.Action hitCallback = () =>
             {
                 // Check if boss still exists
@@ -818,17 +913,6 @@ public class DeckManager : MonoBehaviour
             yield break;
         // Determine if this card should use a special attack
         bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
-
-        //// Create a callback for when the attack hits
-        //System.Action hitCallback = () =>
-        //{
-        //    // Check if hero still exists
-        //    if (heroTransform == null) return;
-
-        //    // Shake the hero to show impact
-        //    heroTransform.DOShakePosition(0.2f, .5f, 10)
-        //        .SetLink(heroTransform.gameObject); // Link to hero to auto-kill if destroyed
-        //};
 
         System.Action hitCallback = () =>
         {

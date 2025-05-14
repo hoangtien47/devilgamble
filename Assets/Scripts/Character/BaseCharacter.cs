@@ -76,8 +76,4 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     {
         return isAlive;
     }
-    public void SetAttack(int attack)
-    {
-        attackPower = attack;
-    }
 }

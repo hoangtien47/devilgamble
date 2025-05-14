@@ -95,7 +95,7 @@ PrefabInstance:
     - target: {fileID: 6346821589383760018, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
       propertyPath: cardVisualPrefab
       value: 
-      objectReference: {fileID: 242629169951691351, guid: 598318e595cd77e41aaef2533ce0c811, type: 3}
+      objectReference: {fileID: 7991528508406032882, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -123,4 +123,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idCharacter: 
   maxHealth: 100
-  attackPower: 1
+  attackPower: 10
+  _HPText: {fileID: 0}
+  _ATKText: {fileID: 0}

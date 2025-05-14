@@ -122,7 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idCharacter: 
-  maxHealth: 120
-  attackPower: 7
+  maxHealth: 300
+  attackPower: 50
+  difficultyLevel: 1
   goldReward: 10
   maxStamina: 100

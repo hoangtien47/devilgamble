@@ -46,14 +46,11 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private Transform deckTransform;
     [SerializeField] private Transform discardTransform;
-    [SerializeField] private Transform playcardTransform;
     [SerializeField] private HorizontalCardHolder handHolder;
 
     [Header("Hero Card")]
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private HorizontalCardHolder heroHolder;
-    private Card selectedHeroCard = null;
-
     [Header("Enemy Card")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private HorizontalCardHolder enemyHolder;
@@ -77,10 +74,8 @@ public class DeckManager : MonoBehaviour
     public List<CardData> handCards = new List<CardData>();
     public List<CardData> removedCards = new List<CardData>(); // Cards removed from play
     public List<CardData> selectedCards = new List<CardData>(); // Selected cards
-    public List<CardData> cardCombo = new List<CardData>();
 
     private bool isDealing = false;
-    private bool canPlayCards = true;
 
     [Header("Events")]
     public UnityEvent<int> OnDeckCountChanged;
@@ -102,18 +97,17 @@ public class DeckManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI turnCountText;
-    [SerializeField] private TextMeshProUGUI scoreText;
     private void Start()
     {
         OnHandDealt.AddListener(OnHandDealtHandler);
-        FadeOutScoreText();
+
 
         InitializeDeck();
         ShuffleDeck();
         DealHand();
 
         StartCoroutine(DealEnemyCoroutine(1));
-        StartCoroutine(DealHeroCoroutine(1));
+        StartCoroutine(DealHeroCoroutine(3));
     }
 
     private void OnHandDealtHandler(List<CardData> hand)
@@ -171,23 +165,7 @@ public class DeckManager : MonoBehaviour
 
         OnDeckShuffled?.Invoke();
     }
-    public void HandleHeroCardSelection(Card card, bool isSelected)
-    {
-        if (isSelected)
-        {
-            // Deselect previous hero card if any
-            if (selectedHeroCard != null && selectedHeroCard != card)
-            {
-                selectedHeroCard.Deselect();
-            }
-            selectedHeroCard = card;
-        }
-        else
-        {
-            if (selectedHeroCard == card)
-                selectedHeroCard = null;
-        }
-    }
+
     public void HandleCardSelection(Card card, bool isSelected)
     {
         int index = handHolder.cards.IndexOf(card);
@@ -263,7 +241,7 @@ public class DeckManager : MonoBehaviour
 
         // Set up event listeners for the new cards
         int cardCount = 0;
-        foreach (Card card in enemyHolder.cards)
+        foreach (Card card in heroHolder.cards)
         {
             // Draw a card from the deck
 
@@ -306,11 +284,10 @@ public class DeckManager : MonoBehaviour
             card.PointerExitEvent.AddListener(heroHolder.CardPointerExit);
             card.BeginDragEvent.AddListener(heroHolder.BeginDrag);
             card.EndDragEvent.AddListener(heroHolder.EndDrag);
-            card.SelectEvent.AddListener(HandleHeroCardSelection); // Add selection listener
+            card.SelectEvent.AddListener(HandleCardSelection); // Add selection listener
             card.name = cardCount.ToString();
             cardCount++;
         }
-        selectedHeroCard = heroHolder.cards[0];
         heroTransform = heroHolder.gameObject.transform;
     }
 
@@ -401,78 +378,7 @@ public class DeckManager : MonoBehaviour
             StartCoroutine(DiscardHandCoroutine());
         }
     }
-    private IEnumerator DiscardSelectedCardsCoroutineAfterPlayCard()
-    {
-        if (handHolder.cards == null || handHolder.cards.Count == 0)
-            yield break;
 
-        List<Card> cardsToDiscard = new List<Card>();
-        List<int> indicesToRemove = new List<int>();
-
-        // Find all selected cards
-        for (int i = 0; i < handHolder.cards.Count; i++)
-        {
-            Card card = handHolder.cards[i];
-            if (card != null && card.selected)
-            {
-                cardsToDiscard.Add(card);
-                indicesToRemove.Add(i);
-            }
-        }
-
-        if (cardsToDiscard.Count == 0)
-            yield break;
-
-        foreach (Card card in cardsToDiscard)
-        {
-            card.transform.DOMove(playcardTransform.position, dealDuration)
-                .SetEase(Ease.InBack);
-
-            // Add card data to discard pile
-            int index = handHolder.cards.IndexOf(card);
-            if (index >= 0 && index < handCards.Count)
-            {
-                discardPile.Add(handCards[index]);
-            }
-
-            yield return new WaitForSeconds(dealDelay / 2);
-        }
-
-        yield return new WaitForSeconds(dealDuration);
-        foreach(CardData card in cardCombo)
-        {
-            AddScoreByCardRank(card);
-            yield return new WaitForSeconds(dealDelay);
-        }
-        // Remove the cards from the hand (in reverse order to avoid index issues)
-        indicesToRemove.Sort();
-        indicesToRemove.Reverse();
-        foreach (int index in indicesToRemove)
-        {
-            if (index < handCards.Count)
-            {
-                handCards.RemoveAt(index);
-            }
-        }
-
-        // Destroy the selected card objects
-        foreach (Card card in cardsToDiscard)
-        {
-            if (card != null && card.transform.parent != null)
-            {
-                Destroy(card.transform.parent.gameObject);
-            }
-        }
-
-        selectedCards.Clear();
-
-        // Update the card holder
-        handHolder.cards = handHolder.GetComponentsInChildren<Card>().ToList();
-        StartCoroutine(AttackHeroSequence());
-        DealHand();
-
-        OnDiscardCountChanged?.Invoke(discardPile.Count);
-    }
     private IEnumerator DiscardSelectedCardsCoroutine()
     {
         if (handHolder.cards == null || handHolder.cards.Count == 0)
@@ -536,6 +442,7 @@ public class DeckManager : MonoBehaviour
 
         // Update the card holder
         handHolder.cards = handHolder.GetComponentsInChildren<Card>().ToList();
+
         DealHand();
 
         OnDiscardCountChanged?.Invoke(discardPile.Count);
@@ -631,9 +538,6 @@ public class DeckManager : MonoBehaviour
 
     public void CalculateScoreWithCombos()
     {
-        if (!canPlayCards || selectedHeroCard == null)
-            return;
-        canPlayCards = false;
         var hand = selectedCards;
 
         // Check if there are any cards selected
@@ -646,70 +550,173 @@ public class DeckManager : MonoBehaviour
         int baseScore = 0;
         float comboMultiplier = 1f;
 
-        // Get the actual combo cards
-        cardCombo = GetComboCards(hand);
+        // Define minimum cards needed for each combo
+        const int MIN_FLUSH_CARDS = 5;
+        const int MIN_STRAIGHT_CARDS = 5;
 
-        // Helper: Check for Royal Flush
-        bool IsRoyalFlush(List<CardData> cards)
-        {
-            if (cards.Count != 5) return false;
-            var suit = cards[0].suit;
-            var ranks = cards.Select(c => c.rank).OrderBy(r => r).ToList();
-            return cards.All(c => c.suit == suit) &&
-                   ranks.SequenceEqual(new List<CardRank> { CardRank.Ten, CardRank.Jack, CardRank.Queen, CardRank.King, CardRank.Ace });
-        }
+        // Only check for flush/straight if we have enough cards
+        bool isFlush = hand.Count >= MIN_FLUSH_CARDS && hand.All(c => c.suit == hand[0].suit);
+        bool isStraight = hand.Count >= MIN_STRAIGHT_CARDS && IsStraight(hand);
 
-        // Determine combo type and assign baseScore
-        if (IsRoyalFlush(cardCombo))
+        var rankGroups = hand.GroupBy(c => c.rank).ToList();
+        var groupSizes = rankGroups.Select(g => g.Count()).OrderByDescending(x => x).ToList();
+
+        // Determine combo based on number of cards
+        if (hand.Count >= 5)
         {
-            baseScore = 2000;
-            Debug.Log("Royal Flush");
+            // Standard poker hands (require 5+ cards)
+            if (isStraight && isFlush)
+            {
+                baseScore = 500;
+                comboMultiplier = 5f;
+                Debug.Log("Straight Flush");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 4)
+            {
+                baseScore = 400;
+                comboMultiplier = 4f;
+                Debug.Log("Four of a Kind");
+            }
+            else if (groupSizes.Count >= 2 && groupSizes[0] == 3 && groupSizes[1] >= 2)
+            {
+                baseScore = 300;
+                comboMultiplier = 3.5f;
+                Debug.Log("Full House");
+            }
+            else if (isFlush)
+            {
+                baseScore = 250;
+                comboMultiplier = 3f;
+                Debug.Log("Flush");
+            }
+            else if (isStraight)
+            {
+                baseScore = 200;
+                comboMultiplier = 2.5f;
+                Debug.Log("Straight");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 3)
+            {
+                baseScore = 150;
+                comboMultiplier = 2f;
+                Debug.Log("Three of a Kind");
+            }
+            else if (groupSizes.Count(g => g == 2) == 2)
+            {
+                baseScore = 100;
+                comboMultiplier = 2f;
+                Debug.Log("Two Pair");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 50;
+                comboMultiplier = 1.5f;
+                Debug.Log("Pair");
+            }
+            else
+            {
+                baseScore = 5 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (5+ cards)");
+            }
         }
-        else if (cardCombo.Count == 5 && cardCombo.All(c => c.suit == cardCombo[0].suit) &&
-                 cardCombo.Select(c => (int)c.rank).OrderBy(x => x).Zip(cardCombo.Select(c => (int)c.rank).OrderBy(x => x).Skip(1), (a, b) => b - a).All(diff => diff == 1))
+        else if (hand.Count == 4)
         {
-            baseScore = 600;
-            Debug.Log("Straight Flush");
+            // 4-card combinations
+            if (groupSizes.Count > 0 && groupSizes[0] == 4)
+            {
+                baseScore = 300;
+                comboMultiplier = 3f;
+                Debug.Log("Four of a Kind (4 cards)");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 3)
+            {
+                baseScore = 120;
+                comboMultiplier = 1.8f;
+                Debug.Log("Three of a Kind (4 cards)");
+            }
+            else if (groupSizes.Count(g => g == 2) == 2)
+            {
+                baseScore = 80;
+                comboMultiplier = 1.7f;
+                Debug.Log("Two Pair (4 cards)");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 40;
+                comboMultiplier = 1.4f;
+                Debug.Log("Pair (4 cards)");
+            }
+            else
+            {
+                baseScore = 4 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (4 cards)");
+            }
         }
-        else if (cardCombo.Count == 4 && cardCombo.GroupBy(c => c.rank).Any(g => g.Count() == 4))
+        else if (hand.Count == 3)
         {
-            baseScore = 400;
-            Debug.Log("Four of a Kind");
+            // 3-card combinations
+            if (groupSizes.Count > 0 && groupSizes[0] == 3)
+            {
+                baseScore = 90;
+                comboMultiplier = 1.6f;
+                Debug.Log("Three of a Kind (3 cards)");
+            }
+            else if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 30;
+                comboMultiplier = 1.3f;
+                Debug.Log("Pair (3 cards)");
+            }
+            else
+            {
+                baseScore = 3 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (3 cards)");
+            }
         }
-        else if (cardCombo.Count == 5 && cardCombo.GroupBy(c => c.rank).Any(g => g.Count() == 3) && cardCombo.GroupBy(c => c.rank).Any(g => g.Count() == 2))
+        else if (hand.Count == 2)
         {
-            baseScore = 175;
-            Debug.Log("Full House");
+            // 2-card combinations
+            if (groupSizes.Count > 0 && groupSizes[0] == 2)
+            {
+                baseScore = 20;
+                comboMultiplier = 1.2f;
+                Debug.Log("Pair (2 cards)");
+            }
+            else
+            {
+                baseScore = 2 * hand.Count;
+                comboMultiplier = 1f;
+                Debug.Log("High Card (2 cards)");
+            }
         }
-        else if (cardCombo.Count == 5 && cardCombo.All(c => c.suit == cardCombo[0].suit))
+        else if (hand.Count == 1)
         {
-            baseScore = 125;
-            Debug.Log("Flush");
-        }
-        else if (cardCombo.Count == 5 && cardCombo.Select(c => (int)c.rank).OrderBy(x => x).Zip(cardCombo.Select(c => (int)c.rank).OrderBy(x => x).Skip(1), (a, b) => b - a).All(diff => diff == 1))
-        {
-            baseScore = 100;
-            Debug.Log("Straight");
-        }
-        else if (cardCombo.Count == 3 && cardCombo.GroupBy(c => c.rank).Any(g => g.Count() == 3))
-        {
-            baseScore = 80;
-            Debug.Log("Three of a Kind");
-        }
-        else if (cardCombo.Count == 4 && cardCombo.GroupBy(c => c.rank).Count(g => g.Count() == 2) == 2)
-        {
-            baseScore = 40;
-            Debug.Log("Two Pair");
-        }
-        else if (cardCombo.Count == 2 && cardCombo.GroupBy(c => c.rank).Any(g => g.Count() == 2))
-        {
-            baseScore = 20;
-            Debug.Log("Pair");
-        }
-        else
-        {
-            baseScore = 10;
-            Debug.Log("High Card");
+            // Single card - score based on rank
+            CardRank rank = hand[0].rank;
+
+            // Higher ranks get better scores
+            if (rank == CardRank.Ace)
+            {
+                baseScore = 15;
+                comboMultiplier = 1.1f;
+                Debug.Log("Single Ace");
+            }
+            else if (rank == CardRank.King || rank == CardRank.Queen || rank == CardRank.Jack)
+            {
+                baseScore = 12;
+                comboMultiplier = 1.05f;
+                Debug.Log("Single Face Card");
+            }
+            else
+            {
+                // For number cards, score based on the rank
+                baseScore = 5 + (int)rank;
+                comboMultiplier = 1f;
+                Debug.Log($"Single Card: {rank}");
+            }
         }
 
         // Enhance bonuses
@@ -724,12 +731,11 @@ public class DeckManager : MonoBehaviour
         int finalScore = Mathf.RoundToInt(baseScore * comboMultiplier * handMultiplier);
         OnScoreCalculated?.Invoke(finalScore, Mathf.RoundToInt(comboMultiplier * handMultiplier));
         Debug.Log($"Final Score: {finalScore} (Base: {baseScore} x Multiplier: {comboMultiplier} x HandMultiplier: {handMultiplier})");
-        UpdateScoreText(finalScore);
-
-        StartCoroutine(DiscardSelectedCardsCoroutineAfterPlayCard());
+        StartCoroutine(DiscardSelectedCardsCoroutine());
 
         if (heroHolder == null || heroHolder.cards == null || heroHolder.cards.Count == 0 || bossTransform == null)
             return;
+        StartCoroutine(AttackHeroSequence());
     }
 
     private bool IsStraight(List<CardData> cards)
@@ -853,50 +859,51 @@ public class DeckManager : MonoBehaviour
 
     private IEnumerator AttackHeroSequence()
     {
-        if (selectedHeroCard == null || !selectedHeroCard.isCharacterCard || selectedHeroCard.cardVisual == null || bossTransform == null)
-            yield break;
+        // Get all hero cards
+        List<Card> heroCards = heroHolder.cards;
 
-        // Determine if this card should use a special attack
-        bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
-
-        System.Action hitCallback = () =>
+        foreach (Card heroCard in heroCards)
         {
-            // Check if boss still exists
-            if (bossTransform == null || enemyHolder.cards[0].cardVisual == null) return;
+            if (heroCard == null || !heroCard.isCharacterCard || heroCard.cardVisual == null || bossTransform == null)
+                continue;
 
-            // Use AttackedEffect instead of just shaking position
-            enemyHolder.cards[0].cardVisual.AttackedEffect(1.0f, () =>
+            // Determine if this card should use a special attack
+            bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
+
+            System.Action hitCallback = () =>
             {
-                // Any additional effects after the attacked animation
-            });
-        };
+                // Check if boss still exists
+                if (bossTransform == null || enemyHolder.cards[0].cardVisual == null) return;
 
-        // Execute the attack animation
-        Tween attackTween = useSpecial ?
-            selectedHeroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
-            selectedHeroCard.cardVisual.Attack(bossTransform, hitCallback);
+                // Use AttackedEffect instead of just shaking position
+                enemyHolder.cards[0].cardVisual.AttackedEffect(1.0f, () =>
+                {
+                    // Any additional effects after the attacked animation
+                });
+            };
 
-        // Wait for the attack to complete if the tween was created successfully
-        if (attackTween != null)
-        {
-            yield return attackTween.WaitForCompletion();
-            //deal damage to the boss
-            if (enemyHolder.cards[0].GetComponent<ICharacter>() != null)
-                selectedHeroCard.OnAttack(enemyHolder.cards[0].GetComponent<ICharacter>());
+            // Execute the attack animation
+            Tween attackTween = useSpecial ?
+                heroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
+                heroCard.cardVisual.Attack(bossTransform, hitCallback);
+
+            // Wait for the attack to complete if the tween was created successfully
+            if (attackTween != null)
+            {
+                yield return attackTween.WaitForCompletion();
+                //deal damage to the boss
+                if (enemyHolder.cards[0].GetComponent<ICharacter>() != null)
+                    heroCard.OnAttack(enemyHolder.cards[0].GetComponent<ICharacter>());
+            }
+
+            // Add a small delay between attacks
+            yield return new WaitForSeconds(delayBetweenAttacks);
         }
-
-        // Add a small delay between attacks
-        yield return new WaitForSeconds(delayBetweenAttacks);
         turnCount--;
         if (turnCount <= 0)
         {
             StartCoroutine(AttackEnemySequence());
             turnCount = 2;
-        }
-        else
-        {
-            FadeOutScoreText();
-            canPlayCards = true;
         }
     }
     private IEnumerator AttackEnemySequence()
@@ -943,153 +950,5 @@ public class DeckManager : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(delayBetweenAttacks);
-        FadeOutScoreText();
-        canPlayCards = true;
     }
-    public List<CardData> GetComboCards(List<CardData> hand)
-    {
-        if (hand == null || hand.Count == 0)
-            return new List<CardData>();
-
-        // Helper: Find straight in a list
-        List<CardData> FindStraight(List<CardData> cards)
-        {
-            var sorted = cards.OrderBy(c => (int)c.rank).ToList();
-            for (int i = 0; i <= sorted.Count - 5; i++)
-            {
-                bool isSeq = true;
-                for (int j = 0; j < 4; j++)
-                {
-                    if ((int)sorted[i + j + 1].rank != (int)sorted[i + j].rank + 1)
-                    {
-                        isSeq = false;
-                        break;
-                    }
-                }
-                if (isSeq)
-                    return sorted.GetRange(i, 5);
-            }
-            return new List<CardData>();
-        }
-
-        // Helper: Find flush in a list
-        List<CardData> FindFlush(List<CardData> cards)
-        {
-            var suitGroups = cards.GroupBy(c => c.suit).Where(g => g.Count() >= 5).FirstOrDefault();
-            return suitGroups != null ? suitGroups.Take(5).ToList() : new List<CardData>();
-        }
-
-        // Helper: Find straight flush
-        List<CardData> FindStraightFlush(List<CardData> cards)
-        {
-            var suitGroups = cards.GroupBy(c => c.suit).Where(g => g.Count() >= 5);
-            foreach (var group in suitGroups)
-            {
-                var straightFlush = FindStraight(group.ToList());
-                if (straightFlush.Count == 5)
-                    return straightFlush;
-            }
-            return new List<CardData>();
-        }
-
-        var rankGroups = hand.GroupBy(c => c.rank).OrderByDescending(g => g.Count()).ToList();
-
-        // 1. Straight Flush
-        var straightFlush = FindStraightFlush(hand);
-        if (straightFlush.Count == 5)
-            return straightFlush;
-
-        // 2. Four of a Kind
-        var four = rankGroups.FirstOrDefault(g => g.Count() == 4);
-        if (four != null)
-            return four.ToList();
-
-        // 3. Full House
-        var three = rankGroups.FirstOrDefault(g => g.Count() == 3);
-        var pair = rankGroups.Where(g => g.Count() >= 2 && g.Key != (three != null ? three.Key : CardRank.Two - 1)).FirstOrDefault();
-        if (three != null && pair != null)
-            return three.Take(3).Concat(pair.Take(2)).ToList();
-
-        // 4. Flush
-        var flush = FindFlush(hand);
-        if (flush.Count == 5)
-            return flush;
-
-        // 5. Straight
-        var straight = FindStraight(hand);
-        if (straight.Count == 5)
-            return straight;
-
-        // 6. Three of a Kind
-        if (three != null)
-            return three.ToList();
-
-        // 7. Two Pair
-        var pairs = rankGroups.Where(g => g.Count() == 2).Take(2).ToList();
-        if (pairs.Count == 2)
-            return pairs[0].ToList().Concat(pairs[1].ToList()).ToList();
-
-        // 8. Pair
-        if (pairs.Count == 1)
-            return pairs[0].ToList();
-
-        // 9. High Card (return the highest card)
-        return new List<CardData> { hand.OrderByDescending(c => (int)c.rank).First() };
-    }
-    #region ScoreText
-    private void AddScoreByCardRank(CardData card)
-    {
-        if (scoreText == null || card == null)
-            return;
-
-        int current = 0;
-        int.TryParse(scoreText.text, out current);
-
-        int addValue = 0;
-        if (card.rank == CardRank.Ace)
-        {
-            addValue = 15;
-        }
-        else if (card.rank == CardRank.King || card.rank == CardRank.Queen || card.rank == CardRank.Jack)
-        {
-            addValue = 12;
-        }
-        else
-        {
-            addValue = (int)card.rank;
-        }
-
-        int newValue = current + addValue;
-        heroHolder.cards[0].GetComponent<BaseCharacter>().SetAttack(newValue);
-        scoreText.text = newValue.ToString();
-
-        // Optional: pop animation
-        scoreText.DOKill();
-        scoreText.transform.localScale = Vector3.one;
-        scoreText.transform.DOScale(1.6f, 0.1f)
-            .SetEase(Ease.OutBack)
-            .OnComplete(() => scoreText.transform.DOScale(1f, 0.1f).SetEase(Ease.InBack));
-    }
-    private void UpdateScoreText(int value)
-    {
-        if (scoreText == null)
-            return;
-        int oldValue = int.Parse(scoreText.text);
-        scoreText.text = (oldValue+value).ToString();
-        scoreText.DOKill(); // Stop any previous tweens
-        scoreText.transform.localScale = Vector3.one;
-        scoreText.color = new Color(scoreText.color.r, scoreText.color.g, scoreText.color.b, 1f); // Ensure visible
-        scoreText.transform.DOScale(1.6f, 0.1f)
-            .SetEase(Ease.OutBack)
-            .OnComplete(() => scoreText.transform.DOScale(1f, 0.1f).SetEase(Ease.InBack));
-    }
-    private void FadeOutScoreText()
-    {
-        if (scoreText == null)
-            return;
-
-        scoreText.DOFade(0f, 0.3f).SetEase(Ease.InOutQuad);
-        scoreText.text = "0";
-    }
-    #endregion
 }

@@ -439,7 +439,7 @@ public class DeckManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(dealDuration);
-        foreach(CardData card in cardCombo)
+        foreach (CardData card in cardCombo)
         {
             AddScoreByCardRank(card);
             yield return new WaitForSeconds(dealDelay);
@@ -856,9 +856,6 @@ public class DeckManager : MonoBehaviour
         if (selectedHeroCard == null || !selectedHeroCard.isCharacterCard || selectedHeroCard.cardVisual == null || bossTransform == null)
             yield break;
 
-        // Determine if this card should use a special attack
-        bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
-
         System.Action hitCallback = () =>
         {
             // Check if boss still exists
@@ -872,9 +869,7 @@ public class DeckManager : MonoBehaviour
         };
 
         // Execute the attack animation
-        Tween attackTween = useSpecial ?
-            selectedHeroCard.cardVisual.SpecialAttack(bossTransform, hitCallback) :
-            selectedHeroCard.cardVisual.Attack(bossTransform, hitCallback);
+        Tween attackTween = selectedHeroCard.cardVisual.Attack(bossTransform, hitCallback);
 
         // Wait for the attack to complete if the tween was created successfully
         if (attackTween != null)
@@ -904,8 +899,7 @@ public class DeckManager : MonoBehaviour
         Card enemyCard = enemyHolder.cards[0];
         if (enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null)
             yield break;
-        // Determine if this card should use a special attack
-        bool useSpecial = useSpecialAttacks && Random.value > 0.7f;
+
 
         System.Action hitCallback = () =>
         {
@@ -927,9 +921,7 @@ public class DeckManager : MonoBehaviour
         };
 
         // Execute the attack animation
-        Tween attackTween = useSpecial ?
-            enemyCard.cardVisual.SpecialAttack(heroTransform, hitCallback) :
-        enemyCard.cardVisual.Attack(heroTransform, hitCallback);
+        Tween attackTween = enemyCard.cardVisual.Attack(heroTransform, hitCallback);
 
         // Wait for the attack to complete if the tween was created successfully
         if (attackTween != null)
@@ -1075,7 +1067,7 @@ public class DeckManager : MonoBehaviour
         if (scoreText == null)
             return;
         int oldValue = int.Parse(scoreText.text);
-        scoreText.text = (oldValue+value).ToString();
+        scoreText.text = (oldValue + value).ToString();
         scoreText.DOKill(); // Stop any previous tweens
         scoreText.transform.localScale = Vector3.one;
         scoreText.color = new Color(scoreText.color.r, scoreText.color.g, scoreText.color.b, 1f); // Ensure visible

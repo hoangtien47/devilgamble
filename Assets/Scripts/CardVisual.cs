@@ -321,6 +321,7 @@ public class CardVisual : MonoBehaviour
 
         Vector3 originalPosition = transform.position;
 
+        // Calculate attack position
         Vector3 attackPosition = Vector3.Lerp(
             originalPosition,
             targetTransform.position,
@@ -328,84 +329,40 @@ public class CardVisual : MonoBehaviour
         );
 
         Sequence attackSequence = DOTween.Sequence();
-
         attackSequence.SetLink(gameObject);
-        attackSequence.Append(transform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 5, 0.5f));
 
-        attackSequence.Join(shakeParent.DORotate(new Vector3(15f, 0f, 0f), 0.2f, RotateMode.LocalAxisAdd));
+        // Step 1: Pick up (move upward slightly)
+        attackSequence.Append(transform.DOMoveY(originalPosition.y + 0.5f, 0.2f).SetEase(Ease.OutBack));
 
-        attackSequence.Append(transform.DOMove(attackPosition, attackDuration)
-            .SetEase(attackEase));
+        // Step 2: Aggressively move toward the target
+        attackSequence.Append(transform.DOMove(attackPosition, attackDuration * 0.8f).SetEase(Ease.InQuad));
 
+        // Step 3: Apply knockback and shake to the target
         attackSequence.AppendCallback(() =>
         {
             if (isBeingDestroyed || shakeParent == null) return;
 
-            shakeParent.DOPunchRotation(new Vector3(-25f, 0f, 0f), 0.2f, 10, 0.5f);
+            // Knockback effect on the target
+            targetTransform.DOMove(targetTransform.position + (targetTransform.position - transform.position).normalized * 0.5f, 0.2f)
+                .SetEase(Ease.OutQuad);
 
+            // Shake effect on the target
+            targetTransform.DOShakePosition(0.3f, strength: 0.3f, vibrato: 10, randomness: 90);
+
+            // Trigger the hit callback
             onHitCallback?.Invoke();
         });
 
-        attackSequence.Append(transform.DOMove(originalPosition, returnDuration)
-            .SetEase(returnEase));
+        // Step 4: Return to the original position
+        attackSequence.Append(transform.DOMove(originalPosition, returnDuration).SetEase(returnEase));
 
+        // Step 5: Reset rotation and scale
         attackSequence.Join(shakeParent.DORotate(Vector3.zero, returnDuration, RotateMode.Fast));
-
-        return attackSequence;
-    }
-
-
-    public Tween SpecialAttack(Transform targetTransform, System.Action onHitCallback = null)
-    {
-        if (isBeingDestroyed || targetTransform == null || transform == null || shakeParent == null)
-            return null;
-
-        DOTween.Kill(transform);
-
-        Vector3 originalPosition = transform.position;
-        Quaternion originalRotation = transform.rotation;
-
-        Vector3 attackPosition = Vector3.Lerp(
-            originalPosition,
-            targetTransform.position,
-            attackDistance
-        );
-
-        Sequence attackSequence = DOTween.Sequence();
-
-        attackSequence.SetLink(gameObject);
-
-        attackSequence.Append(transform.DOScale(scaleOnSelect * 1.2f, 0.3f).SetEase(Ease.OutBack));
-
-        attackSequence.Join(transform.DORotate(new Vector3(0, 0, 360), 0.5f, RotateMode.FastBeyond360)
-            .SetEase(Ease.OutCirc));
-
-        attackSequence.Append(transform.DOPath(
-            new Vector3[] {
-                originalPosition + Vector3.up * 0.5f,
-                attackPosition + Vector3.up * 0.3f,
-                attackPosition
-            },
-            attackDuration * 1.5f,
-            PathType.CatmullRom
-        ).SetEase(attackEase));
-
-        attackSequence.AppendCallback(() =>
-        {
-            if (isBeingDestroyed || shakeParent == null) return;
-
-            shakeParent.DOPunchScale(Vector3.one * 0.4f, 0.3f, 10, 0.5f);
-            onHitCallback?.Invoke();
-        });
-
-        attackSequence.Append(transform.DOMove(originalPosition, returnDuration)
-            .SetEase(returnEase));
-
-        attackSequence.Join(transform.DORotateQuaternion(originalRotation, returnDuration));
         attackSequence.Join(transform.DOScale(1f, returnDuration).SetEase(Ease.OutBack));
 
         return attackSequence;
     }
+
 
     public Tween AttackedEffect(float intensity = 1.0f, System.Action onCompleteCallback = null)
     {

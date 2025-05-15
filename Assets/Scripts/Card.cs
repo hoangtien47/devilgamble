@@ -202,6 +202,13 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         if (cardVisual != null)
             cardVisual.OnChangeData(GetComponent<ICharacter>().HP, GetComponent<ICharacter>().ATK);
     }
+    public virtual void OnCharacterDeath()
+    {
+        if (cardVisual != null)
+            cardVisual.PlayExplosionEffect();
+        else
+            Destroy(cardVisual.gameObject);
+    }
     public virtual void OnAttack(ICharacter target)
     {
         if (cardVisual != null)

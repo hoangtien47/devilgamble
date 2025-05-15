@@ -897,7 +897,7 @@ public class DeckManager : MonoBehaviour
     private IEnumerator AttackEnemySequence()
     {
         Card enemyCard = enemyHolder.cards[0];
-        if (enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null)
+        if (enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null || !enemyCard.BaseCharacter.IsAlive())
             yield break;
 
 

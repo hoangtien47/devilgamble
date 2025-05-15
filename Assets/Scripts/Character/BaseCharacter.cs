@@ -65,7 +65,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     {
         currentHealth = 0;
         isAlive = false;
-
+        GetComponent<Card>().OnCharacterDeath();
         Debug.Log($"{idCharacter} has died!");
     }
 

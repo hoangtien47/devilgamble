@@ -53,7 +53,7 @@ public class EnemyCharacter : BaseCharacter
     protected override void Die()
     {
         base.Die();
-
+        GetComponent<Card>().OnCharacterDeath();
         // Enemy specific death logic
         DropRewards();
     }

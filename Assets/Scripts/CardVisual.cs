@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -311,6 +312,10 @@ public class CardVisual : MonoBehaviour
     {
         _HPText.SetText(HP.ToString());
         _ATKText.SetText(ATK.ToString());
+    }
+    public void LoadCharacterData(NodeBlueprint currentNode)
+    {
+        parentCard.LoadCharacterData(currentNode);
     }
     public Tween Attack(Transform targetTransform, System.Action onHitCallback = null)
     {

@@ -179,7 +179,7 @@ MonoBehaviour:
   m_text: New Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
-  m_sharedMaterial: {fileID: 654226567835329514, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
+  m_sharedMaterial: {fileID: -2113247034561278414, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -701,7 +701,7 @@ MonoBehaviour:
   m_text: Death Gamble
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
-  m_sharedMaterial: {fileID: 654226567835329514, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
+  m_sharedMaterial: {fileID: -2113247034561278414, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

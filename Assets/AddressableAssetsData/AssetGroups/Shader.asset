@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Shader
+  m_EditorClassIdentifier: 
+  m_GroupName: Shader
+  m_GUID: 7196666ed8682d14b803998c4575f4b6
+  m_SerializeEntries:
+  - m_GUID: 6bd04197f2541274fa5e47dfecc78cc1
+    m_Address: Assets/Shaders/MADFINGER-Unlit-Scroll2Layers-Sine-AlphaBlend-No-Amp.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9033b7432b030b94ebdd14861cc3e42c
+    m_Address: Assets/Shaders/Scroll.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: b522204c83bbe8446a881f04f7e2ed20, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e0b096b6e3111f04582d264f4110169e, type: 2}
+    - {fileID: 11400000, guid: 491e21b3ec591e54a9d18e0829d6903e, type: 2}

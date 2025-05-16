@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Map;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -245,7 +246,6 @@ public class DeckManager : MonoBehaviour
     }
     private IEnumerator DealEnemyCoroutine(int numCardDeal)
     {
-
         // Create slots for the hand
         for (int i = 0; i < numCardDeal; i++)
         {
@@ -276,6 +276,7 @@ public class DeckManager : MonoBehaviour
             cardCount++;
         }
         bossTransform = enemyHolder.cards[0].gameObject.transform;
+        enemyHolder.cards[0].cardVisual.LoadCharacterData(GameSession.node);
     }
 
     private IEnumerator DealHeroCoroutine(int numCardDeal)

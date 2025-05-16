@@ -3,6 +3,19 @@ using UnityEngine;
 
 public class HeroesCharacter : BaseCharacter
 {
+    [SerializeField] private int maxEnergy = 100;
+    private int currentEnergy;
+
+    /// <summary>
+    /// Gets the current energy of the hero.
+    /// </summary>
+    public int Energy => currentEnergy;
+
+    private void Awake()
+    {
+        base.Awake();
+        currentEnergy = maxEnergy;
+    }
     /// <summary>
     /// Takes damage from an attacker
     /// </summary>

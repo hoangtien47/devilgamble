@@ -1,5 +1,6 @@
 
 using DG.Tweening;
+using Map;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -201,6 +202,22 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     {
         if (cardVisual != null)
             cardVisual.OnChangeData(GetComponent<ICharacter>().HP, GetComponent<ICharacter>().ATK);
+    }
+    public virtual void LoadCharacterData(NodeBlueprint currentNode)
+    {
+        if(GetComponent<EnemyCharacter>() != null)
+        {
+            Debug.Log("LoadCharacterData");
+            GetComponent<EnemyCharacter>().SetData(currentNode.hp,currentNode.atk,currentNode.turn);
+            OnCharacterDataChange();
+        }
+    }
+    public virtual void OnCharacterDeath()
+    {
+        if (cardVisual != null)
+            cardVisual.PlayExplosionEffect();
+        else
+            Destroy(cardVisual.gameObject);
     }
     public virtual void OnAttack(ICharacter target)
     {

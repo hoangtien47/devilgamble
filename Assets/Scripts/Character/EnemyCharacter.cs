@@ -10,6 +10,8 @@ public class EnemyCharacter : BaseCharacter
     // Stamina attribute
     [SerializeField] private int maxStamina = 100;
     private int currentStamina;
+    // Turn attribute
+    [SerializeField] private int turn = 3;
     /// <summary>
     /// Override the Attack method to add enemy-specific behavior
     /// </summary>
@@ -53,7 +55,7 @@ public class EnemyCharacter : BaseCharacter
     protected override void Die()
     {
         base.Die();
-
+        GetComponent<Card>().OnCharacterDeath();
         // Enemy specific death logic
         DropRewards();
     }
@@ -65,5 +67,11 @@ public class EnemyCharacter : BaseCharacter
     {
         Debug.Log($"{idCharacter} was defeated! Drops: {goldReward} gold.");
         // Logic for spawning items or giving rewards to the player would go here
+    }
+    public void SetData(int Hp, int Atk, int turn)
+    {
+        this.maxHealth = Hp;
+        this.attackPower = Atk;
+        this.turn = turn;
     }
 }

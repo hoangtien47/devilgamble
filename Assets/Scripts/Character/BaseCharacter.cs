@@ -10,7 +10,8 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     [SerializeField] protected string idCharacter;
     [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected int attackPower = 10;
-    
+    [SerializeField] private int attackAmount = 1;
+
     protected int currentHealth;
     protected bool isAlive = true;
 
@@ -34,7 +35,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
             return;
 
         // Apply damage to the target
-        target.TakeDamage(attackPower, this);
+        target.TakeDamage(attackAmount, this);
 
         Debug.Log($"{idCharacter} attacks {target.id} for {ATK} damage!");
     }
@@ -65,7 +66,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     {
         currentHealth = 0;
         isAlive = false;
-
+        GetComponent<Card>().OnCharacterDeath();
         Debug.Log($"{idCharacter} has died!");
     }
 
@@ -78,6 +79,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     }
     public void SetAttack(int attack)
     {
+        attackAmount =  attack;
         attackPower = attack;
     }
 }

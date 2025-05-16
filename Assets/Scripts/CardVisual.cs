@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -312,6 +313,10 @@ public class CardVisual : MonoBehaviour
         _HPText.SetText(HP.ToString());
         _ATKText.SetText(ATK.ToString());
     }
+    public void LoadCharacterData(NodeBlueprint currentNode)
+    {
+        parentCard.LoadCharacterData(currentNode);
+    }
     public Tween Attack(Transform targetTransform, System.Action onHitCallback = null)
     {
         if (isBeingDestroyed || targetTransform == null || transform == null || shakeParent == null)
@@ -430,5 +435,21 @@ public class CardVisual : MonoBehaviour
         });
 
         return attackedSequence;
+    }
+    public void PlayExplosionEffect()
+    {
+        if (isBeingDestroyed) return;
+        isBeingDestroyed = true;
+
+        // Optional: randomize direction for a more dynamic effect
+        Vector2 randomDir = Random.insideUnitCircle.normalized * 80f;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(transform.DOScale(1.7f, 0.18f).SetEase(Ease.OutBack));
+        seq.Join(transform.DORotate(new Vector3(0, 0, Random.Range(-180f, 180f)), 0.18f, RotateMode.FastBeyond360));
+        seq.Join(transform.DOMove(transform.position + (Vector3)randomDir, 0.18f).SetEase(Ease.OutQuad));
+        if (cardImage != null)
+            seq.Join(cardImage.DOFade(0f, 0.18f));
+        seq.AppendCallback(() => Destroy(gameObject));
     }
 }

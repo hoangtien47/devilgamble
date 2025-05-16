@@ -90,6 +90,9 @@ namespace ZkLogin
                 var ephemeralPublicKeyBase = ephemeralPrivateKey.PublicKey();
                 ephemeralPublicKey = new PublicKey(ephemeralPublicKeyBase.KeyBase64);
 
+                Debug.Log($"Google Auth Private key: {ephemeralPrivateKey}");
+                Debug.Log($"Google Auth Public key: {ephemeralPublicKey}");
+
                 // Get current epoch from Sui RPC
                 maxEpoch = await FetchCurrentEpochFromRPC() + 10; // Buffer of 10 epochs
 
@@ -127,8 +130,8 @@ namespace ZkLogin
                 (int)maxEpoch,
                 randomness
             );
+            Debug.Log($"Google Generated nonce for proof: {nonce}");
 
-            Debug.Log($"Generated ZKLogin nonce with ephemeral key: {nonce}");
 
             var parameters = new Dictionary<string, string>
             {

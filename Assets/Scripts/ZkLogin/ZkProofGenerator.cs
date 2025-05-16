@@ -1,8 +1,11 @@
 using Newtonsoft.Json;
+using OpenDive.BCS;
 using Sui.Cryptography.Ed25519;
 using Sui.ZKLogin;
 using Sui.ZKLogin.SDK;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +26,7 @@ namespace ZkLogin
         {
             try
             {
+
                 Debug.Log("Starting ZK proof generation process");
 
                 // Decode the JWT to get necessary fields
@@ -38,7 +42,8 @@ namespace ZkLogin
 
                 // Create a proper Ed25519.PublicKey using the key data from the base class
                 var ephemeralPublicKey = new PublicKey(ephemeralPublicKeyBase.KeyBase64);
-
+                Debug.Log($"Zk Private key: {ephemeralPrivateKey}");
+                Debug.Log($"Zk Public key: {ephemeralPublicKey}");
                 // Use saved randomness if provided, otherwise generate new randomness
                 string randomness = savedRandomness;
                 if (string.IsNullOrEmpty(randomness))
@@ -57,6 +62,7 @@ namespace ZkLogin
                     (int)maxEpoch,
                     randomness
                 );
+                Debug.Log($"ZK Generated nonce for proof: {nonce}");
 
                 // Calculate the address seed
                 var addressSeed = Utils.GenAddressSeed(
@@ -70,13 +76,13 @@ namespace ZkLogin
                 var proofRequest = new ZkProofRequest
                 {
                     Jwt = jwt,
-                    AddressSeed = addressSeed.ToString(),
+                    //AddressSeed = addressSeed.ToString(),
                     Salt = userSalt,
                     KeyClaimName = "sub", // Add the key claim name (typically "sub" for subject)
                     MaxEpoch = maxEpoch,
                     JwtRandomness = randomness, // Use the consistent randomness
-                    EphemeralPublicKey = ephemeralPublicKeyBase.KeyBase64,
-                    ExtendedEphemeralPublicKey = $"PK${ephemeralPublicKeyBase.KeyBase64}"
+                    //EphemeralPublicKey = ephemeralPublicKeyBase.KeyBase64,
+                    ExtendedEphemeralPublicKey = ephemeralPublicKeyBase.KeyBase64
                 };
 
                 // Log the complete request for debugging
@@ -86,6 +92,8 @@ namespace ZkLogin
                 // Call the prover service to get the proof
                 var proofResponse = await SendProofRequestAsync(proofRequest);
 
+                Debug.Log($"2Received proof response: {JsonConvert.SerializeObject(proofResponse, Formatting.Indented)}");
+
                 // Create the ZK Login signature components
                 var zkLoginSignature = new ZkLoginSignature();
 
@@ -94,7 +102,7 @@ namespace ZkLogin
                 {
                     ProofPoints = proofResponse.ProofPoints,
                     IssBase64Details = proofResponse.IssBase64Details,
-                    HeaderBase64 = proofResponse.HeaderBase64,
+                    HeaderBase64 = BigInteger.Parse(proofResponse.HeaderBase64),
                     AddressSeed = addressSeed.ToString()
                 };
 
@@ -114,7 +122,6 @@ namespace ZkLogin
             }
         }
 
-        // Rest of the class remains unchanged
         private static async Task<ZkProofResponse> SendProofRequestAsync(ZkProofRequest request)
         {
             // Create HTTP client to call the prover service
@@ -157,9 +164,57 @@ namespace ZkLogin
 
                 Debug.Log($"Received prover response: {responseContent}");
 
-                // Parse the response using Newtonsoft.Json
-                return JsonConvert.DeserializeObject<ZkProofResponse>(responseContent);
+                var jsonObj = Newtonsoft.Json.Linq.JObject.Parse(responseContent);
+                Debug.Log($"ProofPoints 2: {jsonObj}");
+
+                // Create and manually populate the response
+                var result = new ZkProofResponse
+                {
+                    IssBase64Details = new ZkLoginSignatureInputsClaim
+                    {
+                        Value = jsonObj["issBase64Details"]["value"].ToString(),
+                        IndexMod4 = byte.Parse(jsonObj["issBase64Details"]["indexMod4"].ToString())
+                    },
+                    HeaderBase64 = jsonObj["headerBase64"].ToString(),  // Keep as string for now
+                    DataToSign = Convert.FromBase64String(jsonObj["dataToSign"].ToString())
+                };
+                Debug.Log($"ProofPoints 1: {result}");
+
+                // Create manually populated ProofPoints to avoid circular reference issues
+                result.ProofPoints = new ProofPoints();
+
+                // Create new instances for each sequence to avoid circular references
+                result.ProofPoints.A = CreateSequenceFromArray(jsonObj["proofPoints"]["a"]);
+                result.ProofPoints.B = CreateNestedSequence(jsonObj["proofPoints"]["b"]);
+                result.ProofPoints.C = CreateSequenceFromArray(jsonObj["proofPoints"]["c"]);
+
+                Debug.Log($"ProofPoints : {result}");
+
+                return result;
             }
+
+        }
+        private static Sequence CreateSequenceFromArray(Newtonsoft.Json.Linq.JToken array)
+        {
+            var items = array.ToArray();
+            var bStrings = items.Select(item => new OpenDive.BCS.BString(item.ToString())).ToArray();
+            return new OpenDive.BCS.Sequence(bStrings);
+        }
+
+        private static Sequence CreateNestedSequence(Newtonsoft.Json.Linq.JToken nestedArray)
+        {
+            // For the B field which is an array of arrays
+            var outerItems = nestedArray.ToArray();
+            var innerSequences = new List<ISerializable>();
+
+            foreach (var innerArray in outerItems)
+            {
+                var innerItems = innerArray.ToArray();
+                var innerBStrings = innerItems.Select(item => new OpenDive.BCS.BString(item.ToString())).ToArray();
+                innerSequences.Add(new OpenDive.BCS.Sequence(innerBStrings));
+            }
+
+            return new OpenDive.BCS.Sequence(innerSequences.ToArray());
         }
     }
 }
@@ -171,8 +226,8 @@ public class ZkProofRequest
     [JsonProperty("jwt")]
     public string Jwt;
 
-    [JsonProperty("addressSeed")]
-    public string AddressSeed;
+    //[JsonProperty("addressSeed")]
+    //public string AddressSeed;
 
     [JsonProperty("salt")]
     public string Salt;
@@ -186,8 +241,8 @@ public class ZkProofRequest
     [JsonProperty("jwtRandomness")]
     public string JwtRandomness;
 
-    [JsonProperty("ephemeralPublicKey")]
-    public string EphemeralPublicKey;
+    //[JsonProperty("ephemeralPublicKey")]
+    //public string EphemeralPublicKey;
 
     [JsonProperty("extendedEphemeralPublicKey")]
     public string ExtendedEphemeralPublicKey;
@@ -203,7 +258,7 @@ public class ZkProofResponse
     public ZkLoginSignatureInputsClaim IssBase64Details;
 
     [JsonProperty("headerBase64")]
-    public BigInteger HeaderBase64;
+    public string HeaderBase64;
 
     [JsonProperty("dataToSign")]
     public byte[] DataToSign;

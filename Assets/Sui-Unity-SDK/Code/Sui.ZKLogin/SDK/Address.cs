@@ -23,12 +23,12 @@
 //  THE SOFTWARE.
 //
 
-using System;
-using System.Numerics;
-using System.Text;
 using Blake2Fast;
 using OpenDive.Utils.Jwt;
 using Sui.Cryptography;
+using System;
+using System.Numerics;
+using System.Text;
 using UnityEngine;
 
 namespace Sui.ZKLogin.SDK

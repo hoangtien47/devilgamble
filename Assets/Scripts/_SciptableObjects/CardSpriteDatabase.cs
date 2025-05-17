@@ -6,9 +6,6 @@ public class CardSpriteDatabase : ScriptableObject
     [Header("Standard Playing Cards")]
     public Sprite[] cardSprites; // 52 card sprites (13 ranks x 4 suits)
 
-    [Header("Index-Based Cards")]
-    public Sprite[] indexCardSprites; // Any number of card sprites for index-based cards
-
     // Method to get a standard card sprite by suit and rank
     public Sprite GetCardSprite(CardSuit suit, CardRank rank)
     {
@@ -23,20 +20,6 @@ public class CardSpriteDatabase : ScriptableObject
         else
         {
             Debug.LogWarning("Invalid sprite index: " + spriteIndex);
-            return null;
-        }
-    }
-
-    // Method to get an index card sprite
-    public Sprite GetIndexCardSprite(int index)
-    {
-        if (index >= 0 && index < indexCardSprites.Length)
-        {
-            return indexCardSprites[index];
-        }
-        else
-        {
-            Debug.LogWarning("Invalid index card sprite index: " + index);
             return null;
         }
     }

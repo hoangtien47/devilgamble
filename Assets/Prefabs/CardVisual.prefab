@@ -381,7 +381,7 @@ MonoBehaviour:
   attackEase: 15
   returnEase: 27
   attackDistance: 0.7
-  spriteDatabase: {fileID: 11400000, guid: ce82c1338c52cc94fb2b9b5f3dd27b16, type: 2}
+  spriteDatabase: {fileID: 11400000, guid: 3a4a2827b38319446a0405667baf5a3c, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0

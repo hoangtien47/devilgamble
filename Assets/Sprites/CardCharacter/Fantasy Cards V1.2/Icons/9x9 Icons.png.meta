@@ -175,6 +175,45 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -697,7 +736,30 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      9x9 Icons_0: -7054886697471145948
+      9x9 Icons_1: -979610443174276624
+      9x9 Icons_10: 1784746472234601649
+      9x9 Icons_11: 3940325419899796561
+      9x9 Icons_12: 7924829949386877385
+      9x9 Icons_13: 7402192518315941337
+      9x9 Icons_14: 5638922156756108114
+      9x9 Icons_15: 7950477497252287915
+      9x9 Icons_16: 2875486773965725501
+      9x9 Icons_17: 6289417910415310609
+      9x9 Icons_18: -7505997032819034786
+      9x9 Icons_19: -342159843343922981
+      9x9 Icons_2: -3952804508129760693
+      9x9 Icons_20: -8902649066845952595
+      9x9 Icons_21: 7589382899817902680
+      9x9 Icons_22: 9111612326937248459
+      9x9 Icons_3: -5645959243156627019
+      9x9 Icons_4: 5463734673434334000
+      9x9 Icons_5: -7406255140536672267
+      9x9 Icons_6: 4167576331851766316
+      9x9 Icons_7: -4243827690711037556
+      9x9 Icons_8: -2016424746366844855
+      9x9 Icons_9: 8575975628813520483
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

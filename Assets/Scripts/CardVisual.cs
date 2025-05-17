@@ -24,7 +24,7 @@ public class CardVisual : MonoBehaviour
     private Canvas shadowCanvas;
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
-    [SerializeField] private Image cardImage;
+    [SerializeField] protected Image cardImage;
     [Header("==========UI Character==========")]
     [SerializeField] private TextMeshProUGUI _HPText;
     [SerializeField] private TextMeshProUGUI _ATKText;
@@ -114,10 +114,8 @@ public class CardVisual : MonoBehaviour
         }
     }
 
-    public void Initialize(Card target, int index = 0)
+    public virtual void Initialize(Card target)
     {
-
-
         Suit = target.Suit;
         Rank = target.Rank;
 
@@ -125,11 +123,8 @@ public class CardVisual : MonoBehaviour
         int rankIndex = (int)Rank - 2; // Two starts at 2
         int spriteIndex = suitIndex * 13 + rankIndex;
 
-        if (target.isCharacterCard)
-        {
-            cardImage.sprite = spriteDatabase.GetIndexCardSprite(target.charIndex);
-        }
-        else if (!target.isCharacterCard && spriteIndex >= 0 && spriteIndex < spriteDatabase.cardSprites.Length)
+
+        if (!target.isCharacterCard && spriteIndex >= 0 && spriteIndex < spriteDatabase.cardSprites.Length)
         {
             cardImage.sprite = spriteDatabase.GetCardSprite(Suit, Rank);//spriteDatabase.cardSprites[spriteIndex];
         }

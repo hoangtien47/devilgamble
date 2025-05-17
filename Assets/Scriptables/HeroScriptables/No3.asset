@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2704f4895a8d474aa88415cf05a61f7, type: 3}
+  m_Name: No3
+  m_EditorClassIdentifier: 
+  Name: Battle Beetle
+  Description: Battle Beetle
+  Sprite: {fileID: -8566626792118560811, guid: 878f69fbf434d504bbc3e8a80eb3a1a6, type: 3}
+  health: 10
+  attack: 10
+  defense: 10
+  attackName: 
+  attackDescription: 
+  skillName: 
+  skill1Description: 
+  skill1Animation: {fileID: 0}
+  ultName: 
+  ultDescription: 
+  ultAnimation: {fileID: 0}

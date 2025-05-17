@@ -9,20 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f8042c443da3e74f9db5731e3ceec64, type: 3}
+  m_Script: {fileID: 11500000, guid: d2704f4895a8d474aa88415cf05a61f7, type: 3}
   m_Name: No1
   m_EditorClassIdentifier: 
-  heroName: Battle Beetle
-  heroDescription: 
-  heroSprite: {fileID: 4786299406925355100, guid: 54fb59b2d4069a444887a79a034f4472, type: 3}
-  health: 0
-  attack: 0
-  defense: 0
-  attackName: 
-  attackDescription: 
-  skillName: 
-  skill1Description: 
-  skill1Animation: {fileID: 0}
+  Name: Poison Demon
+  Description: Poison Demon
+  Sprite: {fileID: 813796157681362143, guid: d56bb8478ada828428b1f28f16f1dbd8, type: 3}
+  health: 10
+  attack: 10
+  defense: 10
+  energyForUlt: 0
+  passiveName: 
+  passiveDescription: 
   ultName: 
   ultDescription: 
   ultAnimation: {fileID: 0}

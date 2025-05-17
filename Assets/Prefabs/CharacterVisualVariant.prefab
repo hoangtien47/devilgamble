@@ -524,7 +524,8 @@ PrefabInstance:
       propertyPath: _ATKText
       value: 
       objectReference: {fileID: 6477378141736739175}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7994647478966201829, guid: bddd0263814164da396aa8d1438dd810, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7006996992505307320, guid: bddd0263814164da396aa8d1438dd810, type: 3}
@@ -536,10 +537,89 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7006996992505307320, guid: bddd0263814164da396aa8d1438dd810, type: 3}
       insertIndex: -1
       addedObject: {fileID: 761847344779173489}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7310339964073049012, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1088162230432872413}
   m_SourcePrefab: {fileID: 100100000, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+--- !u!224 &2614746215703413372 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3449025543118524474, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  m_PrefabInstance: {fileID: 834317812470682182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &6541880506897532914 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5862976466474931636, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  m_PrefabInstance: {fileID: 834317812470682182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7009538425905110442 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7697484841366769644, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  m_PrefabInstance: {fileID: 834317812470682182}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7685899650017719038 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7006996992505307320, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  m_PrefabInstance: {fileID: 834317812470682182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7991528508406032882 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7310339964073049012, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  m_PrefabInstance: {fileID: 834317812470682182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1088162230432872413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7991528508406032882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94850a236ec6e3645a520488eaabb2d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentCard: {fileID: 0}
+  visualShadow: {fileID: 8394981458858822827}
+  shakeParent: {fileID: 2614746215703413372}
+  tiltParent: {fileID: 6541880506897532914}
+  cardImage: {fileID: 7009538425905110442}
+  _HPText: {fileID: 398503878633158659}
+  _ATKText: {fileID: 6477378141736739175}
+  followSpeed: 25
+  rotationAmount: 70
+  rotationSpeed: 50
+  autoTiltAmount: 15
+  manualTiltAmount: 30
+  tiltSpeed: 40
+  scaleAnimations: 1
+  scaleOnHover: 1.07
+  scaleOnSelect: 1.2
+  scaleTransition: 0.15
+  scaleEase: 27
+  selectPunchAmount: 20
+  hoverPunchAngle: 5
+  hoverTransition: 0.15
+  swapAnimations: 1
+  swapRotationAngle: 20
+  swapTransition: 0.2
+  swapVibrato: 5
+  curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
+  attackDuration: 0.3
+  returnDuration: 0.2
+  attackEase: 15
+  returnEase: 27
+  attackDistance: 0.7
+  spriteDatabase: {fileID: 0}
+  characterCardScriptable: {fileID: 11400000, guid: 69aec5e0897098b40904d7f1506ef1ac, type: 2}
+--- !u!224 &8394981458858822827 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 9157190824811683565, guid: bddd0263814164da396aa8d1438dd810, type: 3}
   m_PrefabInstance: {fileID: 834317812470682182}
   m_PrefabAsset: {fileID: 0}

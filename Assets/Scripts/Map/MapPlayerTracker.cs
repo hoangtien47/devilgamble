@@ -73,7 +73,7 @@ namespace Map
                 case NodeType.MinorEnemy:
                     // open card game
                     Debug.Log("Open card game");
-                    SceneManager.LoadScene(1);
+                    SceneManager.LoadScene(3);
                     break;
                 case NodeType.EliteEnemy:
                     break;

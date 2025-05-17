@@ -1,23 +1,18 @@
-
 using DG.Tweening;
-using Map;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
-
-public enum CardSuit { Hearts, Diamonds, Clubs, Spades }
-public enum CardRank { Two = 2, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace }
-
-public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
+public class HeroSelectData : MonoBehaviour, IPointerEnterHandler, IBeginDragHandler, IEndDragHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
     private Canvas canvas;
     private Image imageComponent;
     [SerializeField] private bool instantiateVisual = true;
     private VisualCardsHandler visualHandler;
     private Vector3 offset;
+
+    [HideInInspector] public HeroCardScriptable heroData;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeedLimit = 50;
@@ -29,30 +24,30 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     private float pointerUpTime;
 
     [Header("Visual")]
-    [SerializeField] private GameObject cardVisualPrefab;
-    [HideInInspector] public CardVisual cardVisual;
+    [SerializeField] private GameObject heroVisualPrefab;
+    [HideInInspector] public HeroCardSelector heroVisual;
 
     [Header("States")]
     public bool isHovering;
     public bool isDragging;
     [HideInInspector] public bool wasDragged;
-    [HideInInspector] public BaseCharacter BaseCharacter;
 
     [Header("Events")]
-    [HideInInspector] public UnityEvent<Card> PointerEnterEvent;
-    [HideInInspector] public UnityEvent<Card> PointerExitEvent;
-    [HideInInspector] public UnityEvent<Card, bool> PointerUpEvent;
-    [HideInInspector] public UnityEvent<Card> PointerDownEvent;
-    [HideInInspector] public UnityEvent<Card> BeginDragEvent;
-    [HideInInspector] public UnityEvent<Card> EndDragEvent;
-    [HideInInspector] public UnityEvent<Card, bool> SelectEvent;
-    public CardSuit Suit { get; set; }
-    public CardRank Rank { get; set; }
+    [HideInInspector] public UnityEvent<HeroSelectData> PointerEnterEvent;
+    [HideInInspector] public UnityEvent<HeroSelectData> PointerExitEvent;
+    [HideInInspector] public UnityEvent<HeroSelectData, bool> PointerUpEvent;
+    [HideInInspector] public UnityEvent<HeroSelectData> PointerDownEvent;
+    [HideInInspector] public UnityEvent<HeroSelectData> BeginDragEvent;
+    [HideInInspector] public UnityEvent<HeroSelectData> EndDragEvent;
+    [HideInInspector] public UnityEvent<HeroSelectData, bool> SelectEvent;
 
-    public bool isCharacterCard { get; set; }
-    public int charIndex { get; set; }
+    public int idx;
+    private void Awake()
+    {
+        
+    }
 
-    void Start()
+    private void Start()
     {
         canvas = GetComponentInParent<Canvas>();
         imageComponent = GetComponent<Image>();
@@ -60,15 +55,19 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             return;
 
         visualHandler = FindObjectOfType<VisualCardsHandler>();
-        cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
-        if (isCharacterCard)
-        {
-            cardVisual.OnLoadCharacter(BaseCharacter);
-        }
-        cardVisual.Initialize(this);
-    }
+        heroVisual = Instantiate(heroVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<HeroCardSelector>();
 
-    void Update()
+        // Initialize the visual with this data and setup events
+        if (heroVisual != null)
+        {
+            heroVisual.Initialize(this);
+            if (heroData != null)
+            {
+                heroVisual.LoadHeroData(heroData);
+            }
+        }
+    }
+    private void Update()
     {
         ClampPosition();
 
@@ -80,7 +79,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             transform.Translate(velocity * Time.deltaTime);
         }
     }
-
     void ClampPosition()
     {
         Vector2 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
@@ -89,7 +87,17 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, -screenBounds.y, screenBounds.y);
         transform.position = new Vector3(clampedPosition.x, clampedPosition.y, 0);
     }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        isHovering = true;
+        PointerEnterEvent?.Invoke(this);
+    }
 
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isHovering = false;
+        PointerExitEvent?.Invoke(this);
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         BeginDragEvent.Invoke(this);
@@ -122,19 +130,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        PointerEnterEvent.Invoke(this);
-        isHovering = true;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        PointerExitEvent.Invoke(this);
-        isHovering = false;
-    }
-
-
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left)
@@ -156,16 +151,18 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         if (pointerUpTime - pointerDownTime > .2f)
             return;
 
-        if (wasDragged)
-            return;
-
         selected = !selected;
         SelectEvent.Invoke(this, selected);
 
         if (selected)
-            transform.localPosition += (cardVisual.transform.up * selectionOffset);
+            transform.localPosition += (heroVisual.transform.up * selectionOffset);
         else
             transform.localPosition = Vector3.zero;
+    }
+    public virtual void OnLoadCharacterData(HeroCardScriptable character)
+    {
+        if (heroVisual != null)
+            heroVisual.LoadHeroData(character);
     }
     public void Deselect()
     {
@@ -175,7 +172,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             if (selected)
             {
                 SelectEvent.Invoke(this, false);  // Make sure to trigger the event when deselecting
-                transform.localPosition += (cardVisual.transform.up * 50);
+                transform.localPosition += (heroVisual.transform.up * 50);
             }
             else
                 transform.localPosition = Vector3.zero;
@@ -198,46 +195,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         return transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
-    public virtual void OnCharacterDataChange()
-    {
-        if (cardVisual != null)
-            cardVisual.OnChangeData(GetComponent<ICharacter>().HP, GetComponent<ICharacter>().ATK);
-    }
-    public virtual void OnLoadCharacterData(BaseCharacter character)
-    {
-        if (cardVisual != null)
-            cardVisual.OnLoadCharacter(character);
-    }
-    public virtual void LoadCharacterData(NodeBlueprint currentNode)
-    {
-        if(GetComponent<EnemyCharacter>() != null)
-        {
-            Debug.Log("LoadCharacterData");
-            GetComponent<EnemyCharacter>().SetData(currentNode.enemyCharacter);
-            OnLoadCharacterData(GetComponent<EnemyCharacter>());
-        }
-    }
-    public virtual void LoadCharacterData(HeroCardScriptable hero)
-    {
-        if (GetComponent<HeroesCharacter>() != null)
-        {
-            Debug.Log("LoadHeroData: " +$"{hero.health}");
-            GetComponent<HeroesCharacter>().SetData(hero);
-            OnLoadCharacterData(GetComponent<HeroesCharacter>());
-        }
-    }
-    public virtual void OnCharacterDeath()
-    {
-        if (cardVisual != null)
-            cardVisual.PlayExplosionEffect();
-        else
-            Destroy(cardVisual.gameObject);
-    }
-    public virtual void OnAttack(ICharacter target)
-    {
-        if (cardVisual != null)
-            this.GetComponent<BaseCharacter>().Attack(target);
-    }
     private void OnDestroy()
     {
         // Kill any tweens associated with this card
@@ -248,15 +205,13 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         PointerExitEvent.RemoveAllListeners();
         PointerUpEvent.RemoveAllListeners();
         PointerDownEvent.RemoveAllListeners();
-        BeginDragEvent.RemoveAllListeners();
-        EndDragEvent.RemoveAllListeners();
         SelectEvent.RemoveAllListeners();
 
         // Destroy the card visual if it exists
-        if (cardVisual != null)
+        if (heroVisual != null)
         {
             // The cardVisual will handle its own tween cleanup in its OnDestroy
-            Destroy(cardVisual.gameObject);
+            Destroy(heroVisual.gameObject);
         }
     }
 }

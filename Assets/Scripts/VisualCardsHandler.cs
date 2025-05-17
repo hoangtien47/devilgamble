@@ -9,7 +9,12 @@ public class VisualCardsHandler : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if(instance != null && instance != this)
+        {
+            Destroy(instance.gameObject);
+            instance = this;
+            return;
+        }
     }
     // Start is called before the first frame update
     void Start()

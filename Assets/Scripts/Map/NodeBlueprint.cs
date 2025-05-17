@@ -28,6 +28,7 @@ namespace Map
     {
         public Sprite sprite;
         public NodeType nodeType;
+        public EnemyCardScriptable enemyCharacter;
         [Header("Enemy/Boss Stats")]
         [Tooltip("HP for Enemy or Boss nodes")]
         public int hp;

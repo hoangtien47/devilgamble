@@ -3,6 +3,7 @@ using UnityEngine;
 public class CharacterCardScriptable : ScriptableObject
 {
     // Hero card parameters
+    public string id;
     public string Name;
     public string Description;
     public Sprite Sprite;

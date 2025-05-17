@@ -1,3 +1,4 @@
+using Obvious.Soap.Example;
 using TMPro;
 using UnityEngine;
 
@@ -13,7 +14,6 @@ public class HeroesCharacter : BaseCharacter
 
     private void Awake()
     {
-        base.Awake();
         currentEnergy = maxEnergy;
     }
     /// <summary>
@@ -47,5 +47,15 @@ public class HeroesCharacter : BaseCharacter
         {
             //GainExperience(enemy.ExperienceReward);
         }
+    }
+
+    public void SetData(HeroCardScriptable hero)
+    {
+        this.maxHealth = hero.health;
+        this.currentHealth = hero.health;
+        this.attackPower = hero.attack;
+        this.characterName = hero.Name;
+        this.sprite = hero.Sprite;
+        sprite = hero.Sprite;
     }
 }

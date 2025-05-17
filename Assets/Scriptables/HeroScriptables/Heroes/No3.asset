@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2704f4895a8d474aa88415cf05a61f7, type: 3}
   m_Name: No3
   m_EditorClassIdentifier: 
+  id: H3
   Name: Battle Beetle
   Description: Battle Beetle
-  Sprite: {fileID: -8566626792118560811, guid: 878f69fbf434d504bbc3e8a80eb3a1a6, type: 3}
-  health: 10
-  attack: 10
+  Sprite: {fileID: 21300000, guid: 878f69fbf434d504bbc3e8a80eb3a1a6, type: 3}
+  health: 90
+  attack: 12
   defense: 10
-  attackName: 
-  attackDescription: 
-  skillName: 
-  skill1Description: 
-  skill1Animation: {fileID: 0}
+  energyForUlt: 0
+  passiveName: 
+  passiveDescription: 
   ultName: 
   ultDescription: 
   ultAnimation: {fileID: 0}
+  IsUnlocked: 1

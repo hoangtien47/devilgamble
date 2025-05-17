@@ -12,6 +12,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected int attackPower = 10;
     [SerializeField] private int attackAmount = 0;
+    [SerializeField] protected Sprite sprite;
 
     protected int currentHealth;
     protected bool isAlive = true;
@@ -23,6 +24,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     public string Name => characterName;
     public int HP => currentHealth;
     public int ATK => attackPower;
+    public Sprite Sprite => sprite;
 
     protected virtual void Awake()
     {

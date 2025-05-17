@@ -126,9 +126,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idCharacter: 
   characterName: 
-  maxHealth: 100
+  maxHealth: 0
   attackPower: 1
   attackAmount: 0
+  sprite: {fileID: 0}
   maxEnergy: 100
 --- !u!114 &2600460331536638366
 MonoBehaviour:

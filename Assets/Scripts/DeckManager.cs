@@ -311,8 +311,9 @@ public class DeckManager : MonoBehaviour
             card.name = cardCount.ToString();
             cardCount++;
         }
-        selectedHeroCard = heroHolder.cards[0];
         heroTransform = heroHolder.gameObject.transform;
+        heroHolder.cards[0].cardVisual.LoadCharacterData(GameSession.heroes);
+        selectedHeroCard = heroHolder.cards[0];
     }
 
     private IEnumerator DealHandCoroutine(int numCardDeal)
@@ -898,7 +899,7 @@ public class DeckManager : MonoBehaviour
     private IEnumerator AttackEnemySequence()
     {
         Card enemyCard = enemyHolder.cards[0];
-        if (enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null || !enemyCard.BaseCharacter.IsAlive())
+        if (enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null /*|| !enemyCard.BaseCharacter.IsAlive()*/)
             yield break;
 
 

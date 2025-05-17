@@ -1140,7 +1140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d16aef7034f2da34e97d2359106134ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rpcUrl: https://fullnode.testnet.sui.io
+  rpcUrl: https://fullnode.devnet.sui.io
   googleAuthManager: {fileID: 893183476}
   authConfig: {fileID: 11400000, guid: 50484df5bf96c6a4ab7345443231e43a, type: 2}
 --- !u!114 &893183475
@@ -1174,6 +1174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 50484df5bf96c6a4ab7345443231e43a, type: 2}
+  rpcUrl: https://fullnode.devnet.sui.io
 --- !u!1 &939706299
 GameObject:
   m_ObjectHideFlags: 0

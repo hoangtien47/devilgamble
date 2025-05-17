@@ -210,6 +210,7 @@ namespace ZkLogin
 
                 isProofGenerated = true;
                 OnProofGenerated?.Invoke(suiAddress);
+                Debug.Log($"ZK proof generated for address: {zkSignature}");
                 Debug.Log("Successfully generated ZK proof");
             }
             catch (Exception e)

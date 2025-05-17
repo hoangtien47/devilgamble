@@ -254,7 +254,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
-  m_sharedMaterial: {fileID: 654226567835329514, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
+  m_sharedMaterial: {fileID: -2113247034561278414, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1758,7 +1758,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -351879809
   m_SortingOrder: 0
@@ -2595,7 +2595,7 @@ MonoBehaviour:
   m_text: Discard Hand
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
-  m_sharedMaterial: {fileID: 654226567835329514, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
+  m_sharedMaterial: {fileID: -2113247034561278414, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2731,7 +2731,7 @@ MonoBehaviour:
   m_text: Play Hand
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
-  m_sharedMaterial: {fileID: 654226567835329514, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
+  m_sharedMaterial: {fileID: -2113247034561278414, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

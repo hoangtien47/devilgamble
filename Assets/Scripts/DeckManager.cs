@@ -158,7 +158,7 @@ public class DeckManager : MonoBehaviour
     public void ShuffleDeck()
     {
         // Fisher-Yates shuffle algorithm
-        System.Random rng = new System.Random(55);
+        System.Random rng = new System.Random();
         int n = deckCards.Count;
 
         while (n > 1)

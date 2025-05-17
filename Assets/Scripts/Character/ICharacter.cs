@@ -6,6 +6,7 @@ using UnityEngine;
 public interface ICharacter
 {
     string id{ get; }
+    string name{ get; }
     int HP { get; }
     int ATK { get; }
 

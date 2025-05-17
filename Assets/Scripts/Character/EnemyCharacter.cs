@@ -44,6 +44,7 @@ public class EnemyCharacter : BaseCharacter
         Debug.Log($"{idCharacter} takes {damageAmount} damage from {attacker.id}! Remaining HP: {HP}, Stamina: {currentStamina}");
         GetComponent<Card>().OnCharacterDataChange();
         // Check if character died
+        base.TakeDamage(damageAmount, attacker);
         if (currentHealth <= 0)
         {
             Die();

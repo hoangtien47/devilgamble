@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 398503878633158659, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -2113247034561278414, guid: dfc9e20476cc18944846886383cdbbce, type: 2}
     - target: {fileID: 3130495439932062365, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -91,6 +95,18 @@ PrefabInstance:
     - target: {fileID: 5029135634558169736, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7009538425905110442, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7780264574027006942, guid: 5ad8dbe56940bb346ad9b488ca11498c, type: 3}
+    - target: {fileID: 7685899650017719038, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 277.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7685899650017719038, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 370.5
       objectReference: {fileID: 0}
     - target: {fileID: 7991528508406032882, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
       propertyPath: m_Name

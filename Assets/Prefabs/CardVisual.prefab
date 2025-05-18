@@ -300,9 +300,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5647236407421411534}
   - component: {fileID: 7120376734261528799}
-  - component: {fileID: 7994647478966201829}
   - component: {fileID: 4132845374223140069}
   - component: {fileID: 404130344431792101}
+  - component: {fileID: 7022065600779294521}
   m_Layer: 5
   m_Name: CardVisual
   m_TagString: Untagged
@@ -338,50 +338,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7310339964073049012}
   m_CullTransparentMesh: 1
---- !u!114 &7994647478966201829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7310339964073049012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c73809c3b87e04a6dae1308b12ab4749, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentCard: {fileID: 0}
-  visualShadow: {fileID: 9157190824811683565}
-  shakeParent: {fileID: 3449025543118524474}
-  tiltParent: {fileID: 5862976466474931636}
-  cardImage: {fileID: 7697484841366769644}
-  _HPText: {fileID: 0}
-  _ATKText: {fileID: 0}
-  followSpeed: 25
-  rotationAmount: 70
-  rotationSpeed: 50
-  autoTiltAmount: 15
-  manualTiltAmount: 30
-  tiltSpeed: 40
-  scaleAnimations: 1
-  scaleOnHover: 1.07
-  scaleOnSelect: 1.2
-  scaleTransition: 0.15
-  scaleEase: 27
-  selectPunchAmount: 20
-  hoverPunchAngle: 5
-  hoverTransition: 0.15
-  swapAnimations: 1
-  swapRotationAngle: 20
-  swapTransition: 0.2
-  swapVibrato: 5
-  curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
-  attackDuration: 0.3
-  returnDuration: 0.2
-  attackEase: 15
-  returnEase: 27
-  attackDistance: 0.7
-  spriteDatabase: {fileID: 11400000, guid: 3a4a2827b38319446a0405667baf5a3c, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0
@@ -417,3 +373,45 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &7022065600779294521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73809c3b87e04a6dae1308b12ab4749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentCard: {fileID: 0}
+  visualShadow: {fileID: 9157190824811683565}
+  shakeParent: {fileID: 3449025543118524474}
+  tiltParent: {fileID: 5862976466474931636}
+  cardImage: {fileID: 7697484841366769644}
+  followSpeed: 30
+  rotationAmount: 20
+  rotationSpeed: 20
+  autoTiltAmount: 30
+  manualTiltAmount: 20
+  tiltSpeed: 20
+  scaleAnimations: 1
+  scaleOnHover: 1.15
+  scaleOnSelect: 1.25
+  scaleTransition: 0.15
+  scaleEase: 27
+  selectPunchAmount: 20
+  hoverPunchAngle: 5
+  hoverTransition: 0.15
+  swapAnimations: 1
+  swapRotationAngle: 30
+  swapTransition: 0.15
+  swapVibrato: 5
+  curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
+  attackDuration: 0.3
+  returnDuration: 0.2
+  attackEase: 15
+  returnEase: 27
+  attackDistance: 0.7
+  spriteDatabase: {fileID: 11400000, guid: 3a4a2827b38319446a0405667baf5a3c, type: 2}

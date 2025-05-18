@@ -25,9 +25,6 @@ public class CardVisual : MonoBehaviour
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
     [SerializeField] protected Image cardImage;
-    [Header("==========UI Character==========")]
-    [SerializeField] private TextMeshProUGUI _HPText;
-    [SerializeField] private TextMeshProUGUI _ATKText;
 
     [Header("Follow Parameters")]
     [SerializeField] private float followSpeed = 30;
@@ -303,14 +300,21 @@ public class CardVisual : MonoBehaviour
                 shadowCanvas.overrideSorting = false;
         }
     }
-    public void OnChangeData(int HP, int ATK)
+    public virtual void OnChangeData(int HP, int ATK)
     {
-        _HPText.SetText(HP.ToString());
-        _ATKText.SetText(ATK.ToString());
+        
+    }
+    public virtual void OnLoadCharacter(BaseCharacter character)
+    {
+        
     }
     public void LoadCharacterData(NodeBlueprint currentNode)
     {
         parentCard.LoadCharacterData(currentNode);
+    }
+    public void LoadCharacterData(HeroCardScriptable heroData)
+    {
+        parentCard.LoadCharacterData(heroData);
     }
     public Tween Attack(Transform targetTransform, System.Action onHitCallback = null)
     {

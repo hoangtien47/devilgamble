@@ -1,6 +1,7 @@
 using Sui.ZKLogin;
 using Sui.ZKLogin.SDK;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -271,6 +272,142 @@ namespace ZkLogin
             // Create a temporary client to fetch current epoch
             var client = new SuiRpcClient(rpcUrl);
             return await client.GetCurrentEpochAsync();
+        }
+
+
+        public async Task<string> ExecuteTransactionAsync(string packageId, string moduleName, string functionName,
+           List<object> arguments, ulong gasBudget = 10000000)
+        {
+            if (!isProofGenerated || zkSignature == null)
+            {
+                OnError?.Invoke("Cannot execute transaction: ZK proof not generated");
+                return null;
+            }
+
+            try
+            {
+                Debug.Log($"Creating transaction to call {moduleName}::{functionName}");
+
+                // 1. Create a Connection object first, then use it to create SuiClient
+                var connection = new Sui.Rpc.Connection(rpcUrl);
+                var client = new Sui.Rpc.Client.SuiClient(connection);
+
+                // 2. Create transaction block
+                var txBlock = new Sui.Transactions.TransactionBlock();
+
+                // 3. Set gas budget for the transaction
+                txBlock.SetGasBudget(gasBudget);
+
+                // 4. Set the sender address
+                var senderAddress = Sui.Accounts.AccountAddress.FromHex(suiAddress);
+                txBlock.SetSenderIfNotSet(senderAddress);
+
+                Debug.Log($"Transaction sender: {senderAddress}");
+
+                // 5. Prepare arguments for the move call
+                List<Sui.Transactions.TransactionArgument> txArgs = new List<Sui.Transactions.TransactionArgument>();
+                foreach (var arg in arguments)
+                {
+                    if (arg is string && ((string)arg).StartsWith("0x"))
+                    {
+                        // This is an object ID argument - use AddObjectInput
+                        txArgs.Add(txBlock.AddObjectInput((string)arg));
+                    }
+                    else
+                    {
+                        // This is a pure value argument - use AddPure
+                        if (arg is int intValue)
+                        {
+                            txArgs.Add(txBlock.AddPure(new OpenDive.BCS.U64((ulong)intValue)));
+                        }
+                        else if (arg is string strValue)
+                        {
+                            txArgs.Add(txBlock.AddPure(new OpenDive.BCS.BString(strValue)));
+                        }
+                        else if (arg is bool boolValue)
+                        {
+                            txArgs.Add(txBlock.AddPure(new OpenDive.BCS.Bool(boolValue)));
+                        }
+                        // Add other type conversions as needed
+                    }
+                }
+
+                Debug.Log($"Transaction arguments: {txArgs}");
+
+                // 6. Create a proper SuiMoveNormalizedStructType using FromStr method
+                // Format: "0xPACKAGE_ID::MODULE_NAME::FUNCTION_NAME"
+                string fullPath = $"{packageId}::{moduleName}::{functionName}";
+                var targetType = Sui.Types.SuiMoveNormalizedStructType.FromStr(fullPath);
+
+                // Create move call with the target
+                var moveCall = new Sui.Transactions.MoveCall(
+                    targetType,
+                    null,  // No type arguments
+                    txArgs.ToArray()
+                );
+
+                Debug.Log($"moveCall kind: {moveCall}");
+
+                // Create command and add to transaction
+                var command = new Sui.Transactions.Command(
+                    Sui.Transactions.CommandKind.MoveCall,
+                    moveCall
+                );
+
+                Debug.Log($"Transaction command: {command}");
+
+                txBlock.AddTransaction(command);
+
+                // 7. Build the transaction
+                var buildOptions = new Sui.Transactions.BuildOptions(client);
+                byte[] txBytes = await txBlock.Build(buildOptions);
+
+                if (txBlock.Error != null)
+                {
+                    OnError?.Invoke($"Transaction build error: {txBlock.Error.Message}");
+                    return null;
+                }
+
+                // 8. Get serialized ZkLoginSignature
+                string serializedSignature = ZkLoginSignature.GetZkLoginSignature(
+                    zkSignature.Inputs,
+                    zkSignature.MaxEpoch,
+                    zkSignature.UserSignature
+                );
+
+                Debug.Log($"Serialized ZK signature: {serializedSignature.Substring(0, Math.Min(20, serializedSignature.Length))}...");
+
+                // 9. Execute the transaction
+                var response = await client.ExecuteTransactionBlockAsync(
+                    txBytes,
+                    new List<string> { serializedSignature },
+                    new Sui.Rpc.Models.TransactionBlockResponseOptions(
+                        showEffects: true,
+                        showEvents: true,
+                        showObjectChanges: true
+                    ),
+                    Sui.Rpc.Models.RequestType.WaitForLocalExecution
+                );
+
+                // 10. Process and return the result
+                if (response.Error != null)
+                {
+                    string errorMsg = $"Transaction error: {response.Error.Message}";
+                    Debug.LogError(errorMsg);
+                    OnError?.Invoke(errorMsg);
+                    return null;
+                }
+
+                Debug.Log($"Transaction successful! Digest: {response.Result.Digest}");
+                return response.Result.Digest;
+            }
+            catch (System.Exception e)
+            {
+                string errorMsg = $"Failed to execute transaction: {e.Message}";
+                Debug.LogError(errorMsg);
+                OnError?.Invoke(errorMsg);
+                return null;
+            }
         }
 
         private void OnDestroy()

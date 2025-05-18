@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -76,33 +78,47 @@ namespace ZkLogin
 
             try
             {
-                // This is a sample transaction - in a real app, you would build a real transaction
-                string sampleTransaction = CreateSampleTransaction();
+                // Package and module information for the counter example
+                string packageId = "0xd258c05b4e3ea0b6a551acb9054cde9af8ed22e0e11d5a0bce278bbd5bfb8474";
+                string moduleName = "counter";
 
-                statusText.text = "Signing and executing transaction...";
+                // You can toggle between these functions to test different operations
+                string functionName = "create_and_transfer";  // Create a new counter
+                                                              // string functionName = "increment";         // Increment existing counter
 
-                // Since SignAndExecuteTransaction isn't implemented yet, just show placeholder message
-                // In a real app, you would uncomment this line when implemented:
-                // string txResult = await loginManager.SignAndExecuteTransaction(sampleTransaction);
+                List<object> arguments = new List<object>();
 
-                // For now, just show a placeholder message
-                statusText.text = "Transaction feature coming soon!";
+                // If incrementing an existing counter, uncomment and use the object ID
+                // if (functionName == "increment") 
+                // {
+                //     arguments.Add("0xf0c4928833567a19b792f68ea5a838592db371e5128fbee66166e914cdc844ae");
+                // }
 
-                /* Uncomment when transaction functionality is implemented:
-                if (!string.IsNullOrEmpty(txResult))
+                statusText.text = $"Executing {moduleName}::{functionName}...";
+
+                // Execute the transaction
+                string txDigest = await loginManager.ExecuteTransactionAsync(
+                    packageId,
+                    moduleName,
+                    functionName,
+                    arguments,
+                    10000000  // Gas budget
+                );
+
+                // Process the result
+                if (!string.IsNullOrEmpty(txDigest))
                 {
-                    statusText.text = $"Transaction successful! Digest: {txResult.Substring(0, 8)}...";
+                    statusText.text = $"Transaction successful! Digest: {txDigest.Substring(0, Math.Min(8, txDigest.Length))}...";
+                    Debug.Log($"Full transaction digest: {txDigest}");
                 }
                 else
                 {
                     statusText.text = "Transaction failed";
                 }
-                */
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"Transaction error: {e.Message}");
-                statusText.text = $"Transaction error: {e.Message}";
             }
             finally
             {
@@ -144,6 +160,8 @@ namespace ZkLogin
             // For testing, you can return a placeholder
             return "SAMPLE_TRANSACTION_BYTES";
         }
+
+
 
         private void OnDestroy()
         {

@@ -307,9 +307,11 @@ MonoBehaviour:
   moveToSelectedDuration: 0.2
   moveToSelectedEase: 27
   heroData:
-  - {fileID: 11400000, guid: 69aec5e0897098b40904d7f1506ef1ac, type: 2}
   - {fileID: 11400000, guid: dc14e84ad8ff15f449f5d83252400537, type: 2}
   - {fileID: 11400000, guid: 55af51bee11d902489e6c6c9dd6bb860, type: 2}
+  - {fileID: 11400000, guid: 8e2f913db2394dc42b509948f2d67bd3, type: 2}
+  - {fileID: 11400000, guid: 6ea7c81b2442b234bbdba5fdf278773c, type: 2}
+  - {fileID: 11400000, guid: 69aec5e0897098b40904d7f1506ef1ac, type: 2}
   dealDelay: 0.1
   dealDuration: 0.3
   dealEase: 27

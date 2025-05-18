@@ -390,23 +390,23 @@ MonoBehaviour:
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
-  followSpeed: 30
-  rotationAmount: 20
-  rotationSpeed: 20
-  autoTiltAmount: 30
-  manualTiltAmount: 20
-  tiltSpeed: 20
+  followSpeed: 25
+  rotationAmount: 70
+  rotationSpeed: 50
+  autoTiltAmount: 15
+  manualTiltAmount: 30
+  tiltSpeed: 40
   scaleAnimations: 1
-  scaleOnHover: 1.15
-  scaleOnSelect: 1.25
+  scaleOnHover: 1.07
+  scaleOnSelect: 1.2
   scaleTransition: 0.15
   scaleEase: 27
   selectPunchAmount: 20
   hoverPunchAngle: 5
   hoverTransition: 0.15
   swapAnimations: 1
-  swapRotationAngle: 30
-  swapTransition: 0.15
+  swapRotationAngle: 20
+  swapTransition: 0.2
   swapVibrato: 5
   curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
   attackDuration: 0.3

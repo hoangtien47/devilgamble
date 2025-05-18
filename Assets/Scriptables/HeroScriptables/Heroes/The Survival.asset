@@ -9,18 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6c1e7653535c5742ba81afe5ff26737, type: 3}
-  m_Name: NormalEnemy
+  m_Script: {fileID: 11500000, guid: d2704f4895a8d474aa88415cf05a61f7, type: 3}
+  m_Name: The Survival
   m_EditorClassIdentifier: 
-  Name: SubBer
-  Description: 
-  Sprite: {fileID: 21300000, guid: c63b6191b762de64d8cded5a00ea620f, type: 3}
+  id: H18
+  Name: The Survival
+  Description: The Survival
+  Sprite: {fileID: 21300000, guid: 6703dbfba44aea649ab857919e98cd86, type: 3}
   health: 120
-  attack: 7
-  defense: 0
+  attack: 6
+  defense: 10
   energyForUlt: 0
   passiveName: 
   passiveDescription: 
   ultName: 
   ultDescription: 
   ultAnimation: {fileID: 0}
+  IsUnlocked: 1

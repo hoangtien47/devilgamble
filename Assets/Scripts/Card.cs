@@ -201,7 +201,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public virtual void OnCharacterDataChange()
     {
         if (cardVisual != null)
-            cardVisual.OnChangeData(GetComponent<ICharacter>().HP, GetComponent<ICharacter>().ATK);
+            cardVisual.OnChangeData(GetComponent<BaseCharacter>().HP, GetComponent<BaseCharacter>().ATK);
     }
     public virtual void OnLoadCharacterData(BaseCharacter character)
     {
@@ -229,9 +229,11 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public virtual void OnCharacterDeath()
     {
         if (cardVisual != null)
+        {
             cardVisual.PlayExplosionEffect();
-        else
             Destroy(cardVisual.gameObject);
+            Destroy(this.gameObject, 1f);
+        }
     }
     public virtual void OnAttack(ICharacter target)
     {

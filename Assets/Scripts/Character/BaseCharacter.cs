@@ -24,6 +24,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     public string Name => characterName;
     public int HP => currentHealth;
     public int ATK => attackPower;
+    public UIAct ui => uiAct;
     public Sprite Sprite => sprite;
 
     protected virtual void Awake()
@@ -54,8 +55,12 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     {
         if (!isAlive)
             return;
-        uiAct.ShowPopup(damageAmount, false); // Show damage popup
-        Debug.Log($"{idCharacter} takes {damageAmount} damage from {attacker.id}! Remaining HP: {HP}");
+        
+        if (uiAct != null)  // Add null check for UIAct
+        {
+            uiAct.ShowPopup(damageAmount, false); // Show damage popup
+        }
+        
         // Check if character died
         if (currentHealth <= 0)
         {
@@ -70,7 +75,6 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     {
         currentHealth = 0;
         isAlive = false;
-        GetComponent<Card>().OnCharacterDeath();
         Debug.Log($"{idCharacter} has died!");
     }
 

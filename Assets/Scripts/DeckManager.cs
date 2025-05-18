@@ -887,8 +887,11 @@ public class DeckManager : MonoBehaviour
         turnCount--;
         if (turnCount <= 0)
         {
-            StartCoroutine(AttackEnemySequence());
-            turnCount = 2;
+            if (enemyHolder.cards[0].GetComponent<BaseCharacter>().IsAlive())
+            {
+                StartCoroutine(AttackEnemySequence());
+                turnCount = 2;
+            }
         }
         else
         {

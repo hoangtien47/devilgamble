@@ -17,8 +17,12 @@ public class EnemyCharacter : BaseCharacter
     /// </summary>
     public override void Attack(ICharacter target)
     {
-        // Call base attack with modified power
-        base.Attack(target);
+        if (!isAlive || target == null || !target.IsAlive())
+            return;
+
+        // Apply damage to the target
+        target.TakeDamage(attackPower, this);
+        Debug.Log($"{idCharacter} attacks {target.id} for {ATK} damage!");
     }
     /// <summary>
     /// Takes damage from an attacker
@@ -43,8 +47,8 @@ public class EnemyCharacter : BaseCharacter
 
         Debug.Log($"{idCharacter} takes {damageAmount} damage from {attacker.id}! Remaining HP: {HP}, Stamina: {currentStamina}");
         GetComponent<Card>().OnCharacterDataChange();
-        // Check if character died
         base.TakeDamage(damageAmount, attacker);
+        // Check if character died
         if (currentHealth <= 0)
         {
             Die();
@@ -72,6 +76,7 @@ public class EnemyCharacter : BaseCharacter
     public void SetData(EnemyCardScriptable enemy)
     {
         this.maxHealth = enemy.health;
+        this.currentHealth = enemy.health;
         this.attackPower = enemy.attack;
         this.characterName = enemy.Name;
         this.sprite = enemy.Sprite;

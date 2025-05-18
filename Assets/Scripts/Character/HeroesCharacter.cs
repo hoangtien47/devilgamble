@@ -12,10 +12,12 @@ public class HeroesCharacter : BaseCharacter
     /// </summary>
     public int Energy => currentEnergy;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake(); // Call base.Awake() first to initialize UIAct
         currentEnergy = maxEnergy;
     }
+
     /// <summary>
     /// Takes damage from an attacker
     /// </summary>
@@ -24,11 +26,13 @@ public class HeroesCharacter : BaseCharacter
         if (!isAlive)
             return;
 
+        base.TakeDamage(damageAmount, attacker); // Call base.TakeDamage first to show popup
+
         // Apply damage
         currentHealth -= damageAmount;
-
         Debug.Log($"{idCharacter} takes {damageAmount} damage from {attacker.id}! Remaining HP: {HP}");
         GetComponent<Card>().OnCharacterDataChange();
+        
         // Check if character died
         if (currentHealth <= 0)
         {
@@ -48,7 +52,10 @@ public class HeroesCharacter : BaseCharacter
             //GainExperience(enemy.ExperienceReward);
         }
     }
-
+    protected override void Die()
+    {
+        base.Die();
+    }
     public void SetData(HeroCardScriptable hero)
     {
         this.maxHealth = hero.health;

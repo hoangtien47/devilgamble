@@ -217,9 +217,9 @@ public class HeroCardSelector : MonoBehaviour
     public void LoadHeroData(HeroCardScriptable heroData)
     {
         if (heroData == null) return;
-
+        Debug.Log("Name draw map:" + heroData.name);
         cardImage.sprite = heroData.Sprite;
-        _HPText.text = heroData.health.ToString();
+        _HPText.text = heroData.currentHealth.ToString();
         _ATKText.text = heroData.attack.ToString();
         _NameText.text = heroData.Name;
 

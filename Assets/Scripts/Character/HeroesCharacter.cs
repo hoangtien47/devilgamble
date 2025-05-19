@@ -1,6 +1,7 @@
 using Obvious.Soap.Example;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HeroesCharacter : BaseCharacter
 {
@@ -16,6 +17,12 @@ public class HeroesCharacter : BaseCharacter
     {
         base.Awake(); // Call base.Awake() first to initialize UIAct
         currentEnergy = maxEnergy;
+
+        // Load hero data from GameSession if available
+        if (GameSession.heroes != null)
+        {
+            SetData(GameSession.heroes);
+        }
     }
 
     /// <summary>
@@ -26,12 +33,14 @@ public class HeroesCharacter : BaseCharacter
         if (!isAlive)
             return;
 
-        base.TakeDamage(damageAmount, attacker); // Call base.TakeDamage first to show popup
+        // Track damage taken
+        GameStateManager.Instance?.TrackDamageTaken(damageAmount);
 
         // Apply damage
         currentHealth -= damageAmount;
         Debug.Log($"{idCharacter} takes {damageAmount} damage from {attacker.id}! Remaining HP: {HP}");
         GetComponent<Card>().OnCharacterDataChange();
+        base.TakeDamage(damageAmount, attacker);
         
         // Check if character died
         if (currentHealth <= 0)
@@ -39,6 +48,7 @@ public class HeroesCharacter : BaseCharacter
             Die();
         }
     }
+
     /// <summary>
     /// Override the Attack method to add hero-specific behavior
     /// </summary>
@@ -52,17 +62,23 @@ public class HeroesCharacter : BaseCharacter
             //GainExperience(enemy.ExperienceReward);
         }
     }
+
     protected override void Die()
     {
         base.Die();
+        GetComponent<Card>().OnCharacterDeath();
+        
+        // Trigger lose condition
+        GameStateManager.Instance?.OnBattleLose();
     }
-    public void SetData(HeroCardScriptable hero)
+    public void SetData(HeroCardData heroData)
     {
-        this.maxHealth = hero.health;
-        this.currentHealth = hero.health;
-        this.attackPower = hero.attack;
-        this.characterName = hero.Name;
-        this.sprite = hero.Sprite;
-        sprite = hero.Sprite;
+        if (heroData == null) return;
+
+        this.maxHealth = heroData.maxHealth;
+        this.currentHealth = heroData.currentHealth;
+        this.attackPower = heroData.attack;
+        this.characterName = heroData.Name;
+        this.sprite = heroData.Sprite;
     }
 }

@@ -16,7 +16,8 @@ MonoBehaviour:
   Name: Battle Beetle
   Description: Battle Beetle
   Sprite: {fileID: 21300000, guid: 878f69fbf434d504bbc3e8a80eb3a1a6, type: 3}
-  health: 90
+  maxHealth: 100
+  currentHealth: 100
   attack: 12
   defense: 10
   energyForUlt: 0

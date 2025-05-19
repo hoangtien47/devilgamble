@@ -16,8 +16,9 @@ MonoBehaviour:
   Name: Goblin
   Description: Goblin
   Sprite: {fileID: 21300000, guid: 56f6e2a1d798183458dfab5ad8b823c0, type: 3}
-  health: 120
-  attack: 7
+  maxHealth: 100
+  currentHealth: 100
+  attack: 5
   defense: 0
   energyForUlt: 0
   passiveName: 

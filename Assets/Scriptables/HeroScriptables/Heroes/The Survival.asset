@@ -16,7 +16,8 @@ MonoBehaviour:
   Name: The Survival
   Description: The Survival
   Sprite: {fileID: 21300000, guid: 6703dbfba44aea649ab857919e98cd86, type: 3}
-  health: 120
+  maxHealth: 150
+  currentHealth: 150
   attack: 6
   defense: 10
   energyForUlt: 0

@@ -106,6 +106,8 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     private void Start()
     {
+        // Reload current scene
+        GameStateManager.Instance?.ClearAllData();
         OnHandDealt.AddListener(OnHandDealtHandler);
         FadeOutScoreText();
 
@@ -892,6 +894,10 @@ public class DeckManager : MonoBehaviour
                 StartCoroutine(AttackEnemySequence());
                 turnCount = 2;
             }
+            else
+            {
+                FadeOutScoreText();
+            }
         }
         else
         {
@@ -941,7 +947,8 @@ public class DeckManager : MonoBehaviour
         }
         yield return new WaitForSeconds(delayBetweenAttacks);
         FadeOutScoreText();
-        canPlayCards = true;
+        if (heroHolder.cards[0].GetComponent<BaseCharacter>().IsAlive())
+            canPlayCards = true;
     }
     public List<CardData> GetComboCards(List<CardData> hand)
     {

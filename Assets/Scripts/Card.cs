@@ -217,11 +217,10 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             OnLoadCharacterData(GetComponent<EnemyCharacter>());
         }
     }
-    public virtual void LoadCharacterData(HeroCardScriptable hero)
+    public virtual void LoadCharacterData(HeroCardData hero)
     {
         if (GetComponent<HeroesCharacter>() != null)
         {
-            Debug.Log("LoadHeroData: " +$"{hero.health}");
             GetComponent<HeroesCharacter>().SetData(hero);
             OnLoadCharacterData(GetComponent<HeroesCharacter>());
         }

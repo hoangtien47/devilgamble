@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: b5f5839c0c638184d90210de34685b87, type: 3}
   nodeType: 0
-  enemyCharacter: {fileID: 11400000, guid: 899db4256d9d3a04da87131fc978b42c, type: 2}
+  enemyCharacter: {fileID: 11400000, guid: e62e0c132cf5ee7438f32653bd4a1095, type: 2}
   hp: 120
   atk: 8
   turn: 2

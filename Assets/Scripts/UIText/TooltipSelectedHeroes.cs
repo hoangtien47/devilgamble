@@ -46,7 +46,7 @@ public class TooltipSelectedHeroes : MonoBehaviour
         else
         {
             nameText.text = heroData.Name;
-            hpText.text = $"{heroData.health}";
+            hpText.text = $"{heroData.maxHealth}";
             atkText.text = $"{heroData.attack}";
         }
         // Show and fade in

@@ -29,6 +29,17 @@ public class HeroSelectionManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private Button loadMapButton;
+
+    //private void Awake()
+    //{
+    //    // Clear the map data when HeroSelectionManager initializes
+    //    if (PlayerPrefs.HasKey("Map"))
+    //    {
+    //        PlayerPrefs.DeleteKey("Map");
+    //        PlayerPrefs.Save();
+    //    }
+    //}
+
     void Start()
     {
         if(heroData!=null && heroData.Count > 0)
@@ -188,8 +199,8 @@ public class HeroSelectionManager : MonoBehaviour
     }
     private void UpdateGameSession(HeroCardScriptable heroData)
     {
-        // Store the selected hero data in GameSession
-        GameSession.heroes = heroData;
+        /// Create a new HeroCardData instance with copied values
+        GameSession.heroes = new HeroCardData(heroData);
         UpdateLoadMapButton();
     }
 
@@ -218,7 +229,12 @@ public class HeroSelectionManager : MonoBehaviour
             return;
         }
 
-        // Save the selected hero to GameSession (already done in UpdateGameSession)
+        // Make sure map is cleared before loading map scene
+        if (PlayerPrefs.HasKey("Map"))
+        {
+            PlayerPrefs.DeleteKey("Map");
+            PlayerPrefs.Save();
+        }
 
         // Load the map scene
         UnityEngine.SceneManagement.SceneManager.LoadScene(2); // Replace "Map" with your actual map scene name

@@ -16,7 +16,8 @@ MonoBehaviour:
   Name: Rune Khight
   Description: Rune Khight
   Sprite: {fileID: 21300000, guid: 5ad8dbe56940bb346ad9b488ca11498c, type: 3}
-  health: 120
+  maxHealth: 150
+  currentHealth: 150
   attack: 6
   defense: 10
   energyForUlt: 0

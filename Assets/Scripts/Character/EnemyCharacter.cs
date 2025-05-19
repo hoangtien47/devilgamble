@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyCharacter : BaseCharacter
 {
@@ -42,6 +43,9 @@ public class EnemyCharacter : BaseCharacter
             currentStamina = Mathf.Max(currentStamina, 0); // Ensure stamina doesn't go below 0
         }
 
+        // Track damage dealt by hero
+        GameStateManager.Instance?.TrackDamageDealt(damageAmount);
+
         // Apply damage
         currentHealth -= damageAmount;
 
@@ -61,7 +65,14 @@ public class EnemyCharacter : BaseCharacter
     {
         base.Die();
         GetComponent<Card>().OnCharacterDeath();
-        // Enemy specific death logic
+        
+        // Trigger win condition
+        GameStateManager.Instance?.OnBattleWin();
+
+        // Save current hero data before dropping rewards
+        SaveHeroData();
+
+        // Drop rewards and handle other death logic
         DropRewards();
     }
 
@@ -75,11 +86,22 @@ public class EnemyCharacter : BaseCharacter
     }
     public void SetData(EnemyCardScriptable enemy)
     {
-        this.maxHealth = enemy.health;
-        this.currentHealth = enemy.health;
+        this.maxHealth = enemy.maxHealth;
+        this.currentHealth = enemy.currentHealth;
         this.attackPower = enemy.attack;
         this.characterName = enemy.Name;
         this.sprite = enemy.Sprite;
         this.turn = turn;
+    }
+    private void SaveHeroData()
+    {
+        // Find the hero character
+        var hero = FindObjectOfType<HeroesCharacter>();
+        if (hero != null && GameSession.heroes != null)
+        {
+            // Update hero's current health in the GameSession
+            GameSession.heroes.SetData(hero);
+            // You can add more stats to save here if needed
+        }
     }
 }

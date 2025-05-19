@@ -16,7 +16,8 @@ MonoBehaviour:
   Name: Rose & Bone
   Description: Rose & Bone
   Sprite: {fileID: 21300000, guid: d24648c953ca28a4bab429be3bb75e42, type: 3}
-  health: 100
+  maxHealth: 120
+  currentHealth: 120
   attack: 10
   defense: 10
   energyForUlt: 0

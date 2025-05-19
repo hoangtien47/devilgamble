@@ -8,7 +8,8 @@ public class CharacterCardScriptable : ScriptableObject
     public string Description;
     public Sprite Sprite;
 
-    public int health;
+    public int maxHealth;
+    public int currentHealth;
     public int attack;
     public int defense;
     public int energyForUlt;

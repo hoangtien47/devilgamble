@@ -312,7 +312,7 @@ public class CardVisual : MonoBehaviour
     {
         parentCard.LoadCharacterData(currentNode);
     }
-    public void LoadCharacterData(HeroCardScriptable heroData)
+    public void LoadCharacterData(HeroCardData heroData)
     {
         parentCard.LoadCharacterData(heroData);
     }

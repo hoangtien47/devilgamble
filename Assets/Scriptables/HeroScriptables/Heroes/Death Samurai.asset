@@ -16,7 +16,8 @@ MonoBehaviour:
   Name: Death Samurai
   Description: Death Samurai
   Sprite: {fileID: 21300000, guid: dec76373fff0190429fa5e604b15e956, type: 3}
-  health: 90
+  maxHealth: 100
+  currentHealth: 100
   attack: 12
   defense: 10
   energyForUlt: 0

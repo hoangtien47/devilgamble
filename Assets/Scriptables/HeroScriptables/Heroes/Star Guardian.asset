@@ -16,7 +16,8 @@ MonoBehaviour:
   Name: Star Guardian
   Description: Star Guardian
   Sprite: {fileID: 21300000, guid: c9fbdd8d28c7ca74882b15404ab609a6, type: 3}
-  health: 120
+  maxHealth: 150
+  currentHealth: 150
   attack: 6
   defense: 10
   energyForUlt: 0

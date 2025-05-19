@@ -76,6 +76,9 @@ namespace Map
                     SceneManager.LoadScene(3);
                     break;
                 case NodeType.EliteEnemy:
+                    // open card game
+                    Debug.Log("Open card game");
+                    SceneManager.LoadScene(3);
                     break;
                 case NodeType.RestSite:
                     break;
@@ -84,6 +87,9 @@ namespace Map
                 case NodeType.Store:
                     break;
                 case NodeType.Boss:
+                    // open card game
+                    Debug.Log("Open card game");
+                    SceneManager.LoadScene(3);
                     break;
                 case NodeType.Mystery:
                     break;

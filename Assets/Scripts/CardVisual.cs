@@ -308,9 +308,9 @@ public class CardVisual : MonoBehaviour
     {
         
     }
-    public void LoadCharacterData(NodeBlueprint currentNode)
+    public void LoadCharacterData(EnemyCardData enemyCardData)
     {
-        parentCard.LoadCharacterData(currentNode);
+        parentCard.LoadCharacterData(enemyCardData);
     }
     public void LoadCharacterData(HeroCardData heroData)
     {

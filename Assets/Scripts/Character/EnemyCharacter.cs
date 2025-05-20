@@ -84,7 +84,7 @@ public class EnemyCharacter : BaseCharacter
         Debug.Log($"{idCharacter} was defeated! Drops: {goldReward} gold.");
         // Logic for spawning items or giving rewards to the player would go here
     }
-    public void SetData(EnemyCardScriptable enemy)
+    public void SetData(EnemyCardData enemy)
     {
         this.maxHealth = enemy.maxHealth;
         this.currentHealth = enemy.currentHealth;

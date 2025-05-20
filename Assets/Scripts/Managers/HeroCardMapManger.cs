@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Map;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,19 @@ public class HeroCardMapManager : MonoBehaviour
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private HeroHorrizontalHolder cardHolder;
 
-    [Header("Animation Settings")]
+    [Header("Animation draw Settings")]
     [SerializeField] private float dealDuration = 0.5f;
     [SerializeField] private float scaleUpDuration = 0.3f;
     [SerializeField] private Ease dealEase = Ease.OutBack;
-    
+
     [Header("Position Settings")]
     [SerializeField] private Vector3 dealFromPosition;
     [SerializeField] private Vector3 finalScale = Vector3.one;
 
     private HeroCardScriptable tempHeroCard;
-    private GameObject currentCard;
-    private HeroSelectData currentSelectData;
-    private HeroCardSelector cardVisual;
+    [SerializeField] private GameObject currentCard;
+    [SerializeField] private HeroSelectData currentSelectData;
+    [SerializeField] private HeroCardSelector cardVisual;
 
     private void Start()
     {
@@ -68,54 +69,9 @@ public class HeroCardMapManager : MonoBehaviour
         // Get and setup components
         currentSelectData = currentCard.GetComponentInChildren<HeroSelectData>();
         currentSelectData.heroData = CreateHeroCardData();
-        cardVisual = currentCard.GetComponentInChildren<HeroCardSelector>();
-
-        if (currentSelectData != null && cardVisual != null)
-        {
-            // Setup initial data
-            currentSelectData.heroData = tempHeroCard;
-            currentSelectData.idx = 0;
-            currentSelectData.name = tempHeroCard.Name;
-
-            // Initialize card visual
-            cardVisual.Initialize(currentSelectData);
-
-            // Add to holder's cards list
-            if (!cardHolder.cards.Contains(currentSelectData))
-            {
-                cardHolder.cards.Add(currentSelectData);
-            }
-
-            // Create animation sequence
-            Sequence dealSequence = DOTween.Sequence();
-
-            // Move to position
-            dealSequence.Append(currentCard.transform
-                .DOLocalMove(Vector3.zero, dealDuration)
-                .SetEase(dealEase));
-
-            // Scale up
-            dealSequence.Join(currentCard.transform
-                .DOScale(finalScale, scaleUpDuration)
-                .SetEase(Ease.OutBack));
-
-            // Setup after animation
-            dealSequence.OnComplete(() =>
-            {
-                cardVisual.LoadHeroData(tempHeroCard);
-                cardHolder.UpdateCardVisuals();
-            });
-
-            // Prevent interaction events
-            currentSelectData.PointerUpEvent.RemoveAllListeners();
-            currentSelectData.SelectEvent.RemoveAllListeners();
-            currentSelectData.BeginDragEvent.RemoveAllListeners();
-            currentSelectData.EndDragEvent.RemoveAllListeners();
-
-            dealSequence.Play();
-        }
+        cardVisual = currentSelectData.heroVisual;
     }
-
+    
     private HeroCardScriptable CreateHeroCardData()
     {
         // Create a temporary ScriptableObject
@@ -137,7 +93,19 @@ public class HeroCardMapManager : MonoBehaviour
 
         return heroCard;
     }
+    public void HealHero()
+    {
+        if (currentCard == null)
+        {
+            return;
+        }
 
+        // Update hero data first
+        tempHeroCard = CreateHeroCardData();  // Get fresh data with new health value
+        currentSelectData.heroData = tempHeroCard;
+        currentSelectData.HealHero();
+        currentSelectData.ReloadHero();
+    }
     private void OnDestroy()
     {
         // Cleanup

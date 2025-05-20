@@ -15,6 +15,8 @@ namespace Map
 
         public static MapPlayerTracker Instance;
 
+        [SerializeField] private EnemyMapManager enemyList;
+
         public bool Locked { get; set; }
 
         private void Awake()
@@ -56,7 +58,21 @@ namespace Map
             view.SetAttainableNodes();
             view.SetLineColors();
             mapNode.ShowSwirlAnimation();
-
+            GameSession.node = mapNode.Blueprint;
+            switch (mapNode.Node.nodeType)
+            {
+                case NodeType.MinorEnemy:
+                    SetMinorEnemy();
+                    break;
+                case NodeType.EliteEnemy:
+                    SetEliteEnemy();
+                    break;
+                case NodeType.Boss:
+                    SetBossEnemy();
+                    break;
+                default:
+                    break;
+            }
             DOTween.Sequence().AppendInterval(enterNodeDelay).OnComplete(() => EnterNode(mapNode));
         }
 
@@ -67,7 +83,7 @@ namespace Map
             // load appropriate scene with context based on nodeType:
             // or show appropriate GUI over the map: 
             // if you choose to show GUI in some of these cases, do not forget to set "Locked" in MapPlayerTracker back to false
-            GameSession.node = mapNode.Blueprint;
+            
             switch (mapNode.Node.nodeType)
             {
                 case NodeType.MinorEnemy:
@@ -81,6 +97,10 @@ namespace Map
                     SceneManager.LoadScene(3);
                     break;
                 case NodeType.RestSite:
+                    // open rest site GUI
+                    GameSession.heroes.HealForRest();
+                    var ManagerMap = FindObjectOfType<HeroCardMapManager>();
+                    ManagerMap.HealHero(); 
                     break;
                 case NodeType.Treasure:
                     break;
@@ -100,6 +120,42 @@ namespace Map
         private void PlayWarningThatNodeCannotBeAccessed()
         {
             Debug.Log("Selected node cannot be accessed");
+        }
+        public void SetMinorEnemy()
+        {
+            // Get the random minor enemy scriptable object
+            EnemyCardScriptable enemyScriptable = enemyList.GetRandomMinorEnemy();
+
+            // Assign the scriptable object directly to the node blueprint
+            if (GameSession.node != null)
+            {
+                GameSession.node.enemyCharacter = enemyScriptable;
+                GameSession.enemies = new EnemyCardData(enemyScriptable);
+            }
+        }
+        public void SetEliteEnemy()
+        {
+            // Get the random minor enemy scriptable object
+            EnemyCardScriptable enemyScriptable = enemyList.GetRandomEliteEnemy();
+
+            // Assign the scriptable object directly to the node blueprint
+            if (GameSession.node != null)
+            {
+                GameSession.node.enemyCharacter = enemyScriptable;
+                GameSession.enemies = new EnemyCardData(enemyScriptable);
+            }
+        }
+        public void SetBossEnemy()
+        {
+            // Get the random minor enemy scriptable object
+            EnemyCardScriptable enemyScriptable = enemyList.GetRandomBoss();
+
+            // Assign the scriptable object directly to the node blueprint
+            if (GameSession.node != null)
+            {
+                GameSession.node.enemyCharacter = enemyScriptable;
+                GameSession.enemies = new EnemyCardData(enemyScriptable);
+            }
         }
     }
 }

@@ -316,6 +316,7 @@ MonoBehaviour:
   dealDuration: 0.3
   dealEase: 27
   loadMapButton: {fileID: 2048748826}
+  mapConfig: {fileID: 11400000, guid: 19bf411c79e522b4b8e54f82b0140314, type: 2}
 --- !u!1 &399316078
 GameObject:
   m_ObjectHideFlags: 0

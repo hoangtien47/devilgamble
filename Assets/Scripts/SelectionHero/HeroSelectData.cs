@@ -25,7 +25,7 @@ public class HeroSelectData : MonoBehaviour, IPointerEnterHandler, IBeginDragHan
 
     [Header("Visual")]
     [SerializeField] private GameObject heroVisualPrefab;
-    [HideInInspector] public HeroCardSelector heroVisual;
+    [SerializeField] public HeroCardSelector heroVisual;
 
     [Header("States")]
     public bool isHovering;
@@ -178,7 +178,16 @@ public class HeroSelectData : MonoBehaviour, IPointerEnterHandler, IBeginDragHan
                 transform.localPosition = Vector3.zero;
         }
     }
-
+    public virtual void HealHero()
+    {
+        if (heroVisual != null)
+            heroVisual.HealHero();
+    }
+    public virtual void ReloadHero()
+    {
+        if (heroVisual != null)
+            heroVisual.LoadHeroData(heroData);
+    }
 
     public int SiblingAmount()
     {

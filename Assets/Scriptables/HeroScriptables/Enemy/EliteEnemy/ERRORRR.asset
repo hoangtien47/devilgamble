@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6c1e7653535c5742ba81afe5ff26737, type: 3}
-  m_Name: Infected Mage
+  m_Name: ERRORRR
   m_EditorClassIdentifier: 
-  id: E13
-  Name: Infected Mage
-  Description: Infected Mage
-  Sprite: {fileID: 21300000, guid: a61da8afd76b8b241a3e7cd0cdadd3d3, type: 3}
-  maxHealth: 920
-  currentHealth: 920
-  attack: 16
+  id: E02
+  Name: ERRORRR
+  Description: ERRORRR
+  Sprite: {fileID: 21300000, guid: 6703dbfba44aea649ab857919e98cd86, type: 3}
+  maxHealth: 450
+  currentHealth: 450
+  attack: 30
   defense: 0
   energyForUlt: 0
   passiveName: 
@@ -26,3 +26,4 @@ MonoBehaviour:
   ultName: 
   ultDescription: 
   ultAnimation: {fileID: 0}
+  actionTurns: 1

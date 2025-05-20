@@ -11,6 +11,8 @@ namespace ZkLogin
     public class LoginManager : MonoBehaviour
     {
         [SerializeField] private string rpcUrl = "https://fullnode.devnet.sui.io";
+        SuiUnityWrapper suiWrapper;
+
         [SerializeField] private GoogleAuthManager googleAuthManager;
         [SerializeField] private GoogleAuthConfig authConfig;
 
@@ -36,6 +38,8 @@ namespace ZkLogin
             if (googleAuthManager == null)
             {
                 var existingManager = FindObjectOfType<GoogleAuthManager>();
+                suiWrapper = FindObjectOfType<SuiUnityWrapper>();
+
                 if (existingManager != null)
                 {
                     googleAuthManager = existingManager;
@@ -120,6 +124,9 @@ namespace ZkLogin
                 // Generate Sui address using the JWT
                 suiAddress = Sui.ZKLogin.SDK.Address.JwtToAddress(jwtToken, userSalt);
                 Debug.Log($"Generated Sui address: {suiAddress}");
+
+                string result = suiWrapper.Invoke("jwtToAddress", jwtToken, userSalt);
+                Debug.Log($"Sui address from wrapper: {result}");
 
                 // Use the previously generated key or create a new one
                 await LoadOrGenerateEphemeralKeyAndNonce();

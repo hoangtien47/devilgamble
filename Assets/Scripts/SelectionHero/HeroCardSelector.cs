@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ public class HeroCardSelector : MonoBehaviour
     private Canvas shadowCanvas;
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
-    [SerializeField] protected Image cardImage;
+    [SerializeField] public Image cardImage;
     [SerializeField] private TextMeshProUGUI _HPText;
     [SerializeField] private TextMeshProUGUI _ATKText;
     [SerializeField] private TextMeshProUGUI _NameText;
@@ -173,7 +174,56 @@ public class HeroCardSelector : MonoBehaviour
         currentTween = transform.DOScale(originalScale, scaleTransition)
             .SetEase(scaleEase);
     }
+    public virtual void HealHero()
+    {
+        // Create heal animation sequence
+        Sequence healSequence = DOTween.Sequence();
+        Debug.Log("Healing hero: " + parentData.heroData.Name);
+        // Store original values
+        Vector3 originalScale = parentData.transform.localScale;
+        Color originalColor = cardImage.color;
+        Color healColor = Color.green; // Healing color
 
+        // Create glow/heal effect
+        healSequence.Append(transform
+            .DOScale(originalScale * 1.2f, 0.3f)
+            .SetEase(Ease.OutBack));
+
+        // Color change animation
+        healSequence.Join(cardImage
+            .DOColor(healColor, 0.3f)
+            .SetEase(Ease.InOutSine));
+
+        // Wait a moment
+        healSequence.AppendInterval(0.2f);
+
+        // Return to original color
+        healSequence.Append(cardImage
+            .DOColor(originalColor, 0.3f)
+            .SetEase(Ease.InOutSine));
+
+        // Return to original scale
+        healSequence.Join(transform
+            .DOScale(originalScale, 0.3f)
+            .SetEase(Ease.OutBack));
+
+        // Shake effect for emphasis
+        healSequence.Join(transform
+            .DOShakePosition(0.3f, strength: 0.2f, vibrato: 10)
+            .SetEase(Ease.OutQuad));
+
+        // Update card holder and unlock map after animation
+        healSequence.OnComplete(() =>
+        {
+            var tracker = FindObjectOfType<MapPlayerTracker>();
+            if (tracker != null)
+            {
+                tracker.Locked = false;
+            }
+        });
+
+        healSequence.Play();
+    }
     private void OnPointerDown(HeroSelectData card)
     {
         if (isBeingDestroyed) return;
@@ -192,7 +242,7 @@ public class HeroCardSelector : MonoBehaviour
         transform.DOScale(originalScale * targetScale, scaleTransition)
             .SetEase(scaleEase);
     }
-
+        
     private void OnBeginDrag(HeroSelectData card)
     {
         if (isBeingDestroyed) return;
@@ -213,8 +263,8 @@ public class HeroCardSelector : MonoBehaviour
         transform.DOScale(selected ? scaleOnSelect * originalScale : originalScale, scaleTransition)
             .SetEase(scaleEase);
     }
-
-    public void LoadHeroData(HeroCardScriptable heroData)
+    
+    public virtual void LoadHeroData(HeroCardScriptable heroData)
     {
         if (heroData == null) return;
         Debug.Log("Name draw map:" + heroData.name);

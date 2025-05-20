@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Map;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ public class HeroSelectionManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private Button loadMapButton;
+
+    [SerializeField] private MapConfig mapConfig;
 
     //private void Awake()
     //{
@@ -234,9 +237,17 @@ public class HeroSelectionManager : MonoBehaviour
         {
             PlayerPrefs.DeleteKey("Map");
             PlayerPrefs.Save();
+            GameSession.node = null;
+            GameSession.enemies = null;
+            GameSession.levelEnemy = 1;
         }
-
+        SetSeedMap();
         // Load the map scene
         UnityEngine.SceneManagement.SceneManager.LoadScene(2); // Replace "Map" with your actual map scene name
+    }
+
+    public void SetSeedMap()
+    {
+        mapConfig.seed = Random.Range(0, 10000);
     }
 }

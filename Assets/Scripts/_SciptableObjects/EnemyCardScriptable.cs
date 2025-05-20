@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class EnemyCardScriptable : CharacterCardScriptable
 {
-
+    public int actionTurns; // Number of turns before the enemy attacks
 }

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6c1e7653535c5742ba81afe5ff26737, type: 3}
-  m_Name: Infected Guardian
+  m_Name: Fungal Box
   m_EditorClassIdentifier: 
-  id: E04
-  Name: Infected Guardian
-  Description: Infected Guardian
-  Sprite: {fileID: 21300000, guid: 63c6819d724bb1941af5651c1038abad, type: 3}
-  maxHealth: 320
-  currentHealth: 320
-  attack: 7
+  id: E01
+  Name: Fungal Box
+  Description: Fungal Box
+  Sprite: {fileID: 21300000, guid: 56f6e2a1d798183458dfab5ad8b823c0, type: 3}
+  maxHealth: 560
+  currentHealth: 560
+  attack: 20
   defense: 0
   energyForUlt: 0
   passiveName: 
@@ -26,3 +26,4 @@ MonoBehaviour:
   ultName: 
   ultDescription: 
   ultAnimation: {fileID: 0}
+  actionTurns: 2

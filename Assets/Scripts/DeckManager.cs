@@ -58,7 +58,7 @@ public class DeckManager : MonoBehaviour
     [Header("Enemy Card")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private HorizontalCardHolder enemyHolder;
-
+    private int turnsToAttack = 2;
 
     [Header("Deck Settings")]
     [SerializeField] private int handSize = 8;
@@ -71,6 +71,7 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private int baseMultiplier = 1;
     [SerializeField] private int jokerSlots = 3;
     [SerializeField] private int handMultiplier = 1;
+    [SerializeField] private int discardChangeCount = 2;
 
     [Header("State")]
     public List<CardData> deckCards = new List<CardData>();
@@ -104,6 +105,8 @@ public class DeckManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI turnCountText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI discardChangeText;
+    
     private void Start()
     {
         // Reload current scene
@@ -114,7 +117,7 @@ public class DeckManager : MonoBehaviour
         InitializeDeck();
         ShuffleDeck();
         DealHand();
-
+        discardChangeText.text = discardChangeCount.ToString();
         StartCoroutine(DealEnemyCoroutine(1));
         StartCoroutine(DealHeroCoroutine(1));
     }
@@ -278,7 +281,10 @@ public class DeckManager : MonoBehaviour
             cardCount++;
         }
         bossTransform = enemyHolder.cards[0].gameObject.transform;
-        enemyHolder.cards[0].cardVisual.LoadCharacterData(GameSession.node);
+        enemyHolder.cards[0].cardVisual.LoadCharacterData(GameSession.enemies);
+        turnsToAttack = GameSession.enemies.actionTurns;
+        turnCount = turnsToAttack;
+        SetTurnText();
     }
 
     private IEnumerator DealHeroCoroutine(int numCardDeal)
@@ -400,10 +406,10 @@ public class DeckManager : MonoBehaviour
         {
             StartCoroutine(DiscardSelectedCardsCoroutine());
         }
-        else
-        {
-            StartCoroutine(DiscardHandCoroutine());
-        }
+        //else
+        //{
+        //    StartCoroutine(DiscardHandCoroutine());
+        //}
     }
     private IEnumerator DiscardSelectedCardsCoroutineAfterPlayCard()
     {
@@ -481,7 +487,12 @@ public class DeckManager : MonoBehaviour
     {
         if (handHolder.cards == null || handHolder.cards.Count == 0)
             yield break;
-
+        if(discardChangeCount <= 0)
+        {
+            yield break;
+        }
+        discardChangeCount --;
+        discardChangeText.text = discardChangeCount.ToString();
         List<Card> cardsToDiscard = new List<Card>();
         List<int> indicesToRemove = new List<int>();
 
@@ -635,7 +646,7 @@ public class DeckManager : MonoBehaviour
 
     public void CalculateScoreWithCombos()
     {
-        if (!canPlayCards || selectedHeroCard == null)
+        if (!canPlayCards /*|| selectedHeroCard == null*/)
             return;
         canPlayCards = false;
         var hand = selectedCards;
@@ -892,7 +903,7 @@ public class DeckManager : MonoBehaviour
             if (enemyHolder.cards[0].GetComponent<BaseCharacter>().IsAlive())
             {
                 StartCoroutine(AttackEnemySequence());
-                turnCount = 2;
+                turnCount = turnsToAttack;
             }
             else
             {
@@ -904,6 +915,7 @@ public class DeckManager : MonoBehaviour
             FadeOutScoreText();
             canPlayCards = true;
         }
+        SetTurnText();
     }
     private IEnumerator AttackEnemySequence()
     {
@@ -1096,4 +1108,9 @@ public class DeckManager : MonoBehaviour
         scoreText.text = "0";
     }
     #endregion
+
+    private void SetTurnText()
+    {
+        turnCountText.text = turnCount.ToString();
+    }
 }

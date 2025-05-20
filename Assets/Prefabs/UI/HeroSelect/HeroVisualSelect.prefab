@@ -681,6 +681,9 @@ MonoBehaviour:
   scaleOnSelect: 1.25
   scaleTransition: 0.15
   scaleEase: 27
+  colorChangeDuration: 3
+  highlightColor: {r: 0, g: 1, b: 0, a: 1}
+  colorChangeEase: 4
   rotationAmount: 10
   rotationSpeed: 10
   autoTiltAmount: 15

@@ -208,12 +208,12 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         if (cardVisual != null)
             cardVisual.OnLoadCharacter(character);
     }
-    public virtual void LoadCharacterData(NodeBlueprint currentNode)
+    public virtual void LoadCharacterData(EnemyCardData enemyCardData)
     {
         if(GetComponent<EnemyCharacter>() != null)
         {
             Debug.Log("LoadCharacterData");
-            GetComponent<EnemyCharacter>().SetData(currentNode.enemyCharacter);
+            GetComponent<EnemyCharacter>().SetData(enemyCardData);
             OnLoadCharacterData(GetComponent<EnemyCharacter>());
         }
     }

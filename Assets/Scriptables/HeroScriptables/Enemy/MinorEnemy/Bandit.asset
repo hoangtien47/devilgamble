@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6c1e7653535c5742ba81afe5ff26737, type: 3}
-  m_Name: Fungal Box
+  m_Name: Bandit
   m_EditorClassIdentifier: 
-  id: E01
-  Name: Fungal Box
-  Description: Fungal Box
-  Sprite: {fileID: 21300000, guid: d56bb8478ada828428b1f28f16f1dbd8, type: 3}
-  maxHealth: 560
-  currentHealth: 560
-  attack: 20
+  id: M02
+  Name: Bandit
+  Description: Bandit
+  Sprite: {fileID: 21300000, guid: c63b6191b762de64d8cded5a00ea620f, type: 3}
+  maxHealth: 200
+  currentHealth: 200
+  attack: 10
   defense: 0
   energyForUlt: 0
   passiveName: 
@@ -26,3 +26,4 @@ MonoBehaviour:
   ultName: 
   ultDescription: 
   ultAnimation: {fileID: 0}
+  actionTurns: 2

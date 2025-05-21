@@ -37,7 +37,7 @@ namespace MasterStylizedProjectile
         }
         private void OnTriggerEnter(Collider other)
         {
-
+            Debug.Log(other.name);
             if (OnHitEffect != null)
             {
                 var onHitObj = Instantiate(OnHitEffect, transform.position, Quaternion.identity);

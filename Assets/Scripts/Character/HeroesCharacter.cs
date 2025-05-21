@@ -7,7 +7,6 @@ public class HeroesCharacter : BaseCharacter
 {
     [SerializeField] private int maxEnergy = 100;
     private int currentEnergy;
-
     /// <summary>
     /// Gets the current energy of the hero.
     /// </summary>
@@ -60,6 +59,11 @@ public class HeroesCharacter : BaseCharacter
         if (target != null && !target.IsAlive() && target is EnemyCharacter enemy)
         {
             //GainExperience(enemy.ExperienceReward);
+        }
+        currentEnergy += 10; // Gain energy after attacking
+        if(currentEnergy >= maxEnergy)
+        {
+            currentEnergy = 0;
         }
     }
 

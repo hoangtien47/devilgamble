@@ -330,6 +330,130 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284442872}
   m_CullTransparentMesh: 1
+--- !u!1 &753036982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 753036983}
+  - component: {fileID: 753036984}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &753036983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753036982}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.8402543, y: -1.6509246, z: -4.118113}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &753036984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753036982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3bd9e01d2818146a0253a917ba7d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  backgroundMusic:
+  - {fileID: 8300000, guid: d9367bbdcfb308e4e9672056033c0863, type: 3}
+  cardHover:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  cardSelect:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  cardDeal:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  cardAttack:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  cardDamage:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  cardDestroy:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  heroAttack:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  enemyAttack:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  characterDeath:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  healthRestore:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  buttonClick:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  levelUp:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  victory:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  defeat:
+    name: 
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchVariation: 1
+  soundEffects: []
+  defaultSfxVolume: 0.75
+  defaultMusicVolume: 0.5
+  masterVolume: 1
+  sfxVolume: 1
+  musicVolume: 1
 --- !u!1 &868898547
 GameObject:
   m_ObjectHideFlags: 0
@@ -1528,3 +1652,4 @@ SceneRoots:
   - {fileID: 1886135040}
   - {fileID: 1128416404}
   - {fileID: 1701732877}
+  - {fileID: 753036983}

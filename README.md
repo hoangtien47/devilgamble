@@ -1,56 +1,74 @@
-# Idea Chính
+# Main Idea
 
-Game card có cơ chế của HSR (Honkai Starail) kết hợp với cả cơ chế có sẵn giống với balatro.
-
-
+A card game combining mechanics inspired by Honkai: Star Rail (HSR) with elements similar to Balatro.
 
 
-## Cấu tạo quái
 
-Quái có các thuộc tính như:
-- Thanh sức bền
-- Thanh máu
+## Monster Structure
+
+Monsters have the following attributes:
+
+- Stamina Bar
+
+- Health Bar
+
 - Damage
-- Thuộc tính quái (Hiển thị điểm yếu quái)
-- Lượt hành động
+
+- Monster Element (Displays weaknesses)
+
+- Action Turns
 
 
 
-## Cấu tạo lá bài
+## Play Deck Card Structure
 
-Lấy cảm hứng từ bộ bài tây
+Inspired by the traditional 52-card deck.
 
-## Cấu tạo heroes
-- HP
-- ATK
-- SHD
-- LIST<EFFECTED>
+## Hero Structure
+Each hero has the following attributes:
+
+- HP (Health Points)
+
+- ATK (Attack)
+
+- SHD (Shield)
+
+- LIST<EFFECTED> (List of active effects)
 
 - Role
-- 
 
-## Heroes
+- ...
 
-Có 3 loại heroes:
-- DPS
-- Buffer
-- Debuffer
+## Heroe Types
 
-Người chơi có thể chọn 3 heroes tham gia mỗi lần chơi.
+There are 3 main hero types:
+
+- DPS (Damage Dealer)
+
+- Buffer (Support that boosts allies)
+
+- Debuffer (Applies negative effects on enemies)
+
+Players can select 3 heroes per game session.
+(In this version only play 1 Hero each time)
 
 
-## Phân loại Heroes
+## Hero Classification
 
-Có 2 dạng phân loại bài chính:
-- Phân loại theo hệ: Hỏa, Thổ, Thủy và Phong
-- Phân loại theo hiệu ứng của Heroes: DOT (Damage Over Time: Độc, chảy máu,...), Khống chế cứng (Đóng băng, sốc điện), Hiệu ứng tích sát thương (Cần đạt số lượng cộng dồn để gây sát thương), Hiệu ứng phá vỡ điểm yếu (Break Effect), Hiệu ứng hồi máu, Hiệu ứng khiêu khích và vân vân mây mây.
+Heroes are classified in two main ways:
+
+- By Element: Fire, Earth, Water, and Wind
+
+- By Effect Type: DOT (Damage Over Time): e.g. Poison, Bleeding, Hard CC (Crowd Control): e.g. Freeze, Shock
+, Stacked Damage Effects: Require accumulation to trigger damage, Break Effects: Used to break enemy weaknesses, Healing Effects, Taunt and Other Utility Effects,...
 
 
  
 
-## Người chơi
-Người chơi sẽ có các thuộc tính sau:
-- Số tiền người chơi sở hữu
+## Player Attributes
+Players have the following properties:
+
+- Amount of in-game currency owned
 
 ## License
 

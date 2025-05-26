@@ -96,10 +96,14 @@ PrefabInstance:
       propertyPath: cardVisualPrefab
       value: 
       objectReference: {fileID: 7991528508406032882, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6346821589383760018, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2674873723983150242, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 3446781440181143741}
     - targetCorrespondingSourceObject: {fileID: 2674873723983150242, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8630959031633682289}
@@ -112,6 +116,50 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2674873723983150242, guid: e99c361e7acdd41f0b904fef6be48fea, type: 3}
   m_PrefabInstance: {fileID: 5022085944353503726}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3446781440181143741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966232943998436684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bac8338ea0468324e8720a6cf1eb701b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instantiateVisual: 1
+  moveSpeedLimit: 50
+  selected: 0
+  selectionOffset: 50
+  cardVisualPrefab: {fileID: 7991528508406032882, guid: 365f4db846666fd458e69522caefcbd1, type: 3}
+  cardVisual: {fileID: 0}
+  isHovering: 0
+  isDragging: 0
+  wasDragged: 0
+  BaseCharacter: {fileID: 0}
+  PointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  PointerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  PointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  PointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  BeginDragEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  EndDragEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  SelectEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _character: {fileID: 0}
 --- !u!114 &8630959031633682289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,9 +173,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idCharacter: 
+  characterName: 
   maxHealth: 120
   attackPower: 7
   attackAmount: 0
+  sprite: {fileID: 0}
   goldReward: 10
   maxStamina: 100
   turn: 3

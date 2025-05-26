@@ -155,33 +155,33 @@
 //                try
 //                {
 //                    // Convert the Base64 header to a numeric value
-//                    BigInteger headerBase64Value;
-//                    if (!string.IsNullOrEmpty(proofResponse.HeaderBase64))
-//                    {
-//                        // Convert Base64 to bytes and then to BigInteger
-//                        byte[] headerBytes = Encoding.UTF8.GetBytes(proofResponse.HeaderBase64);
+//                    //BigInteger headerBase64Value;
+//                    //if (!string.IsNullOrEmpty(proofResponse.HeaderBase64))
+//                    //{
+//                    //    // Convert Base64 to bytes and then to BigInteger
+//                    //    byte[] headerBytes = Encoding.UTF8.GetBytes(proofResponse.HeaderBase64);
 
-//                        // Create a numeric hash of the header bytes
-//                        using (var sha256 = System.Security.Cryptography.SHA256.Create())
-//                        {
-//                            byte[] hashBytes = sha256.ComputeHash(headerBytes);
-//                            // Convert only the first 8 bytes to a BigInteger (to avoid overflow)
-//                            byte[] truncatedBytes = new byte[8];
-//                            Array.Copy(hashBytes, truncatedBytes, 8);
-//                            headerBase64Value = new BigInteger(truncatedBytes);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        headerBase64Value = BigInteger.Zero;
-//                        Debug.LogWarning("HeaderBase64 is null or empty, using zero");
-//                    }
+//                    //    // Create a numeric hash of the header bytes
+//                    //    using (var sha256 = System.Security.Cryptography.SHA256.Create())
+//                    //    {
+//                    //        byte[] hashBytes = sha256.ComputeHash(headerBytes);
+//                    //        // Convert only the first 8 bytes to a BigInteger (to avoid overflow)
+//                    //        byte[] truncatedBytes = new byte[8];
+//                    //        Array.Copy(hashBytes, truncatedBytes, 8);
+//                    //        headerBase64Value = new BigInteger(truncatedBytes);
+//                    //    }
+//                    //}
+//                    //else
+//                    //{
+//                    //    headerBase64Value = BigInteger.Zero;
+//                    //    Debug.LogWarning("HeaderBase64 is null or empty, using zero");
+//                    //}
 
 //                    zkLoginSignature.Inputs = new Inputs
 //                    {
 //                        ProofPoints = proofResponse.ProofPoints ?? new ProofPoints(),
 //                        IssBase64Details = proofResponse.IssBase64Details ?? new ZkLoginSignatureInputsClaim { Value = "", IndexMod4 = 0 },
-//                        HeaderBase64 = headerBase64Value,
+//                        HeaderBase64 = proofResponse.HeaderBase64,
 //                        AddressSeed = addressSeed.ToString()
 //                    };
 //                }

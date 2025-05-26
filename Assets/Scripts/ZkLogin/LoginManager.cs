@@ -2,6 +2,7 @@
 //using Sui.ZKLogin.SDK;
 //using System;
 //using System.Collections.Generic;
+//using System.Linq;
 //using System.Security.Cryptography;
 //using System.Threading.Tasks;
 //using UnityEngine;
@@ -11,7 +12,6 @@
 //    public class LoginManager : MonoBehaviour
 //    {
 //        [SerializeField] private string rpcUrl = "https://fullnode.devnet.sui.io";
-//        SuiUnityWrapper suiWrapper;
 
 //        [SerializeField] private GoogleAuthManager googleAuthManager;
 //        [SerializeField] private GoogleAuthConfig authConfig;
@@ -38,7 +38,6 @@
 //            if (googleAuthManager == null)
 //            {
 //                var existingManager = FindObjectOfType<GoogleAuthManager>();
-//                suiWrapper = FindObjectOfType<SuiUnityWrapper>();
 
 //                if (existingManager != null)
 //                {
@@ -125,8 +124,6 @@
 //                suiAddress = Sui.ZKLogin.SDK.Address.JwtToAddress(jwtToken, userSalt);
 //                Debug.Log($"Generated Sui address: {suiAddress}");
 
-//                string result = suiWrapper.Invoke("jwtToAddress", jwtToken, userSalt);
-//                Debug.Log($"Sui address from wrapper: {result}");
 
 //                // Use the previously generated key or create a new one
 //                await LoadOrGenerateEphemeralKeyAndNonce();
@@ -365,8 +362,36 @@
 
 //                txBlock.AddTransaction(command);
 
-//                // 7. Build the transaction
+//                // IMPORTANT FIX: Query for gas coins manually and set them explicitly
+//                // for ZkLogin accounts, we need to handle gas explicitly
+//                var suiStructTag = new Sui.Types.SuiStructTag("0x2::sui::SUI");
+//                var coinResult = await client.GetCoinsAsync(senderAddress, suiStructTag);
+
+//                if (coinResult.Error != null || coinResult.Result == null || coinResult.Result.Data.Length == 0)
+//                {
+//                    string errorMsg = "No gas coins available for this address. Request gas from a faucet first.";
+//                    Debug.LogError(errorMsg);
+//                    OnError?.Invoke(errorMsg);
+//                    return null;
+//                }
+
+//                // Set gas payment explicitly
+//                var gasCoins = coinResult.Result.Data
+//                    .Select(coin => new Sui.Types.SuiObjectRef(coin.CoinObjectID, coin.Version, coin.Digest))
+//                    .ToArray();
+
+//                txBlock.SetGasPayment(gasCoins);
+
+//                // 7. Build the transaction with explicit gas info
 //                var buildOptions = new Sui.Transactions.BuildOptions(client);
+
+//                // Set gas price explicitly as well
+//                var gasPriceResult = await client.GetReferenceGasPriceAsync();
+//                if (gasPriceResult.Error == null && gasPriceResult.Result != null)
+//                {
+//                    txBlock.SetGasPrice(gasPriceResult.Result);
+//                }
+
 //                byte[] txBytes = await txBlock.Build(buildOptions);
 
 //                if (txBlock.Error != null)

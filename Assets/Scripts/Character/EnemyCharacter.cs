@@ -1,6 +1,4 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class EnemyCharacter : BaseCharacter
 {
@@ -50,7 +48,7 @@ public class EnemyCharacter : BaseCharacter
         currentHealth -= damageAmount;
 
         Debug.Log($"{idCharacter} takes {damageAmount} damage from {attacker.id}! Remaining HP: {HP}, Stamina: {currentStamina}");
-        GetComponent<Card>().OnCharacterDataChange();
+        GetComponent<CharacterCard>().OnCharacterDataChange();
         base.TakeDamage(damageAmount, attacker);
         // Check if character died
         if (currentHealth <= 0)
@@ -64,8 +62,8 @@ public class EnemyCharacter : BaseCharacter
     protected override void Die()
     {
         base.Die();
-        GetComponent<Card>().OnCharacterDeath();
-        
+        GetComponent<CharacterCard>().OnCharacterDeath();
+
         // Trigger win condition
         GameStateManager.Instance?.OnBattleWin();
 

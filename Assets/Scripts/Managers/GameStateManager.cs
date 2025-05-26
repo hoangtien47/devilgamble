@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
+using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
@@ -17,6 +19,9 @@ public class GameStateManager : MonoBehaviour
     private int currentDamageDealt = 0;
     private int currentDamageTaken = 0;
 
+    // Game state properties
+    public bool IsVictory { get; private set; }
+
     public int BestDamageDealt => PlayerPrefs.GetInt(BEST_DAMAGE_DEALT_KEY, 0);
     public int BestDamageTaken => PlayerPrefs.GetInt(DAMAGE_TAKEN_KEY, 0);
     public int CurrentDamageDealt => currentDamageDealt;
@@ -31,6 +36,9 @@ public class GameStateManager : MonoBehaviour
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Initialize game state
+        IsVictory = false;
     }
 
     public void ClearAllData()
@@ -44,6 +52,9 @@ public class GameStateManager : MonoBehaviour
         PlayerPrefs.SetInt(BEST_DAMAGE_DEALT_KEY, 0);
         PlayerPrefs.SetInt(DAMAGE_TAKEN_KEY, 0);
         PlayerPrefs.Save();
+
+        // Reset game state
+        IsVictory = false;
 
         Debug.Log("GameState data cleared for new combat");
     }
@@ -68,13 +79,40 @@ public class GameStateManager : MonoBehaviour
     public void OnBattleWin()
     {
         Debug.Log($"Battle Won! Damage Dealt: {currentDamageDealt}, Damage Taken: {currentDamageTaken}");
+        IsVictory = true;
+        SendGameResultToReact(true); // Send win result to React
         ShowGameOverUI(true);
     }
 
     public void OnBattleLose()
     {
         Debug.Log($"Battle Lost! Damage Dealt: {currentDamageDealt}, Damage Taken: {currentDamageTaken}");
+        IsVictory = false;
+        SendGameResultToReact(false); // Send lose result to React
         ShowGameOverUI(false);
+    }
+
+    // This method sends the game result to React frontend
+    private void SendGameResultToReact(bool isVictory)
+    {
+        // Create result object with all the info React might need
+        GameResult result = new GameResult
+        {
+            isVictory = isVictory,
+            damageDealt = currentDamageDealt,
+            damageTaken = currentDamageTaken,
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+        };
+
+        // Convert result to JSON
+        string resultJson = JsonConvert.SerializeObject(result);
+
+        // Call JavaScript function to send data to React
+#if UNITY_WEBGL && !UNITY_EDITOR
+            SendResultToReactJS(resultJson);
+#else
+        Debug.Log($"Would send to React: {resultJson}");
+#endif
     }
 
     private void ShowGameOverUI(bool isWin)
@@ -93,4 +131,17 @@ public class GameStateManager : MonoBehaviour
         currentDamageDealt = 0;
         currentDamageTaken = 0;
     }
+
+    [DllImport("__Internal")]
+    private static extern void SendResultToReactJS(string resultJson);
+}
+
+// Class to hold the game result data for serialization
+[Serializable]
+public class GameResult
+{
+    public bool isVictory;
+    public int damageDealt;
+    public int damageTaken;
+    public long timestamp;
 }

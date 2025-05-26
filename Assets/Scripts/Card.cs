@@ -1,6 +1,5 @@
 
 using DG.Tweening;
-using Map;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,11 +47,10 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [HideInInspector] public UnityEvent<Card, bool> SelectEvent;
     public CardSuit Suit { get; set; }
     public CardRank Rank { get; set; }
-
-    public bool isCharacterCard { get; set; }
     public int charIndex { get; set; }
 
-    void Start()
+
+    protected virtual void Initialize()
     {
         canvas = GetComponentInParent<Canvas>();
         imageComponent = GetComponent<Image>();
@@ -61,11 +59,13 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
         visualHandler = FindObjectOfType<VisualCardsHandler>();
         cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
-        if (isCharacterCard)
-        {
-            cardVisual.OnLoadCharacter(BaseCharacter);
-        }
+
         cardVisual.Initialize(this);
+    }
+
+    void Start()
+    {
+        Initialize();
     }
 
     void Update()
@@ -198,47 +198,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         return transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
-    public virtual void OnCharacterDataChange()
-    {
-        if (cardVisual != null)
-            cardVisual.OnChangeData(GetComponent<BaseCharacter>().HP, GetComponent<BaseCharacter>().ATK);
-    }
-    public virtual void OnLoadCharacterData(BaseCharacter character)
-    {
-        if (cardVisual != null)
-            cardVisual.OnLoadCharacter(character);
-    }
-    public virtual void LoadCharacterData(EnemyCardData enemyCardData)
-    {
-        if(GetComponent<EnemyCharacter>() != null)
-        {
-            Debug.Log("LoadCharacterData");
-            GetComponent<EnemyCharacter>().SetData(enemyCardData);
-            OnLoadCharacterData(GetComponent<EnemyCharacter>());
-        }
-    }
-    public virtual void LoadCharacterData(HeroCardData hero)
-    {
-        if (GetComponent<HeroesCharacter>() != null)
-        {
-            GetComponent<HeroesCharacter>().SetData(hero);
-            OnLoadCharacterData(GetComponent<HeroesCharacter>());
-        }
-    }
-    public virtual void OnCharacterDeath()
-    {
-        if (cardVisual != null)
-        {
-            cardVisual.PlayExplosionEffect();
-            Destroy(cardVisual.gameObject);
-            Destroy(this.gameObject, 1f);
-        }
-    }
-    public virtual void OnAttack(ICharacter target)
-    {
-        if (cardVisual != null)
-            this.GetComponent<BaseCharacter>().Attack(target);
-    }
     private void OnDestroy()
     {
         // Kill any tweens associated with this card

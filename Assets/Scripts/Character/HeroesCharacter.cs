@@ -1,7 +1,4 @@
-using Obvious.Soap.Example;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class HeroesCharacter : BaseCharacter
 {
@@ -38,9 +35,9 @@ public class HeroesCharacter : BaseCharacter
         // Apply damage
         currentHealth -= damageAmount;
         Debug.Log($"{idCharacter} takes {damageAmount} damage from {attacker.id}! Remaining HP: {HP}");
-        GetComponent<Card>().OnCharacterDataChange();
+        GetComponent<CharacterCard>().OnCharacterDataChange();
         base.TakeDamage(damageAmount, attacker);
-        
+
         // Check if character died
         if (currentHealth <= 0)
         {
@@ -54,14 +51,14 @@ public class HeroesCharacter : BaseCharacter
     public override void Attack(ICharacter target)
     {
         base.Attack(target);
-        GetComponent<Card>().OnCharacterDataChange();
+        GetComponent<CharacterCard>().OnCharacterDataChange();
         // If the target died from this attack, gain experience
         if (target != null && !target.IsAlive() && target is EnemyCharacter enemy)
         {
             //GainExperience(enemy.ExperienceReward);
         }
         currentEnergy += 10; // Gain energy after attacking
-        if(currentEnergy >= maxEnergy)
+        if (currentEnergy >= maxEnergy)
         {
             currentEnergy = 0;
         }
@@ -70,8 +67,8 @@ public class HeroesCharacter : BaseCharacter
     protected override void Die()
     {
         base.Die();
-        GetComponent<Card>().OnCharacterDeath();
-        
+        GetComponent<CharacterCard>().OnCharacterDeath();
+
         // Trigger lose condition
         GameStateManager.Instance?.OnBattleLose();
     }

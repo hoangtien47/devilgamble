@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Map;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,7 +105,7 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI turnCountText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI discardChangeText;
-    
+
     private void Start()
     {
         // Reload current scene
@@ -136,8 +135,6 @@ public class DeckManager : MonoBehaviour
             SortBySuit();
         }
 
-        // Optionally, unsubscribe if you only want this to happen once
-        // OnHandDealt.RemoveListener(OnHandDealtHandler);
     }
 
     public void InitializeDeck()
@@ -258,12 +255,10 @@ public class DeckManager : MonoBehaviour
             // Create a slot and card
             GameObject slot = Instantiate(enemyPrefab, enemyHolder.transform);
             Card card = slot.GetComponentInChildren<Card>();
-            card.isCharacterCard = true;
             card.charIndex = i;
             yield return new WaitForSeconds(dealDelay);
         }
 
-        // Update the card holder
         enemyHolder.cards = enemyHolder.GetComponentsInChildren<Card>().ToList();
 
         // Set up event listeners for the new cards
@@ -281,7 +276,8 @@ public class DeckManager : MonoBehaviour
             cardCount++;
         }
         bossTransform = enemyHolder.cards[0].gameObject.transform;
-        enemyHolder.cards[0].cardVisual.LoadCharacterData(GameSession.enemies);
+        var enemyVisual = enemyHolder.cards[0].cardVisual as CharacterCardVisual;
+        enemyVisual.LoadCharacterData(GameSession.enemies);
         turnsToAttack = GameSession.enemies.actionTurns;
         turnCount = turnsToAttack;
         SetTurnText();
@@ -297,7 +293,6 @@ public class DeckManager : MonoBehaviour
             // Create a slot and card
             GameObject slot = Instantiate(heroPrefab, heroHolder.transform);
             Card card = slot.GetComponentInChildren<Card>();
-            card.isCharacterCard = true;
             card.charIndex = i;
             yield return new WaitForSeconds(dealDelay);
         }
@@ -319,8 +314,9 @@ public class DeckManager : MonoBehaviour
             card.name = cardCount.ToString();
             cardCount++;
         }
-        heroTransform = heroHolder.gameObject.transform;
-        heroHolder.cards[0].cardVisual.LoadCharacterData(GameSession.heroes);
+        heroTransform = heroHolder.cards[0].gameObject.transform;
+        var heroVisual = heroHolder.cards[0].cardVisual as CharacterCardVisual;
+        heroVisual.LoadCharacterData(GameSession.heroes);
         selectedHeroCard = heroHolder.cards[0];
     }
 
@@ -487,11 +483,11 @@ public class DeckManager : MonoBehaviour
     {
         if (handHolder.cards == null || handHolder.cards.Count == 0)
             yield break;
-        if(discardChangeCount <= 0)
+        if (discardChangeCount <= 0)
         {
             yield break;
         }
-        discardChangeCount --;
+        discardChangeCount--;
         discardChangeText.text = discardChangeCount.ToString();
         List<Card> cardsToDiscard = new List<Card>();
         List<int> indicesToRemove = new List<int>();
@@ -868,34 +864,15 @@ public class DeckManager : MonoBehaviour
 
     private IEnumerator AttackHeroSequence()
     {
-        if (selectedHeroCard == null || !selectedHeroCard.isCharacterCard || selectedHeroCard.cardVisual == null || bossTransform == null)
+        if (selectedHeroCard == null || selectedHeroCard.cardVisual == null || bossTransform == null)
             yield break;
 
-        System.Action hitCallback = () =>
+        if (enemyHolder.cards[0] != null)
         {
-            // Check if boss still exists
-            if (bossTransform == null || enemyHolder.cards[0].cardVisual == null) return;
-
-            // Use AttackedEffect instead of just shaking position
-            enemyHolder.cards[0].cardVisual.AttackedEffect(1.0f, () =>
-            {
-                // Any additional effects after the attacked animation
-            });
-        };
-
-        // Execute the attack animation
-        Tween attackTween = selectedHeroCard.cardVisual.Attack(bossTransform, hitCallback);
-
-        // Wait for the attack to complete if the tween was created successfully
-        if (attackTween != null)
-        {
-            yield return attackTween.WaitForCompletion();
-            //deal damage to the boss
-            if (enemyHolder.cards[0].GetComponent<ICharacter>() != null)
-                selectedHeroCard.OnAttack(enemyHolder.cards[0].GetComponent<ICharacter>());
+            var heroCard = selectedHeroCard as CharacterCard;
+            yield return heroCard.Attack(enemyHolder.cards[0] as CharacterCard);
         }
 
-        // Add a small delay between attacks
         yield return new WaitForSeconds(delayBetweenAttacks);
         turnCount--;
         if (turnCount <= 0)
@@ -919,43 +896,16 @@ public class DeckManager : MonoBehaviour
     }
     private IEnumerator AttackEnemySequence()
     {
-        Card enemyCard = enemyHolder.cards[0];
-        if (enemyCard == null || !enemyCard.isCharacterCard || enemyCard.cardVisual == null || heroTransform == null /*|| !enemyCard.BaseCharacter.IsAlive()*/)
+        CharacterCard enemyCard = enemyHolder.cards[0] as CharacterCard;
+        if (enemyCard == null || enemyCard.cardVisual == null || heroTransform == null /*|| !enemyCard.BaseCharacter.IsAlive()*/)
             yield break;
 
-
-        System.Action hitCallback = () =>
+        foreach (Card hero in heroHolder.cards)
         {
-            // Check if hero still exists
-            if (heroTransform == null) return;
+            if (hero != null)
 
-            // Find the targeted hero card and apply the effect
-            foreach (Card hero in heroHolder.cards)
-            {
-                if (hero.cardVisual != null)
-                {
-                    hero.cardVisual.AttackedEffect(1.0f, () =>
-                    {
-                        // Any additional effects after the attacked animation
-                    });
-                    //break; // Just affect one card, or remove this to affect all
-                }
-            }
-        };
+                yield return enemyCard.Attack(hero as CharacterCard);
 
-        // Execute the attack animation
-        Tween attackTween = enemyCard.cardVisual.Attack(heroTransform, hitCallback);
-
-        // Wait for the attack to complete if the tween was created successfully
-        if (attackTween != null)
-        {
-            yield return attackTween.WaitForCompletion();
-            //deal damage to the hero
-            foreach (Card hero in heroHolder.cards)
-            {
-                if (hero.GetComponent<ICharacter>() != null)
-                    enemyCard.OnAttack(hero.GetComponent<ICharacter>());
-            }
         }
         yield return new WaitForSeconds(delayBetweenAttacks);
         FadeOutScoreText();

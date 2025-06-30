@@ -2,9 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Specialized card class that connects card functionality with character functionality
-/// </summary>
+
 public class CharacterCard : Card
 {
     [Header("Character Reference")]

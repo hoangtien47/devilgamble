@@ -76,7 +76,6 @@ public class DeckManager : MonoBehaviour
     public List<CardData> deckCards = new List<CardData>();
     public List<CardData> discardPile = new List<CardData>();
     public List<CardData> handCards = new List<CardData>();
-    public List<CardData> removedCards = new List<CardData>(); // Cards removed from play
     public List<CardData> selectedCards = new List<CardData>(); // Selected cards
     public List<CardData> cardCombo = new List<CardData>();
 
@@ -126,12 +125,10 @@ public class DeckManager : MonoBehaviour
         // Sort the hand based on the selected sort method
         if (sortBy == SortBy.Rank)
         {
-            print("Sorting by rank");
             SortByRank();
         }
         else if (sortBy == SortBy.Suit)
         {
-            print("Sorting by suit");
             SortBySuit();
         }
 
@@ -142,7 +139,6 @@ public class DeckManager : MonoBehaviour
         deckCards.Clear();
         discardPile.Clear();
         handCards.Clear();
-        removedCards.Clear();
         selectedCards.Clear();
 
         // Create a standard 52-card deck
@@ -402,10 +398,7 @@ public class DeckManager : MonoBehaviour
         {
             StartCoroutine(DiscardSelectedCardsCoroutine());
         }
-        //else
-        //{
-        //    StartCoroutine(DiscardHandCoroutine());
-        //}
+
     }
     private IEnumerator DiscardSelectedCardsCoroutineAfterPlayCard()
     {
@@ -479,6 +472,7 @@ public class DeckManager : MonoBehaviour
 
         OnDiscardCountChanged?.Invoke(discardPile.Count);
     }
+
     private IEnumerator DiscardSelectedCardsCoroutine()
     {
         if (handHolder.cards == null || handHolder.cards.Count == 0)
@@ -552,52 +546,7 @@ public class DeckManager : MonoBehaviour
         OnDiscardCountChanged?.Invoke(discardPile.Count);
     }
 
-    private IEnumerator DiscardHandCoroutine()
-    {
-        if (handHolder.cards == null || handHolder.cards.Count == 0)
-            yield break;
 
-
-        // Animate cards to discard pile
-        foreach (Card card in handHolder.cards)
-        {
-            if (card == null)
-                continue;
-
-            // Animate card to discard pile
-            card.transform.DOMove(discardTransform.position, dealDuration)
-                .SetEase(Ease.InBack);
-
-            // Add card data to discard pile
-            int index = handHolder.cards.IndexOf(card);
-            if (index >= 0 && index < handCards.Count)
-            {
-                discardPile.Add(handCards[index]);
-            }
-
-            yield return new WaitForSeconds(dealDelay / 2);
-        }
-
-        yield return new WaitForSeconds(dealDuration);
-
-        // Clear the hand
-        ClearHand();
-        handCards.Clear();
-
-        OnDiscardCountChanged?.Invoke(discardPile.Count);
-        DealHand();
-    }
-
-    public void ClearHand()
-    {
-        // Destroy all card objects in the hand
-        foreach (Transform child in handHolder.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        handHolder.cards.Clear();
-    }
 
     public void ReshuffleDiscardIntoDeck()
     {
@@ -609,36 +558,6 @@ public class DeckManager : MonoBehaviour
         OnDiscardCountChanged?.Invoke(0);
     }
 
-    public void RemoveCardFromDeck(CardData cardData)
-    {
-        // Find and remove the card from the deck
-        int index = deckCards.FindIndex(c => c.suit == cardData.suit && c.rank == cardData.rank);
-        if (index >= 0)
-        {
-            removedCards.Add(deckCards[index]);
-            deckCards.RemoveAt(index);
-            OnDeckCountChanged?.Invoke(deckCards.Count);
-        }
-    }
-
-    public void EnhanceCard(Card card, int multiplierBonus = 1)
-    {
-        int index = handHolder.cards.IndexOf(card);
-        if (index >= 0 && index < handCards.Count)
-        {
-            handCards[index].isEnhanced = true;
-            handCards[index].multiplier += multiplierBonus;
-
-            // Visual feedback
-            card.transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1);
-
-            // You might want to update the card visual to show enhancement
-            if (card.cardVisual != null)
-            {
-                // Update visual to show enhancement (this would need to be implemented in CardVisual)
-            }
-        }
-    }
 
     public void CalculateScoreWithCombos()
     {
@@ -741,32 +660,6 @@ public class DeckManager : MonoBehaviour
 
         if (heroHolder == null || heroHolder.cards == null || heroHolder.cards.Count == 0 || bossTransform == null)
             return;
-    }
-
-    private bool IsStraight(List<CardData> cards)
-    {
-        var sorted = cards.Select(c => (int)c.rank).Distinct().OrderBy(n => n).ToList();
-
-        if (sorted.Count < 5)
-            return false;
-
-        for (int i = 0; i <= sorted.Count - 5; i++)
-        {
-            bool isSeq = true;
-            for (int j = 0; j < 4; j++)
-            {
-                if (sorted[i + j + 1] != sorted[i + j] + 1)
-                {
-                    isSeq = false;
-                    break;
-                }
-            }
-
-            if (isSeq)
-                return true;
-        }
-
-        return false;
     }
 
     public void SortByRank()
@@ -874,6 +767,7 @@ public class DeckManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(delayBetweenAttacks);
+
         turnCount--;
         if (turnCount <= 0)
         {
@@ -894,6 +788,7 @@ public class DeckManager : MonoBehaviour
         }
         SetTurnText();
     }
+
     private IEnumerator AttackEnemySequence()
     {
         CharacterCard enemyCard = enemyHolder.cards[0] as CharacterCard;
@@ -903,7 +798,6 @@ public class DeckManager : MonoBehaviour
         foreach (Card hero in heroHolder.cards)
         {
             if (hero != null)
-
                 yield return enemyCard.Attack(hero as CharacterCard);
 
         }
@@ -912,6 +806,7 @@ public class DeckManager : MonoBehaviour
         if (heroHolder.cards[0].GetComponent<BaseCharacter>().IsAlive())
             canPlayCards = true;
     }
+
     public List<CardData> GetComboCards(List<CardData> hand)
     {
         if (hand == null || hand.Count == 0)
@@ -1026,7 +921,6 @@ public class DeckManager : MonoBehaviour
         }
 
         int newValue = current + addValue;
-        heroHolder.cards[0].GetComponent<BaseCharacter>().SetAttack(newValue);
         scoreText.text = newValue.ToString();
 
         // Optional: pop animation

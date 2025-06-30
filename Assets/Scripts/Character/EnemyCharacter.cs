@@ -11,34 +11,18 @@ public class EnemyCharacter : BaseCharacter
     private int currentStamina;
     // Turn attribute
     [SerializeField] private int turn = 3;
-    /// <summary>
-    /// Override the Attack method to add enemy-specific behavior
-    /// </summary>
-    public override void Attack(ICharacter target)
-    {
-        if (!isAlive || target == null || !target.IsAlive())
-            return;
 
-        // Apply damage to the target
-        target.TakeDamage(attackPower, this);
-        Debug.Log($"{idCharacter} attacks {target.id} for {ATK} damage!");
-    }
-    /// <summary>
-    /// Takes damage from an attacker
-    /// </summary>
+
     public override void TakeDamage(int damageAmount, ICharacter attacker)
     {
         if (!isAlive)
             return;
 
-        // Calculate damage reduction based on stamina
         if (currentStamina > 0)
         {
-            // Reduce damage by 30% if stamina is above 0
             damageAmount = Mathf.RoundToInt(damageAmount * 0.7f);
-            // Reduce stamina by a percentage of the damage taken
-            currentStamina -= Mathf.RoundToInt(damageAmount * 0.1f); // 10% of damage taken
-            currentStamina = Mathf.Max(currentStamina, 0); // Ensure stamina doesn't go below 0
+            currentStamina -= Mathf.RoundToInt(damageAmount * 0.1f);
+            currentStamina = Mathf.Max(currentStamina, 0);
         }
 
         // Track damage dealt by hero
@@ -56,9 +40,7 @@ public class EnemyCharacter : BaseCharacter
             Die();
         }
     }
-    /// <summary>
-    /// Override the Die method to add enemy-specific behavior
-    /// </summary>
+
     protected override void Die()
     {
         base.Die();
@@ -82,6 +64,7 @@ public class EnemyCharacter : BaseCharacter
         Debug.Log($"{idCharacter} was defeated! Drops: {goldReward} gold.");
         // Logic for spawning items or giving rewards to the player would go here
     }
+
     public void SetData(EnemyCardData enemy)
     {
         this.maxHealth = enemy.maxHealth;

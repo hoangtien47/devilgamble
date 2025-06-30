@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -11,7 +10,6 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     [SerializeField] protected string characterName;
     [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected int attackPower = 10;
-    [SerializeField] private int attackAmount = 0;
     [SerializeField] protected Sprite sprite;
 
     protected int currentHealth;
@@ -43,7 +41,7 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
             return;
 
         // Apply damage to the target
-        target.TakeDamage(attackAmount, this);
+        target.TakeDamage(attackPower, this);
 
         Debug.Log($"{idCharacter} attacks {target.id} for {ATK} damage!");
     }
@@ -55,12 +53,12 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     {
         if (!isAlive)
             return;
-        
+
         if (uiAct != null)  // Add null check for UIAct
         {
             uiAct.ShowPopup(damageAmount, false); // Show damage popup
         }
-        
+
         // Check if character died
         if (currentHealth <= 0)
         {
@@ -84,9 +82,5 @@ public abstract class BaseCharacter : MonoBehaviour, ICharacter
     public bool IsAlive()
     {
         return isAlive;
-    }
-    public void SetAttack(int attack)
-    {
-        attackAmount =  attack;
     }
 }

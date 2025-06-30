@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1418f818da8566b4f8c3fc442a65bebb, type: 3}
+  m_Name: New Card Data
+  m_EditorClassIdentifier: 
+  cardName: 
+  description: 
+  cardArt: {fileID: 0}
+  rarity: 0
+  baseCost: 0
+  baseAttack: 0
+  baseHealth: 0
+  maxUpgradeLevel: 5
+  upgradeData:
+  - level: 0
+    fragmentsRequired: 0
+    attackBonus: 0
+    healthBonus: 0
+    costReduction: 0
+    upgradeDescription: 
+  fragmentIcon: {fileID: 0}
+  baseFragmentDropRate: 1

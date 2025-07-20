@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 public class LobbyController : MonoBehaviour
@@ -17,7 +19,6 @@ public class LobbyController : MonoBehaviour
 
     public void OnClickStartGame()
     {
-        // Load the game scene
-        SceneManager.LoadScene(1);
+        _ = GameManager.Instance.LoadSceneAsync("LevelScene");
     }
 }

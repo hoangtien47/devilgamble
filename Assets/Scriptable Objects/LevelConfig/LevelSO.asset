@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b5919432cea79745902a01c5d0ce446, type: 3}
+  m_Name: LevelSO
+  m_EditorClassIdentifier: 
+  _LevelCSV: {fileID: 4900000, guid: e8ad686bb22d5044eace2d1a6b00a5b5, type: 3}
+  _LevelsDefaults:
+  - Index: 1
+    LevelName: 'Chapter I-1: Mist'
+    LevelDescription: Desert
+    MaxPoints: 0
+    MapConfig: {fileID: 11400000, guid: e06940d27cfc2924d8b7c2fbcecbb9a4, type: 2}
+    LevelMode: 0
+    LevelStatus: 2
+    LevelRewards:
+    - RewardType: 0
+      RewardID: gold
+      RewardSprite: {fileID: -7942359355602504142, guid: 5d4b43405051dfd458c9b75596bc7509, type: 3}
+      Amount: 100
+    - RewardType: 2
+      RewardID: gem
+      RewardSprite: {fileID: 21300000, guid: c3ef92cdac041314db318ffe28be8bd4, type: 3}
+      Amount: 10
+    - RewardType: 2
+      RewardID: soul
+      RewardSprite: {fileID: 21300000, guid: 6e34ff54a33e8444a96abf75b92c849b, type: 3}
+      Amount: 2
+    - RewardType: 2
+      RewardID: dark
+      RewardSprite: {fileID: 21300000, guid: edb921e7cca3ac24c9566d84c65e275f, type: 3}
+      Amount: 10
+    LevelSprite: {fileID: 21300000, guid: 946a70b90041156459cb8eaf94bcd514, type: 3}
+  - Index: 2
+    LevelName: 'Chapter I-2: Forest'
+    LevelDescription: Forest
+    MaxPoints: 0
+    MapConfig: {fileID: 11400000, guid: b3cc3b513382aca4782ef35db879dde2, type: 2}
+    LevelMode: 0
+    LevelStatus: 0
+    LevelRewards:
+    - RewardType: 0
+      RewardID: gold
+      RewardSprite: {fileID: -7942359355602504142, guid: 5d4b43405051dfd458c9b75596bc7509, type: 3}
+      Amount: 120
+    - RewardType: 2
+      RewardID: gem
+      RewardSprite: {fileID: 21300000, guid: c3ef92cdac041314db318ffe28be8bd4, type: 3}
+      Amount: 12
+    - RewardType: 2
+      RewardID: dark
+      RewardSprite: {fileID: 21300000, guid: edb921e7cca3ac24c9566d84c65e275f, type: 3}
+      Amount: 2
+    LevelSprite: {fileID: 21300000, guid: 782095c6fe723484993248ddf8350480, type: 3}

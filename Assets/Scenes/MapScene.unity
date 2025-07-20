@@ -163,15 +163,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c243842ba91c444a3e0cd0e73e9afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heroPrefab: {fileID: 6353660373204981369, guid: bfa1413353dd24c4aa96d754d57c5aa9, type: 3}
-  cardHolder: {fileID: 360670202}
-  dealDuration: 0.3
-  scaleUpDuration: 0.2
+  heroPrefab: {fileID: 8577526342838704511, guid: ba8b8ee8dc7a3814fb892071915142fa, type: 3}
+  cardHolder: {fileID: 360670206}
+  dealDuration: 0.5
+  scaleUpDuration: 0.3
   dealEase: 27
   dealFromPosition: {x: 0, y: 0, z: 0}
   finalScale: {x: 1, y: 1, z: 1}
   currentCard: {fileID: 0}
-  currentSelectData: {fileID: 0}
+  cardData: {fileID: 0}
   cardVisual: {fileID: 0}
 --- !u!1 &360670200
 GameObject:
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 360670205}
   - component: {fileID: 360670204}
   - component: {fileID: 360670203}
-  - component: {fileID: 360670202}
+  - component: {fileID: 360670206}
   m_Layer: 5
   m_Name: HeroCardGroup
   m_TagString: Untagged
@@ -201,7 +201,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 360670200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -209,33 +209,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 200, y: 200}
+  m_AnchoredPosition: {x: 150, y: 200}
   m_SizeDelta: {x: 200, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &360670202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 360670200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c308a66f8c5734180ef73bebd3f4b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectedCard: {fileID: 0}
-  hoveredCard: {fileID: 0}
-  slotPrefab: {fileID: 6353660373204981369, guid: bfa1413353dd24c4aa96d754d57c5aa9, type: 3}
-  cardsToSpawn: 1
-  cards: []
-  hoverScale: 1.15
-  hoverDuration: 0.15
-  hoverEase: 27
-  swapDuration: 0.1
-  swapScale: 0.95
-  swapEase: 6
-  tweenCardReturn: 1
 --- !u!222 &360670203
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -264,11 +240,11 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
+  m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 1
+  m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
 --- !u!114 &360670205
 MonoBehaviour:
@@ -300,6 +276,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &360670206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360670200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8436a7e3d3df42d7a7058aec5e41a69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedCard: {fileID: 0}
+  hoveredCard: {fileID: 0}
+  slotPrefab: {fileID: 8577526342838704511, guid: ba8b8ee8dc7a3814fb892071915142fa, type: 3}
+  cardsToSpawn: 1
+  cards: []
+  tweenCardReturn: 1
 --- !u!850595691 &422679280
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1005,19 +999,19 @@ Canvas:
   m_GameObject: {fileID: 1311161698}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1294898514}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -351879809
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!224 &1311161702
 RectTransform:
@@ -1972,10 +1966,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1311161702}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1339, y: 753}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2121475123
 MonoBehaviour:
@@ -2189,6 +2183,10 @@ PrefabInstance:
       propertyPath: lockAfterSelecting
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5337413451174954175, guid: 6dc8f4ee6004b5345a5925b01e34cb27, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: b3cc3b513382aca4782ef35db879dde2, type: 2}
     - target: {fileID: 5337413451386887161, guid: 6dc8f4ee6004b5345a5925b01e34cb27, type: 3}
       propertyPath: xSize
       value: 18
@@ -2205,6 +2203,18 @@ PrefabInstance:
       propertyPath: orientation
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5337413451386887161, guid: 6dc8f4ee6004b5345a5925b01e34cb27, type: 3}
+      propertyPath: allMapConfigs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5337413451386887161, guid: 6dc8f4ee6004b5345a5925b01e34cb27, type: 3}
+      propertyPath: 'allMapConfigs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e06940d27cfc2924d8b7c2fbcecbb9a4, type: 2}
+    - target: {fileID: 5337413451386887161, guid: 6dc8f4ee6004b5345a5925b01e34cb27, type: 3}
+      propertyPath: 'allMapConfigs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: b3cc3b513382aca4782ef35db879dde2, type: 2}
     - target: {fileID: 6173653652465991376, guid: 6dc8f4ee6004b5345a5925b01e34cb27, type: 3}
       propertyPath: m_Name
       value: MapObjects

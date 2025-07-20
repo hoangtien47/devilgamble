@@ -1,0 +1,149 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Character
+  m_EditorClassIdentifier: 
+  m_GroupName: Character
+  m_GUID: 67919a8006f03264180f046b20ab8a1b
+  m_SerializeEntries:
+  - m_GUID: 03f116ac8fa918245a3c8436fb7d1f90
+    m_Address: card23.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07af000145a58ee46855f8dd9347ce43
+    m_Address: card22.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f641b8046cfab04597dd173cd68b19d
+    m_Address: card5.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1aad396d73ebd1c4687ddfe9afda3121
+    m_Address: card12.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 252a479f29d8cc04ba115396fac6ad14
+    m_Address: card17.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4399a17a74e5b6b43a7209e0d4dd0551
+    m_Address: card7.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4aeac9446c82cc040840f785fb3e0b96
+    m_Address: card20.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54ca7d78fbe948742bfb268ab8a9b3ac
+    m_Address: card14.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56f6e2a1d798183458dfab5ad8b823c0
+    m_Address: card11.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ad8dbe56940bb346ad9b488ca11498c
+    m_Address: card2.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63c6819d724bb1941af5651c1038abad
+    m_Address: card4.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6703dbfba44aea649ab857919e98cd86
+    m_Address: card18.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 670b0fd6f8fd49c4d9255a16ec314727
+    m_Address: card15.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70bd2fdbdc2896046b10840fc8f05929
+    m_Address: card8.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7822d99e811942840964ca778d845564
+    m_Address: card25.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 878f69fbf434d504bbc3e8a80eb3a1a6
+    m_Address: card3.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92d60ecb0a6a1b743a16d39016afdab3
+    m_Address: card24.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a405cd05a37aa774bbe238a5a117fadd
+    m_Address: card21.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a61da8afd76b8b241a3e7cd0cdadd3d3
+    m_Address: card13.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: beee79abbaff3d344a8a378d05e60198
+    m_Address: card16.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c63b6191b762de64d8cded5a00ea620f
+    m_Address: card6.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9fbdd8d28c7ca74882b15404ab609a6
+    m_Address: card19.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d24648c953ca28a4bab429be3bb75e42
+    m_Address: card9.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d56bb8478ada828428b1f28f16f1dbd8
+    m_Address: card1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Hero
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dec76373fff0190429fa5e604b15e956
+    m_Address: card10.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: b522204c83bbe8446a881f04f7e2ed20, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ebd871aafa9d651438d9c14006a4ca15, type: 2}
+    - {fileID: 11400000, guid: 9b102ad26a7e6f248826a290ad808ca4, type: 2}

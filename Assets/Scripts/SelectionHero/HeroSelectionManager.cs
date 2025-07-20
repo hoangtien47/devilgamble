@@ -1,9 +1,7 @@
 using DG.Tweening;
-using Map;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +10,7 @@ public class HeroSelectionManager : MonoBehaviour
     [Header("Hero Card")]
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private HeroHorrizontalHolder heroHolder;
-    private HeroSelectData selectedHeroCard = null;
+    private Card selectedHeroCard = null;
 
     [Header("Hero Selection")]
     [SerializeField] private Transform heroSelectedTransform;
@@ -21,7 +19,7 @@ public class HeroSelectionManager : MonoBehaviour
     [SerializeField] private Ease moveToSelectedEase = Ease.OutBack;
 
     [Header("Hero Data")]
-    [SerializeField] private List<HeroCardScriptable> heroData;
+    [SerializeField] private List<CharacterCardData> heroData;
 
     [Header("Deck Settings")]
     [SerializeField] private float dealDelay = 0.1f;
@@ -30,22 +28,20 @@ public class HeroSelectionManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private Button loadMapButton;
-
-    [SerializeField] private MapConfig mapConfig;
-
-    //private void Awake()
-    //{
-    //    // Clear the map data when HeroSelectionManager initializes
-    //    if (PlayerPrefs.HasKey("Map"))
-    //    {
-    //        PlayerPrefs.DeleteKey("Map");
-    //        PlayerPrefs.Save();
-    //    }
-    //}
+    private void Awake()
+    {
+        // Clear the map data when HeroSelectionManager initializes
+        if (PlayerPrefs.HasKey("Map"))
+        {
+            PlayerPrefs.DeleteKey("Map");
+            PlayerPrefs.Save();
+        }
+        heroData = GameManager.Instance.GetHeroes();
+    }
 
     void Start()
     {
-        if(heroData!=null && heroData.Count > 0)
+        if (heroData != null && heroData.Count > 0)
         {
             StartCoroutine(DealHeroCoroutine(heroData.Count));
         }
@@ -57,7 +53,7 @@ public class HeroSelectionManager : MonoBehaviour
             selectedHolder = heroSelectedTransform.gameObject.AddComponent<HeroHorrizontalHolder>();
         }
         // Initialize selected holder properties
-        selectedHolder.cards = new List<HeroSelectData>();
+        selectedHolder.cards = new List<Card>();
         selectedHolder.cardsToSpawn = 1;
 
         // Initialize load map button
@@ -70,28 +66,22 @@ public class HeroSelectionManager : MonoBehaviour
 
     private IEnumerator DealHeroCoroutine(int numCardDeal)
     {
-
         // Create slots for the hand
         for (int i = 0; i < numCardDeal; i++)
         {
-
             // Create a slot and card
             GameObject slot = Instantiate(heroPrefab, heroHolder.transform);
-            HeroSelectData card = slot.GetComponentInChildren<HeroSelectData>();
-            card.heroData = heroData[i];
-            card.idx = i;
+            Card card = slot.GetComponentInChildren<Card>(); ;
             yield return new WaitForSeconds(dealDelay);
         }
-
         // Update the card holder
-        heroHolder.cards = heroHolder.GetComponentsInChildren<HeroSelectData>().ToList();
+        heroHolder.cards = heroHolder.GetComponentsInChildren<Card>().ToList();
 
         // Set up event listeners for the new cards
         int cardCount = 0;
-        foreach (HeroSelectData card in heroHolder.cards)
+        foreach (Card card in heroHolder.cards)
         {
             // Draw a card from the deck
-
             card.PointerEnterEvent.AddListener(heroHolder.CardPointerEnter);
             card.PointerExitEvent.AddListener(heroHolder.CardPointerExit);
             card.BeginDragEvent.AddListener(heroHolder.BeginDrag);
@@ -99,11 +89,28 @@ public class HeroSelectionManager : MonoBehaviour
             card.SelectEvent.AddListener(HandleHeroCardSelection); // Add selection listener
             card.name = cardCount.ToString();
             cardCount++;
+            //card.idx = i;
+
+            var heroVisual = card.cardVisual as CharacterCardVisual;
+
+            Debug.Log(heroVisual);
+
+            var characterModel = heroVisual.GetComponent<CharacterModel>();
+            Debug.Log(characterModel);
+            CharacterCardData characterCardData = new CharacterCardData(heroData[heroHolder.cards.IndexOf(card)]);
+            Debug.Log(characterCardData);
+
+            if (characterModel != null)
+            {
+                characterModel.Initialize(characterCardData);
+            }
+            heroVisual.UpdateSprite();
+            heroVisual.UpdateView();
         }
     }
-    public void HandleHeroCardSelection(HeroSelectData card, bool isSelected)
+    public void HandleHeroCardSelection(Card card, bool isSelected)
     {
-        if (!card.heroData.isUnlocked) return;
+        //if (!card.heroData.isUnlocked) return;
 
         if (isSelected)
         {
@@ -118,7 +125,9 @@ public class HeroSelectionManager : MonoBehaviour
                     // Move new card to selected holder and update GameSession
                     MoveCardBetweenHolders(card, heroHolder, selectedHolder);
                     selectedHeroCard = card;
-                    UpdateGameSession(card.heroData);
+                    var visual = card.cardVisual as CharacterCardVisual;
+                    Debug.Log("In Hero Selection" + visual.Model.CharacterCardData);
+                    UpdateGameSession(visual.Model.CharacterCardData);
                 }
                 else
                 {
@@ -133,7 +142,8 @@ public class HeroSelectionManager : MonoBehaviour
                 // No previous selection, move card to selected holder
                 MoveCardBetweenHolders(card, heroHolder, selectedHolder);
                 selectedHeroCard = card;
-                UpdateGameSession(card.heroData);
+                var visual = card.cardVisual as CharacterCardVisual;
+                UpdateGameSession(visual.Model.CharacterCardData);
             }
         }
         else
@@ -146,24 +156,9 @@ public class HeroSelectionManager : MonoBehaviour
             }
         }
     }
-    private void MoveCardBetweenHolders(HeroSelectData card, HeroHorrizontalHolder fromHolder, HeroHorrizontalHolder toHolder)
+    private void MoveCardBetweenHolders(Card card, HeroHorrizontalHolder fromHolder, HeroHorrizontalHolder toHolder)
     {
-        if (card == null || card.heroVisual == null) return;
-
-        // Check if there's already a card in the target holder (for selectedHolder)
-        if (toHolder.cards.Count > 0 && toHolder == selectedHolder)
-        {
-            // Move existing card back to main holder first
-            var existingCard = toHolder.cards[0]; // Should only be one card in selectedHolder
-            MoveCardBetweenHolders(existingCard, toHolder, heroHolder);
-            existingCard.Deselect();
-        }
-
-        // Remove from current holder
-        fromHolder.cards.Remove(card);
-
-        // Add to new holder
-        toHolder.cards.Add(card);
+        if (card == null || card.cardVisual == null) return;
 
         // Store the parent GameObject (slot)
         GameObject cardSlot = card.transform.parent.gameObject;
@@ -171,8 +166,14 @@ public class HeroSelectionManager : MonoBehaviour
         // Create sequence for smooth animation
         Sequence sequence = DOTween.Sequence();
 
+        // Remove from current holder
+        fromHolder.cards.Remove(card);
+
+        // Add to new holder
+        toHolder.cards.Add(card);
+
         // Pop effect
-        sequence.Append(card.heroVisual.transform
+        sequence.Append(card.cardVisual.transform
             .DOScale(Vector3.one * 1.2f, moveToSelectedDuration * 0.3f)
             .SetEase(Ease.OutBack));
 
@@ -182,7 +183,7 @@ public class HeroSelectionManager : MonoBehaviour
             .SetEase(moveToSelectedEase));
 
         // Return to normal scale
-        sequence.Append(card.heroVisual.transform
+        sequence.Append(card.cardVisual.transform
             .DOScale(Vector3.one, moveToSelectedDuration * 0.3f)
             .SetEase(Ease.OutBack));
 
@@ -200,17 +201,16 @@ public class HeroSelectionManager : MonoBehaviour
             toHolder.UpdateCardVisuals();
         });
     }
-    private void UpdateGameSession(HeroCardScriptable heroData)
+    private void UpdateGameSession(CharacterCardData heroData)
     {
         /// Create a new HeroCardData instance with copied values
-        GameSession.heroes = new HeroCardData(heroData);
         UpdateLoadMapButton();
+        GameManager.Instance.SetCharacterCardChosen(heroData);
     }
 
     private void ClearGameSession()
     {
         // Clear the hero data when deselected
-        GameSession.heroes = null;
         UpdateLoadMapButton();
     }
 
@@ -226,7 +226,7 @@ public class HeroSelectionManager : MonoBehaviour
     public void LoadMap()
     {
         // Check if we have a selected hero
-        if (selectedHeroCard == null || GameSession.heroes == null)
+        if (selectedHeroCard == null)
         {
             Debug.LogWarning("Cannot load map: No hero selected!");
             return;
@@ -237,17 +237,12 @@ public class HeroSelectionManager : MonoBehaviour
         {
             PlayerPrefs.DeleteKey("Map");
             PlayerPrefs.Save();
-            GameSession.node = null;
-            GameSession.enemies = null;
-            GameSession.levelEnemy = 1;
         }
-        SetSeedMap();
         // Load the map scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene(2); // Replace "Map" with your actual map scene name
+        OnClickStartGame();
     }
-
-    public void SetSeedMap()
+    public void OnClickStartGame()
     {
-        mapConfig.seed = Random.Range(0, 10000);
+        _ = GameManager.Instance.LoadSceneAsync("MapScene");
     }
 }

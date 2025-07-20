@@ -1,0 +1,316 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1418f818da8566b4f8c3fc442a65bebb, type: 3}
+  m_Name: HeroDataSet
+  m_EditorClassIdentifier: 
+  _characterCSV: {fileID: 4900000, guid: fc4fc429cec75cb488cdcad4089bfa53, type: 3}
+  _characterCardsList:
+  - characterName: Sunstone Paladin
+    characterDescription: A valiant knight sworn to protect the innocent.
+    characterSprite: {fileID: 21300000, guid: d56bb8478ada828428b1f28f16f1dbd8, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 25
+    baseHealth: 200
+    baseSpeed: 5
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Forest Guardian
+    characterDescription: A protector of the ancient woods.
+    characterSprite: {fileID: 21300000, guid: 878f69fbf434d504bbc3e8a80eb3a1a6, type: 3}
+    rarity: 4
+    characterTeam: 0
+    baseAttack: 18
+    baseHealth: 180
+    baseSpeed: 7
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Shadow Blade
+    characterDescription: A swift assassin who strikes from the darkness.
+    characterSprite: {fileID: 21300000, guid: 0f641b8046cfab04597dd173cd68b19d, type: 3}
+    rarity: 6
+    characterTeam: 0
+    baseAttack: 35
+    baseHealth: 150
+    baseSpeed: 10
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Skyfire Sorcerer
+    characterDescription: A mage who commands the power of the heavens.
+    characterSprite: {fileID: 21300000, guid: c63b6191b762de64d8cded5a00ea620f, type: 3}
+    rarity: 1
+    characterTeam: 1
+    baseAttack: 30
+    baseHealth: 130
+    baseSpeed: 6
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Ironclad Defender
+    characterDescription: An unstoppable force of defense.
+    characterSprite: {fileID: 21300000, guid: 4399a17a74e5b6b43a7209e0d4dd0551, type: 3}
+    rarity: 4
+    characterTeam: 0
+    baseAttack: 15
+    baseHealth: 250
+    baseSpeed: 5
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Mystic Healer
+    characterDescription: A gentle soul with the power to mend any wound.
+    characterSprite: {fileID: 21300000, guid: 70bd2fdbdc2896046b10840fc8f05929, type: 3}
+    rarity: 3
+    characterTeam: 0
+    baseAttack: 10
+    baseHealth: 160
+    baseSpeed: 8
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Stormcaller
+    characterDescription: Summons storms to vanquish her foes.
+    characterSprite: {fileID: 21300000, guid: d24648c953ca28a4bab429be3bb75e42, type: 3}
+    rarity: 5
+    characterTeam: 0
+    baseAttack: 28
+    baseHealth: 140
+    baseSpeed: 7
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Rogue Archer
+    characterDescription: A master of the bow, never misses a shot.
+    characterSprite: {fileID: 21300000, guid: 56f6e2a1d798183458dfab5ad8b823c0, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 22
+    baseHealth: 120
+    baseSpeed: 9
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Stone Golem
+    characterDescription: A creature of earth, slow but immensely powerful.
+    characterSprite: {fileID: 21300000, guid: 1aad396d73ebd1c4687ddfe9afda3121, type: 3}
+    rarity: 4
+    characterTeam: 0
+    baseAttack: 40
+    baseHealth: 300
+    baseSpeed: 5
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Celestial Knight
+    characterDescription: A warrior blessed by the stars.
+    characterSprite: {fileID: 21300000, guid: a61da8afd76b8b241a3e7cd0cdadd3d3, type: 3}
+    rarity: 6
+    characterTeam: 0
+    baseAttack: 32
+    baseHealth: 190
+    baseSpeed: 6
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Goblin Scout
+    characterDescription: A pesky scout, weak but quick.
+    characterSprite: {fileID: 21300000, guid: 54ca7d78fbe948742bfb268ab8a9b3ac, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 8
+    baseHealth: 50
+    baseSpeed: 12
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Orc Brute
+    characterDescription: A hulking warrior with immense strength.
+    characterSprite: {fileID: 21300000, guid: 670b0fd6f8fd49c4d9255a16ec314727, type: 3}
+    rarity: 1
+    characterTeam: 1
+    baseAttack: 20
+    baseHealth: 180
+    baseSpeed: 4
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Dark Acolyte
+    characterDescription: A spellcaster dabbling in forbidden arts.
+    characterSprite: {fileID: 21300000, guid: 6703dbfba44aea649ab857919e98cd86, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 15
+    baseHealth: 90
+    baseSpeed: 6
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Cave Troll
+    characterDescription: A monstrous beast lurking in the deep.
+    characterSprite: {fileID: 21300000, guid: c9fbdd8d28c7ca74882b15404ab609a6, type: 3}
+    rarity: 1
+    characterTeam: 1
+    baseAttack: 25
+    baseHealth: 220
+    baseSpeed: 3
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Harpy Screecher
+    characterDescription: Its piercing cry can disorient any hero.
+    characterSprite: {fileID: 21300000, guid: 4aeac9446c82cc040840f785fb3e0b96, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 12
+    baseHealth: 70
+    baseSpeed: 11
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Lava Elemental
+    characterDescription: A being of pure fire and rage.
+    characterSprite: {fileID: 21300000, guid: 07af000145a58ee46855f8dd9347ce43, type: 3}
+    rarity: 1
+    characterTeam: 1
+    baseAttack: 30
+    baseHealth: 150
+    baseSpeed: 5
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Necromancer
+    characterDescription: Raises the dead to fight for him.
+    characterSprite: {fileID: 21300000, guid: 03f116ac8fa918245a3c8436fb7d1f90, type: 3}
+    rarity: 2
+    characterTeam: 1
+    baseAttack: 22
+    baseHealth: 3000
+    baseSpeed: 6
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 1
+  - characterName: Swamp Hag
+    characterDescription: A vile witch using poison and curses.
+    characterSprite: {fileID: 21300000, guid: 92d60ecb0a6a1b743a16d39016afdab3, type: 3}
+    rarity: 1
+    characterTeam: 1
+    baseAttack: 18
+    baseHealth: 130
+    baseSpeed: 5
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Dire Wolf
+    characterDescription: A large and aggressive predator.
+    characterSprite: {fileID: 21300000, guid: 5ad8dbe56940bb346ad9b488ca11498c, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 14
+    baseHealth: 80
+    baseSpeed: 10
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Grave Robber
+    characterDescription: Steals life force from its victims.
+    characterSprite: {fileID: 21300000, guid: 63c6819d724bb1941af5651c1038abad, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 10
+    baseHealth: 100
+    baseSpeed: 8
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Cursed Armor
+    characterDescription: An animated suit of armor, relentless in its attack.
+    characterSprite: {fileID: 21300000, guid: beee79abbaff3d344a8a378d05e60198, type: 3}
+    rarity: 1
+    characterTeam: 1
+    baseAttack: 28
+    baseHealth: 200
+    baseSpeed: 3
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Abyssal Horror
+    characterDescription: A creature from the darkest depths.
+    characterSprite: {fileID: 21300000, guid: 252a479f29d8cc04ba115396fac6ad14, type: 3}
+    rarity: 2
+    characterTeam: 1
+    baseAttack: 40
+    baseHealth: 1500
+    baseSpeed: 4
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Sand Wraith
+    characterDescription: A phantom of the desert, hard to hit.
+    characterSprite: {fileID: 21300000, guid: a405cd05a37aa774bbe238a5a117fadd, type: 3}
+    rarity: 1
+    characterTeam: 1
+    baseAttack: 24
+    baseHealth: 110
+    baseSpeed: 12
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Mountain Giant
+    characterDescription: A colossal giant, slow but devastating.
+    characterSprite: {fileID: 21300000, guid: 7822d99e811942840964ca778d845564, type: 3}
+    rarity: 2
+    characterTeam: 1
+    baseAttack: 50
+    baseHealth: 1200
+    baseSpeed: 3
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2
+  - characterName: Fire Imp
+    characterDescription: A mischievous creature that throws fireballs.
+    characterSprite: {fileID: 21300000, guid: dec76373fff0190429fa5e604b15e956, type: 3}
+    rarity: 0
+    characterTeam: 1
+    baseAttack: 12
+    baseHealth: 60
+    baseSpeed: 9
+    currentHealth: 0
+    currentAttack: 0
+    currentSpeed: 0
+    level: 2

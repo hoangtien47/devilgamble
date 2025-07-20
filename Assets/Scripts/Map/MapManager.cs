@@ -31,6 +31,7 @@ namespace Map
             }
             else
             {
+                config = GameManager.Instance.GetMapConfig();
                 GenerateNewMap();
             }
         }

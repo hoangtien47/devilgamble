@@ -1,8 +1,7 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Linq;
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Map
 {
@@ -14,8 +13,6 @@ namespace Map
         public MapView view;
 
         public static MapPlayerTracker Instance;
-
-        [SerializeField] private EnemyMapManager enemyList;
 
         public bool Locked { get; set; }
 
@@ -58,17 +55,17 @@ namespace Map
             view.SetAttainableNodes();
             view.SetLineColors();
             mapNode.ShowSwirlAnimation();
-            GameSession.node = mapNode.Blueprint;
+            //GameSession.node = mapNode.Blueprint;
             switch (mapNode.Node.nodeType)
             {
                 case NodeType.MinorEnemy:
-                    SetMinorEnemy();
+                    GameManager.Instance.SetEnemy(Rarity.Minor);
                     break;
                 case NodeType.EliteEnemy:
-                    SetEliteEnemy();
+                    GameManager.Instance.SetEnemy(Rarity.Elite);
                     break;
                 case NodeType.Boss:
-                    SetBossEnemy();
+                    GameManager.Instance.SetEnemy(Rarity.Boss);
                     break;
                 default:
                     break;
@@ -83,24 +80,20 @@ namespace Map
             // load appropriate scene with context based on nodeType:
             // or show appropriate GUI over the map: 
             // if you choose to show GUI in some of these cases, do not forget to set "Locked" in MapPlayerTracker back to false
-            
+
             switch (mapNode.Node.nodeType)
             {
                 case NodeType.MinorEnemy:
                     // open card game
-                    Debug.Log("Open card game");
-                    SceneManager.LoadScene(3);
+                    LoadGame();
                     break;
                 case NodeType.EliteEnemy:
                     // open card game
-                    Debug.Log("Open card game");
-                    SceneManager.LoadScene(3);
+                    LoadGame();
                     break;
                 case NodeType.RestSite:
                     // open rest site GUI
-                    GameSession.heroes.HealForRest();
-                    var ManagerMap = FindObjectOfType<HeroCardMapManager>();
-                    ManagerMap.HealHero(); 
+                    FindObjectOfType<HeroCardMapManager>().HeroesRest();
                     break;
                 case NodeType.Treasure:
                     break;
@@ -108,8 +101,7 @@ namespace Map
                     break;
                 case NodeType.Boss:
                     // open card game
-                    Debug.Log("Open card game");
-                    SceneManager.LoadScene(3);
+                    LoadGame();
                     break;
                 case NodeType.Mystery:
                     break;
@@ -121,41 +113,9 @@ namespace Map
         {
             Debug.Log("Selected node cannot be accessed");
         }
-        public void SetMinorEnemy()
+        private static void LoadGame()
         {
-            // Get the random minor enemy scriptable object
-            EnemyCardScriptable enemyScriptable = enemyList.GetRandomMinorEnemy();
-
-            // Assign the scriptable object directly to the node blueprint
-            if (GameSession.node != null)
-            {
-                GameSession.node.enemyCharacter = enemyScriptable;
-                GameSession.enemies = new EnemyCardData(enemyScriptable);
-            }
-        }
-        public void SetEliteEnemy()
-        {
-            // Get the random minor enemy scriptable object
-            EnemyCardScriptable enemyScriptable = enemyList.GetRandomEliteEnemy();
-
-            // Assign the scriptable object directly to the node blueprint
-            if (GameSession.node != null)
-            {
-                GameSession.node.enemyCharacter = enemyScriptable;
-                GameSession.enemies = new EnemyCardData(enemyScriptable);
-            }
-        }
-        public void SetBossEnemy()
-        {
-            // Get the random minor enemy scriptable object
-            EnemyCardScriptable enemyScriptable = enemyList.GetRandomBoss();
-
-            // Assign the scriptable object directly to the node blueprint
-            if (GameSession.node != null)
-            {
-                GameSession.node.enemyCharacter = enemyScriptable;
-                GameSession.enemies = new EnemyCardData(enemyScriptable);
-            }
+            _ = GameManager.Instance.LoadSceneAsync("Balatro-Feel"); //Change Addressable scene name to your map scene name
         }
     }
 }

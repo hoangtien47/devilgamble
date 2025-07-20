@@ -1,0 +1,3 @@
+Index,LevelName,LevelDescription,MapConfigKey,LevelStatus,LevelSpriteKey,MaxPoints,Rewards
+1,Chapter I-1: Mist,Desert,Mapcofig_Level01,InProgress,LevelSprite_01,0,gold:100;gem:10;soul:2;dark:10
+2,Chapter I-2: Forest,Forest,Mapcofig_Level02,Locked,LevelSprite_02,0,gold:120;gem:12;dark:2

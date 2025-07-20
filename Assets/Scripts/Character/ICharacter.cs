@@ -1,17 +1,26 @@
-using UnityEngine;
-
 /// <summary>
 /// Interface that defines what a character in the game should have
 /// </summary>
 public interface ICharacter
 {
-    string id{ get; }
-    string name{ get; }
-    int HP { get; }
-    int ATK { get; }
+    // Static data (read-only) - delegate to CharacterCardData
+    string CharacterName { get; }
+    string CharacterDescription { get; }
+    CharacterTeam Team { get; }
 
-    void Attack(ICharacter target);
+
+    // Runtime data (read-write) - keep these
+    int CurrentHealth { get; }
+    int BaseHealth { get; }
+    int CurrentAttack { get; }
+    int BaseAttack { get; }
+    int BaseSpeed { get; }
+    int CurrentSpeed { get; }
+    bool IsAlive { get; }
+
+    void Attack(ICharacter target, int bonusAttack);
     void TakeDamage(int damageAmount, ICharacter attacker);
-    bool IsAlive();
+    void Heal(int healAmount);
+    void Die();
 }
 

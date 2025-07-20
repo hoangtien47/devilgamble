@@ -103,7 +103,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -224,7 +224,7 @@ TextureImporter:
         x: 0
         y: 36
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -246,7 +246,7 @@ TextureImporter:
         x: 9
         y: 36
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -268,7 +268,7 @@ TextureImporter:
         x: 18
         y: 36
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -290,7 +290,7 @@ TextureImporter:
         x: 27
         y: 36
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -312,7 +312,7 @@ TextureImporter:
         x: 36
         y: 36
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -331,10 +331,10 @@ TextureImporter:
       name: 9x9 Icons_5
       rect:
         serializedVersion: 2
-        x: 46
-        y: 37
-        width: 7
-        height: 7
+        x: 45
+        y: 36
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -353,10 +353,10 @@ TextureImporter:
       name: 9x9 Icons_6
       rect:
         serializedVersion: 2
-        x: 1
-        y: 28
-        width: 7
-        height: 7
+        x: 0
+        y: 27
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -375,10 +375,10 @@ TextureImporter:
       name: 9x9 Icons_7
       rect:
         serializedVersion: 2
-        x: 10
-        y: 28
-        width: 7
-        height: 7
+        x: 9
+        y: 27
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -397,10 +397,10 @@ TextureImporter:
       name: 9x9 Icons_8
       rect:
         serializedVersion: 2
-        x: 19
-        y: 28
-        width: 7
-        height: 7
+        x: 18
+        y: 27
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -419,10 +419,10 @@ TextureImporter:
       name: 9x9 Icons_9
       rect:
         serializedVersion: 2
-        x: 28
-        y: 28
-        width: 7
-        height: 7
+        x: 27
+        y: 27
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -441,10 +441,10 @@ TextureImporter:
       name: 9x9 Icons_10
       rect:
         serializedVersion: 2
-        x: 37
-        y: 28
-        width: 7
-        height: 7
+        x: 36
+        y: 27
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -463,10 +463,10 @@ TextureImporter:
       name: 9x9 Icons_11
       rect:
         serializedVersion: 2
-        x: 46
-        y: 28
-        width: 7
-        height: 7
+        x: 45
+        y: 27
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -486,9 +486,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 9
+        y: 18
         width: 9
-        height: 17
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -508,9 +508,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 9
-        y: 9
-        width: 8
-        height: 17
+        y: 18
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -529,10 +529,10 @@ TextureImporter:
       name: 9x9 Icons_14
       rect:
         serializedVersion: 2
-        x: 15
-        y: 9
-        width: 12
-        height: 8
+        x: 18
+        y: 18
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -551,10 +551,10 @@ TextureImporter:
       name: 9x9 Icons_15
       rect:
         serializedVersion: 2
-        x: 19
-        y: 19
-        width: 7
-        height: 7
+        x: 27
+        y: 18
+        width: 9
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -573,10 +573,10 @@ TextureImporter:
       name: 9x9 Icons_16
       rect:
         serializedVersion: 2
-        x: 27
+        x: 36
         y: 18
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -595,10 +595,10 @@ TextureImporter:
       name: 9x9 Icons_17
       rect:
         serializedVersion: 2
-        x: 27
-        y: 9
+        x: 45
+        y: 18
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -617,10 +617,10 @@ TextureImporter:
       name: 9x9 Icons_18
       rect:
         serializedVersion: 2
-        x: 36
-        y: 19
+        x: 0
+        y: 9
         width: 9
-        height: 7
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -639,10 +639,10 @@ TextureImporter:
       name: 9x9 Icons_19
       rect:
         serializedVersion: 2
-        x: 36
+        x: 9
         y: 9
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -661,10 +661,10 @@ TextureImporter:
       name: 9x9 Icons_20
       rect:
         serializedVersion: 2
-        x: 45
-        y: 10
+        x: 18
+        y: 9
         width: 9
-        height: 16
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -683,9 +683,9 @@ TextureImporter:
       name: 9x9 Icons_21
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 18
+        x: 27
+        y: 9
+        width: 9
         height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -705,10 +705,10 @@ TextureImporter:
       name: 9x9 Icons_22
       rect:
         serializedVersion: 2
-        x: 18
-        y: 0
+        x: 36
+        y: 9
         width: 9
-        height: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -723,11 +723,99 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: 9x9 Icons_23
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 9
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5df33c8a908c58a43b4d5d3b804964a7
+      internalID: 951048135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 9x9 Icons_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e64b97575b2ea94d9ff7a5ad4b05fc7
+      internalID: 1228329107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 9x9 Icons_25
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 0
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36dccc06cbcf56d499b6e3914cb4221a
+      internalID: -279753366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 9x9 Icons_26
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 0
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a32462593122f74da9b82ee29ceb821
+      internalID: -383103719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c270404bcb54354449eacc05791d371c
     internalID: 0
     vertices: []
     indices: 
@@ -753,6 +841,10 @@ TextureImporter:
       9x9 Icons_20: -8902649066845952595
       9x9 Icons_21: 7589382899817902680
       9x9 Icons_22: 9111612326937248459
+      9x9 Icons_23: 951048135
+      9x9 Icons_24: 1228329107
+      9x9 Icons_25: -279753366
+      9x9 Icons_26: -383103719
       9x9 Icons_3: -5645959243156627019
       9x9 Icons_4: 5463734673434334000
       9x9 Icons_5: -7406255140536672267

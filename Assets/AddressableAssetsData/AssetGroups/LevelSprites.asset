@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: LevelSprites
+  m_EditorClassIdentifier: 
+  m_GroupName: LevelSprites
+  m_GUID: 2a33df29ae6009d40beb227f64154ba5
+  m_SerializeEntries:
+  - m_GUID: 77e9dd584c522b347b36f9e1d9d326f2
+    m_Address: LevelSprite_03
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 782095c6fe723484993248ddf8350480
+    m_Address: LevelSprite_02
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 946a70b90041156459cb8eaf94bcd514
+    m_Address: LevelSprite_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: b522204c83bbe8446a881f04f7e2ed20, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 263bf2db2815dc341b16062275936b34, type: 2}
+    - {fileID: 11400000, guid: b8fafe01bf950ca469cf28d3c03374e5, type: 2}

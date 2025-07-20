@@ -32,23 +32,23 @@ public class TooltipSelectedHeroes : MonoBehaviour
         HideTooltip();
     }
 
-    public void ShowTooltip(HeroCardScriptable heroData)
+    public void ShowTooltip(CharacterModel heroData)
     {
         if (heroData == null) return;
 
-        if (!heroData.isUnlocked)
-        {
-            // Display ??? for locked heroes
-            nameText.text = "???";
-            hpText.text = "???";
-            atkText.text = "???";
-        }
-        else
-        {
-            nameText.text = heroData.Name;
-            hpText.text = $"{heroData.maxHealth}";
-            atkText.text = $"{heroData.attack}";
-        }
+        //if (!heroData.isUnlocked)
+        //{
+        //    // Display ??? for locked heroes
+        //    nameText.text = "???";
+        //    hpText.text = "???";
+        //    atkText.text = "???";
+        //}
+        //else
+        //{
+            nameText.text = heroData.CharacterName;
+            hpText.text = $"{heroData.BaseHealth}";
+            atkText.text = $"{heroData.BaseAttack}";
+        //}
         // Show and fade in
         tooltipPanel.SetActive(true);
         DOTween.Kill(canvasGroup);

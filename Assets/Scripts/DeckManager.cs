@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +45,6 @@ public class DeckManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject slotPrefab;
-    [SerializeField] private Transform deckTransform;
     [SerializeField] private Transform discardTransform;
     [SerializeField] private Transform playcardTransform;
     [SerializeField] private HorizontalCardHolder handHolder;
@@ -57,7 +57,6 @@ public class DeckManager : MonoBehaviour
     [Header("Enemy Card")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private HorizontalCardHolder enemyHolder;
-    private int turnsToAttack = 2;
 
     [Header("Deck Settings")]
     [SerializeField] private int handSize = 8;
@@ -80,7 +79,7 @@ public class DeckManager : MonoBehaviour
     public List<CardData> cardCombo = new List<CardData>();
 
     private bool isDealing = false;
-    private bool canPlayCards = true;
+    public bool canPlayCards = false;
 
     [Header("Events")]
     public UnityEvent<int> OnDeckCountChanged;
@@ -98,17 +97,20 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private Transform heroTransform;
     [SerializeField] private float delayBetweenAttacks = 0.2f;
     [SerializeField] private bool useSpecialAttacks = false;
-    [SerializeField] private int turnCount = 2;
 
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI turnCountText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI discardChangeText;
+
+    [Header("Public Getter for Character Card Holder")]
+    public HorizontalCardHolder HeroHolder => heroHolder;
+    public HorizontalCardHolder EnemyHolder => enemyHolder;
+
+    public int finalScore = 0;
 
     private void Start()
     {
         // Reload current scene
-        GameStateManager.Instance?.ClearAllData();
         OnHandDealt.AddListener(OnHandDealtHandler);
         FadeOutScoreText();
 
@@ -239,20 +241,28 @@ public class DeckManager : MonoBehaviour
                     handHolder.cards[i].cardVisual.UpdateIndex(transform.childCount);
             }
         }
-
-
     }
     private IEnumerator DealEnemyCoroutine(int numCardDeal)
     {
         // Create slots for the hand
         for (int i = 0; i < numCardDeal; i++)
         {
-
             // Create a slot and card
             GameObject slot = Instantiate(enemyPrefab, enemyHolder.transform);
             Card card = slot.GetComponentInChildren<Card>();
             card.charIndex = i;
             yield return new WaitForSeconds(dealDelay);
+
+            var enemyVisual = card.cardVisual as CharacterCardVisual;
+            var characterModel = enemyVisual.GetComponent<CharacterModel>();
+            CharacterCardData characterCardData = GameManager.Instance.GetEnemyData();
+
+            if (characterModel != null)
+            {
+                characterModel.Initialize(characterCardData); // Reinitialize with new name
+            }
+            enemyVisual.UpdateSprite();
+            enemyVisual.UpdateView();
         }
 
         enemyHolder.cards = enemyHolder.GetComponentsInChildren<Card>().ToList();
@@ -265,18 +275,16 @@ public class DeckManager : MonoBehaviour
 
             card.PointerEnterEvent.AddListener(enemyHolder.CardPointerEnter);
             card.PointerExitEvent.AddListener(enemyHolder.CardPointerExit);
-            card.BeginDragEvent.AddListener(enemyHolder.BeginDrag);
-            card.EndDragEvent.AddListener(enemyHolder.EndDrag);
+            //card.BeginDragEvent.AddListener(enemyHolder.BeginDrag);
+            //card.EndDragEvent.AddListener(enemyHolder.EndDrag);
             card.SelectEvent.AddListener(HandleCardSelection); // Add selection listener
             card.name = cardCount.ToString();
+
             cardCount++;
         }
         bossTransform = enemyHolder.cards[0].gameObject.transform;
-        var enemyVisual = enemyHolder.cards[0].cardVisual as CharacterCardVisual;
-        enemyVisual.LoadCharacterData(GameSession.enemies);
-        turnsToAttack = GameSession.enemies.actionTurns;
-        turnCount = turnsToAttack;
-        SetTurnText();
+
+
     }
 
     private IEnumerator DealHeroCoroutine(int numCardDeal)
@@ -312,14 +320,23 @@ public class DeckManager : MonoBehaviour
         }
         heroTransform = heroHolder.cards[0].gameObject.transform;
         var heroVisual = heroHolder.cards[0].cardVisual as CharacterCardVisual;
-        heroVisual.LoadCharacterData(GameSession.heroes);
+        var characterModel = heroVisual.GetComponent<CharacterModel>();
+
+        CharacterCardData characterCardData = GameManager.Instance.GetCharacterCardChosen();
+
+        if (characterModel != null)
+        {
+            characterModel.Initialize(characterCardData);
+        }
+        heroVisual.UpdateSprite();
+        heroVisual.UpdateView();
+
         selectedHeroCard = heroHolder.cards[0];
     }
 
     private IEnumerator DealHandCoroutine(int numCardDeal)
     {
         isDealing = true;
-
 
         // Check if we need to reshuffle
         if (deckCards.Count < handSize && autoShuffle)
@@ -353,8 +370,6 @@ public class DeckManager : MonoBehaviour
         int cardCount = 0;
         foreach (Card card in handHolder.cards)
         {
-            // Draw a card from the deck
-
             card.PointerEnterEvent.AddListener(handHolder.CardPointerEnter);
             card.PointerExitEvent.AddListener(handHolder.CardPointerExit);
             card.BeginDragEvent.AddListener(handHolder.BeginDrag);
@@ -366,6 +381,21 @@ public class DeckManager : MonoBehaviour
 
         OnHandDealt?.Invoke(handCards);
         isDealing = false;
+        DeSelection();
+    }
+
+    public void DeSelection()
+    {
+        if (handHolder == null || handHolder.cards == null) return;
+
+        foreach (var card in handHolder.cards.ToList())
+        {
+            if (card.selected)
+            {
+                card.Deselect();
+            }
+        }
+        selectedCards.Clear();
     }
 
     public CardData DrawCardFromDeck()
@@ -438,11 +468,7 @@ public class DeckManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(dealDuration);
-        foreach (CardData card in cardCombo)
-        {
-            AddScoreByCardRank(card);
-            yield return new WaitForSeconds(dealDelay);
-        }
+
         // Remove the cards from the hand (in reverse order to avoid index issues)
         indicesToRemove.Sort();
         indicesToRemove.Reverse();
@@ -467,7 +493,6 @@ public class DeckManager : MonoBehaviour
 
         // Update the card holder
         handHolder.cards = handHolder.GetComponentsInChildren<Card>().ToList();
-        StartCoroutine(AttackHeroSequence());
         DealHand();
 
         OnDiscardCountChanged?.Invoke(discardPile.Count);
@@ -561,8 +586,9 @@ public class DeckManager : MonoBehaviour
 
     public void CalculateScoreWithCombos()
     {
-        if (!canPlayCards /*|| selectedHeroCard == null*/)
+        if (!canPlayCards || selectedCards.Count == 0  /*|| selectedHeroCard == null*/)
             return;
+
         canPlayCards = false;
         var hand = selectedCards;
 
@@ -651,17 +677,22 @@ public class DeckManager : MonoBehaviour
             }
         }
 
-        int finalScore = Mathf.RoundToInt(baseScore * comboMultiplier * handMultiplier);
+        finalScore = Mathf.RoundToInt((baseScore + CalculateScoreByEachCardRank(cardCombo)) * comboMultiplier * handMultiplier);
         OnScoreCalculated?.Invoke(finalScore, Mathf.RoundToInt(comboMultiplier * handMultiplier));
         Debug.Log($"Final Score: {finalScore} (Base: {baseScore} x Multiplier: {comboMultiplier} x HandMultiplier: {handMultiplier})");
-        UpdateScoreText(finalScore);
+
+        var heroVisual = heroHolder.cards[0].cardVisual as CharacterCardVisual;
+
+        UpdateScoreText(finalScore + heroVisual.Model.CurrentAttack);
 
         StartCoroutine(DiscardSelectedCardsCoroutineAfterPlayCard());
 
-        if (heroHolder == null || heroHolder.cards == null || heroHolder.cards.Count == 0 || bossTransform == null)
-            return;
+        //if (heroHolder == null || heroHolder.cards == null || heroHolder.cards.Count == 0 || bossTransform == null)
+        //    return;
+
     }
 
+    #region Sorting Methods
     public void SortByRank()
     {
         if (handHolder.cards == null || handHolder.cards.Count == 0)
@@ -711,6 +742,7 @@ public class DeckManager : MonoBehaviour
         // Rearrange cards in the UI
         RearrangeCards(cardPairs);
     }
+    #endregion
 
     private void RearrangeCards(List<(Card card, int index, CardData data)> sortedPairs)
     {
@@ -737,6 +769,7 @@ public class DeckManager : MonoBehaviour
         // Update the cards list in the handHolder
         handHolder.cards = handHolder.GetComponentsInChildren<Card>().ToList();
 
+        DeSelection();
         // Update card visuals
         StartCoroutine(UpdateCardVisuals());
     }
@@ -755,57 +788,6 @@ public class DeckManager : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackHeroSequence()
-    {
-        if (selectedHeroCard == null || selectedHeroCard.cardVisual == null || bossTransform == null)
-            yield break;
-
-        if (enemyHolder.cards[0] != null)
-        {
-            var heroCard = selectedHeroCard as CharacterCard;
-            yield return heroCard.Attack(enemyHolder.cards[0] as CharacterCard);
-        }
-
-        yield return new WaitForSeconds(delayBetweenAttacks);
-
-        turnCount--;
-        if (turnCount <= 0)
-        {
-            if (enemyHolder.cards[0].GetComponent<BaseCharacter>().IsAlive())
-            {
-                StartCoroutine(AttackEnemySequence());
-                turnCount = turnsToAttack;
-            }
-            else
-            {
-                FadeOutScoreText();
-            }
-        }
-        else
-        {
-            FadeOutScoreText();
-            canPlayCards = true;
-        }
-        SetTurnText();
-    }
-
-    private IEnumerator AttackEnemySequence()
-    {
-        CharacterCard enemyCard = enemyHolder.cards[0] as CharacterCard;
-        if (enemyCard == null || enemyCard.cardVisual == null || heroTransform == null /*|| !enemyCard.BaseCharacter.IsAlive()*/)
-            yield break;
-
-        foreach (Card hero in heroHolder.cards)
-        {
-            if (hero != null)
-                yield return enemyCard.Attack(hero as CharacterCard);
-
-        }
-        yield return new WaitForSeconds(delayBetweenAttacks);
-        FadeOutScoreText();
-        if (heroHolder.cards[0].GetComponent<BaseCharacter>().IsAlive())
-            canPlayCards = true;
-    }
 
     public List<CardData> GetComboCards(List<CardData> hand)
     {
@@ -897,11 +879,35 @@ public class DeckManager : MonoBehaviour
         // 9. High Card (return the highest card)
         return new List<CardData> { hand.OrderByDescending(c => (int)c.rank).First() };
     }
+
+    private int CalculateScoreByEachCardRank(List<CardData> cardDatas)
+    {
+        int current = 0;
+        foreach (var cardData in cardDatas)
+        {
+            int addValue = 0;
+            if (cardData.rank == CardRank.Ace)
+            {
+                addValue = 15;
+            }
+            else if (cardData.rank == CardRank.King || cardData.rank == CardRank.Queen || cardData.rank == CardRank.Jack)
+            {
+                addValue = 12;
+            }
+            else
+            {
+                addValue = (int)cardData.rank;
+            }
+            current += addValue;
+        }
+        return current;
+    }
+
     #region ScoreText
-    private void AddScoreByCardRank(CardData card)
+    private IEnumerator AddScoreByCardRank(CardData card)
     {
         if (scoreText == null || card == null)
-            return;
+            yield break;
 
         int current = 0;
         int.TryParse(scoreText.text, out current);
@@ -929,6 +935,9 @@ public class DeckManager : MonoBehaviour
         scoreText.transform.DOScale(1.6f, 0.1f)
             .SetEase(Ease.OutBack)
             .OnComplete(() => scoreText.transform.DOScale(1f, 0.1f).SetEase(Ease.InBack));
+
+        yield return new WaitForSeconds(dealDelay);
+
     }
     private void UpdateScoreText(int value)
     {
@@ -943,7 +952,7 @@ public class DeckManager : MonoBehaviour
             .SetEase(Ease.OutBack)
             .OnComplete(() => scoreText.transform.DOScale(1f, 0.1f).SetEase(Ease.InBack));
     }
-    private void FadeOutScoreText()
+    public void FadeOutScoreText()
     {
         if (scoreText == null)
             return;
@@ -953,8 +962,5 @@ public class DeckManager : MonoBehaviour
     }
     #endregion
 
-    private void SetTurnText()
-    {
-        turnCountText.text = turnCount.ToString();
-    }
+
 }

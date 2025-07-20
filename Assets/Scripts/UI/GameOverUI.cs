@@ -1,8 +1,7 @@
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.SceneManagement;
-using DG.Tweening;
 
 public class GameOverUI : MonoBehaviour
 {
@@ -10,8 +9,7 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI btnText;
-    [SerializeField] private TextMeshProUGUI damageTakenText;
-    [SerializeField] private TextMeshProUGUI bestDamageDealtText;
+
     [SerializeField] private Button stateButton;
     [SerializeField] private Button mainMenuButton;
 
@@ -22,6 +20,20 @@ public class GameOverUI : MonoBehaviour
     [Header("Text Button Settings")]
     [SerializeField] private string retryButtonTextWin = "Continue";
     [SerializeField] private string retryButtonTextLose = "Retry";
+    [SerializeField] private string newGameButtonText = "New Game";
+
+
+    [SerializeField] private TurnManager turnManager;
+
+    private void OnEnable()
+    {
+        TurnManager.OnGameOver += Show;
+    }
+
+    private void OnDisable()
+    {
+        TurnManager.OnGameOver -= Show;
+    }
 
     private void Awake()
     {
@@ -29,14 +41,13 @@ public class GameOverUI : MonoBehaviour
         if (panel != null) panel.SetActive(false);
 
         // Set up button listeners
-        if (stateButton != null) stateButton.onClick.AddListener(OnRetryClicked);
-        if (mainMenuButton != null) mainMenuButton.onClick.AddListener(OnMainMenuClicked);
+        if (mainMenuButton != null) mainMenuButton.onClick.AddListener(
+            GameManager.Instance.OpenLobby);
     }
 
-    public void Show(bool isWin, int currentDamageDealt, int currentDamageTaken)
+    public void Show(bool isWin, bool isComplete)
     {
         if (panel == null) return;
-
         // Ensure panel is active but fully transparent
         panel.SetActive(true);
         CanvasGroup canvasGroup = panel.GetComponent<CanvasGroup>();
@@ -52,30 +63,29 @@ public class GameOverUI : MonoBehaviour
             titleText.alpha = 0f;
             titleText.text = isWin ? winTitle : loseTitle;
         }
-
+        Debug.Log("Game Completed: " + isComplete);
         if (btnText != null)
         {
             btnText.alpha = 0f;
-            btnText.text = isWin ? retryButtonTextWin : retryButtonTextLose;
+            string textWin = isComplete ? newGameButtonText : retryButtonTextWin;
+            btnText.text = isWin ? textWin: retryButtonTextLose;
         }
 
-        if (damageTakenText != null)
-        {
-            damageTakenText.alpha = 0f;
-            damageTakenText.text = $"{PlayerPrefs.GetInt("DamageTaken", 0)}";
-        }
 
-        if (bestDamageDealtText != null)
-        {
-            bestDamageDealtText.alpha = 0f;
-            bestDamageDealtText.text = $"{PlayerPrefs.GetInt("BestDamageDealt", 0)}";
-        }
 
         // Button setup
         if (stateButton != null)
         {
             stateButton.onClick.RemoveAllListeners();
-            stateButton.onClick.AddListener(isWin ? OnContinueClicked : OnRetryClicked);
+            if (isWin)
+            {
+                stateButton.onClick.AddListener(isComplete ?
+                GameManager.Instance.OpenLevelScence : GameManager.Instance.OpenMapScence);
+            }
+            else
+            {
+                stateButton.onClick.AddListener(GameManager.Instance.OpenBattleScence);
+            }
             stateButton.GetComponent<CanvasGroup>().alpha = 0f;
         }
 
@@ -96,16 +106,6 @@ public class GameOverUI : MonoBehaviour
             fadeSequence.Append(titleText.DOFade(1f, 0.3f).SetEase(Ease.InOutQuad));
         }
 
-        // Stats fade in
-        if (damageTakenText != null)
-        {
-            fadeSequence.Append(damageTakenText.DOFade(1f, 0.3f).SetEase(Ease.InOutQuad));
-        }
-
-        if (bestDamageDealtText != null)
-        {
-            fadeSequence.Join(bestDamageDealtText.DOFade(1f, 0.3f).SetEase(Ease.InOutQuad));
-        }
 
         // Button text fade in
         if (btnText != null)
@@ -127,18 +127,5 @@ public class GameOverUI : MonoBehaviour
         // Play the sequence
         fadeSequence.Play();
     }
-    private void OnContinueClicked()
-    {
-        SceneManager.LoadScene(2);
-    }
-    private void OnRetryClicked()
-    {
-        SceneManager.LoadScene(1);
-    }
 
-    private void OnMainMenuClicked()
-    {
-        // Load main menu scene (assuming it's at index 0)
-        SceneManager.LoadScene(0);
-    }
 }

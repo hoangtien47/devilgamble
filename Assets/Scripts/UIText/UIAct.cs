@@ -1,11 +1,10 @@
-using DG.Tweening;
-using TMPro;
 using UnityEngine;
 
 public class UIAct : MonoBehaviour
 {
     [Header("Popup Prefab")]
     [SerializeField] private GameObject popupPrefab;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void ShowPopup(int amount, bool isHeal)
     {
@@ -40,5 +39,7 @@ public class UIAct : MonoBehaviour
             Color color = isHeal ? Color.green : Color.red;
             popUpText.Show($"{sign}{Mathf.Abs(amount)}", color);
         }
+
+
     }
 }

@@ -5,17 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lobby.unity
     guid: fda2f5b7388a3a449bff1c5eebb9d403
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ChoseHeroes.unity
     guid: 01c570eafef7aed498204ff3c05c8504
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MapScene.unity
     guid: a7229d91cf780c1448bbc377abe4d36e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Balatro-Feel.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 1fdf1c523154c184092c5f6947602e21, type: 2}
   m_UseUCBPForAssetBundles: 0

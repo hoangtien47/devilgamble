@@ -1,0 +1,26 @@
+Name,Description,CharacterTeam,Rarity,SpriteAddress,BaseAttack,BaseHealth,Speed,Level,Price
+Sunstone Paladin,A valiant knight sworn to protect the innocent.,Enemy,Minor,card1.png,25,200,5,1,0
+Forest Guardian,A protector of the ancient woods.,Hero,Rare,card3.png,18,180,7,1,350
+Shadow Blade,A swift assassin who strikes from the darkness.,Hero,Legendary,card5.png,35,150,10,1,1200
+Skyfire Sorcerer,A mage who commands the power of the heavens.,Enemy,Elite,card6.png,30,130,6,1,0
+Ironclad Defender,An unstoppable force of defense.,Hero,Rare,card7.png,15,250,5,1,400
+Mystic Healer,A gentle soul with the power to mend any wound.,Hero,Common,card8.png,10,160,8,1,200
+Stormcaller,Summons storms to vanquish her foes.,Hero,Epic,card9.png,28,140,7,1,550
+Rogue Archer,"A master of the bow, never misses a shot.",Enemy,Minor,card11.png,22,120,9,2,0
+Stone Golem,"A creature of earth, slow but immensely powerful.",Hero,Rare,card12.png,40,300,5,1,450
+Celestial Knight,A warrior blessed by the stars.,Hero,Legendary,card13.png,32,190,6,1,1500
+Goblin Scout,"A pesky scout, weak but quick.",Enemy,Minor,card14.png,8,50,12,1,0
+Orc Brute,A hulking warrior with immense strength.,Enemy,Elite,card15.png,20,180,4,1,0
+Dark Acolyte,A spellcaster dabbling in forbidden arts.,Enemy,Minor,card18.png,15,90,6,1,0
+Cave Troll,A monstrous beast lurking in the deep.,Enemy,Elite,card19.png,25,220,3,1,0
+Harpy Screecher,Its piercing cry can disorient any hero.,Enemy,Minor,card20.png,12,70,11,1,0
+Lava Elemental,A being of pure fire and rage.,Enemy,Elite,card22.png,30,150,5,1,0
+Necromancer,Raises the dead to fight for him.,Enemy,Boss,card23.png,22,3000,6,1,0
+Swamp Hag,A vile witch using poison and curses.,Enemy,Elite,card24.png,18,130,5,2,0
+Dire Wolf,A large and aggressive predator.,Enemy,Minor,card2.png,14,80,10,2,0
+Grave Robber,Steals life force from its victims.,Enemy,Minor,card4.png,10,100,8,2,0
+Cursed Armor,"An animated suit of armor, relentless in its attack.",Enemy,Elite,card16.png,28,200,3,2,0
+Abyssal Horror,A creature from the darkest depths.,Enemy,Boss,card17.png,40,1500,4,2,0
+Sand Wraith,"A phantom of the desert, hard to hit.",Enemy,Elite,card21.png,24,110,12,2,0
+Mountain Giant,"A colossal giant, slow but devastating.",Enemy,Boss,card25.png,50,1200,3,2,0
+Fire Imp,A mischievous creature that throws fireballs.,Enemy,Minor,card10.png,12,60,9,2,0

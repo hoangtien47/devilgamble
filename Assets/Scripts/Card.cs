@@ -35,7 +35,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public bool isHovering;
     public bool isDragging;
     [HideInInspector] public bool wasDragged;
-    [HideInInspector] public BaseCharacter BaseCharacter;
 
     [Header("Events")]
     [HideInInspector] public UnityEvent<Card> PointerEnterEvent;

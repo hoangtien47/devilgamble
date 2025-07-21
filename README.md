@@ -2,7 +2,7 @@
 
 A card game combining mechanics inspired by Honkai: Star Rail (HSR) with elements similar to Balatro.
 
-
+![alt text](image-2.png)
 
 ## Monster Structure
 
@@ -38,6 +38,7 @@ Each hero has the following attributes:
 - Role
 
 - ...
+![alt text](image-1.png)
 
 ## Heroe Types
 

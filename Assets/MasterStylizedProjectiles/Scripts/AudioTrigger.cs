@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Audio trigger component for playing audio clips
+/// </summary>
 public class AudioTrigger : MonoBehaviour
 {
     public float time = 3;
@@ -16,16 +17,15 @@ public class AudioTrigger : MonoBehaviour
             audio.Play();
         }
         AutoDestroy(time);
-
     }
+
     void AutoDestroy(float time)
     {
         Invoke("Destroy", time);
     }
+
     public void Destroy()
     {
         Destroy(gameObject);
     }
-
-
 }

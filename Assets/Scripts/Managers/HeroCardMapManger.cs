@@ -6,7 +6,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-public class HeroCardMapManager : MonoBehaviour
+public class HeroCardMapManger : MonoBehaviour
 {
     [Header("Card Settings")]
     [SerializeField] private GameObject heroPrefab;

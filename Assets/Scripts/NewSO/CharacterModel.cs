@@ -38,6 +38,9 @@ public class CharacterModel : MonoBehaviour, ICharacter
     public Rarity Rarity => characterCardData?.rarity ?? Rarity.Rare;
     public int Level => level;
 
+    // Legacy property for backward compatibility
+    public string id => characterCardData?.characterName ?? "";
+
 
     public event Action HealthCurrentChanged;
     public event Action AttackCurrentChanged;

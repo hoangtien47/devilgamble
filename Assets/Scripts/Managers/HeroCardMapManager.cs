@@ -85,7 +85,7 @@ public class HeroCardMapManager : MonoBehaviour
             cardVisual.PlayHealAnimation(healthAmount);
             GameManager.Instance.SetCharacterCardChosen(cardData);
         }
-        var tracker = FindObjectOfType<MapPlayerTracker>();
+        var tracker = FindFirstObjectByType<MapPlayerTracker>();
         if (tracker != null)
         {
             tracker.Locked = false;

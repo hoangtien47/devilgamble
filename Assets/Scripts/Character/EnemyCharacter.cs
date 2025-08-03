@@ -41,7 +41,7 @@ public class EnemyCharacter : BaseCharacter
         }
     }
 
-    protected override void Die()
+    public override void Die()
     {
         base.Die();
         GetComponent<CharacterCard>().OnCharacterDeath();
@@ -72,16 +72,29 @@ public class EnemyCharacter : BaseCharacter
         this.attackPower = enemy.attack;
         this.characterName = enemy.Name;
         this.sprite = enemy.Sprite;
-        this.turn = turn;
+        this.turn = enemy.actionTurns;
     }
     private void SaveHeroData()
     {
         // Find the hero character
-        var hero = FindObjectOfType<HeroesCharacter>();
+        var hero = FindFirstObjectByType<HeroesCharacter>();
         if (hero != null && GameSession.heroes != null)
         {
-            // Update hero's current health in the GameSession
-            GameSession.heroes.SetData(hero);
+            // Create HeroCardData from HeroesCharacter
+            var heroData = new HeroCardData
+            {
+                id = hero.id,
+                Name = hero.CharacterName,
+                Description = hero.CharacterDescription,
+                Sprite = hero.Sprite,
+                maxHealth = hero.BaseHealth,
+                currentHealth = hero.CurrentHealth,
+                attack = hero.CurrentAttack,
+                defense = 0
+            };
+
+            // Update hero's data in the GameSession
+            GameSession.SaveHeroData(heroData);
             // You can add more stats to save here if needed
         }
     }

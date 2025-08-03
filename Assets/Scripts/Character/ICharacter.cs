@@ -18,6 +18,9 @@ public interface ICharacter
     int CurrentSpeed { get; }
     bool IsAlive { get; }
 
+    // Legacy properties for backward compatibility
+    string id { get; }
+
     void Attack(ICharacter target, int bonusAttack);
     void TakeDamage(int damageAmount, ICharacter attacker);
     void Heal(int healAmount);

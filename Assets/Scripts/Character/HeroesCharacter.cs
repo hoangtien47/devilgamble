@@ -40,12 +40,12 @@ public class HeroesCharacter : BaseCharacter
         base.Attack(target);
         GetComponent<CharacterCard>().OnCharacterDataChange();
         // If the target died from this attack, gain experience
-        if (target != null && !target.IsAlive() && target is EnemyCharacter enemy)
+        if (target != null && !target.IsAlive && target is EnemyCharacter enemy)
         {
         }
     }
 
-    protected override void Die()
+    public override void Die()
     {
         base.Die();
         GetComponent<CharacterCard>().OnCharacterDeath();

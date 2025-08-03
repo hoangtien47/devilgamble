@@ -118,10 +118,12 @@ public class GameStateManager : MonoBehaviour
     private void ShowGameOverUI(bool isWin)
     {
         // Find and activate the GameOverUI
-        var gameOverUI = FindObjectOfType<GameOverUI>();
+        var gameOverUI = FindFirstObjectByType<GameOverUI>();
         if (gameOverUI != null)
         {
-            gameOverUI.Show(isWin, currentDamageDealt, currentDamageTaken);
+            // For now, assume game is not complete (false)
+            // This can be modified later based on game logic
+            gameOverUI.Show(isWin, false);
         }
         ResetBattleStats();
     }
